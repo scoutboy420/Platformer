@@ -12,5 +12,5 @@ public:
 	/**
 	* \brief Loads map, rooms structure and textures from disk
 	*/
-	void load();
+	static void load();
 };

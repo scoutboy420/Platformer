@@ -19,7 +19,6 @@ private:
 	 */
 	void changeRoom(sf::Vector2i roomID);
 public:
-
 	Game();
 
 	/**
