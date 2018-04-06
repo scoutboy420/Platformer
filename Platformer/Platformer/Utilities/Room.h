@@ -12,11 +12,13 @@ private:
 	std::vector<Door> doors_;
 	sf::Color backgroundColor_;
 	bool visited_;
+	sf::Vector2f size_;
+	sf::Vector2i roomID_;
 public:
-	Room(std::vector<Entity>& blocks, std::vector<Item>& items, std::vector<Door>& doors, sf::Color backgroundColor = sf::Color::White) :
-		blocks_(blocks), items_(items), doors_(doors), backgroundColor_(backgroundColor), visited_(false) {}
+	Room(std::vector<Entity>& blocks, std::vector<Item>& items, std::vector<Door>& doors, sf::Vector2i roomID,
+	     sf::Color backgroundColor = sf::Color::White);
 
-	sf::Vector2f getSize() const;
+	sf::Vector2f getSize() const { return size_; }
 	const std::vector<Entity>& getBlocks() const { return blocks_; }
 	const std::vector<Item>& getItems() const { return items_; }
 	const std::vector<Door>& getDoors() const { return doors_; }

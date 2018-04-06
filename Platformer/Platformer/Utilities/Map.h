@@ -5,8 +5,9 @@
 class Map
 {
 private:
-	std::vector<Room> rooms_;
-	sf::Texture mapTexture_;
+	std::vector<std::vector<int>> roomMatrix_;
+	std::vector<std::vector<std::vector<int>>> roomsStructure_;
+	sf::Image mapImage_;
 public:
 	Map(std::vector<Room>& rooms);
 };

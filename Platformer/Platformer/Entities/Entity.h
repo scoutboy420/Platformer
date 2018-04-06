@@ -4,12 +4,13 @@
 class Entity
 {
 protected:
-	sf::RectangleShape body_;
-	sf::Texture texture_;
+	sf::RectangleShape body_; //physical body of object
+	sf::Texture& texture_;
 
 	bool isActive_;
 public:
-	Entity(sf::Texture texture, sf::Vector2f position = sf::Vector2f(0.0f, 0.0f), sf::Vector2f size = sf::Vector2f(100.0f, 100.0f));
+	Entity(sf::Texture& texture, sf::Vector2f position = sf::Vector2f(0.0f, 0.0f),
+	       sf::Vector2f size = sf::Vector2f(100.0f, 100.0f));
 
 	const sf::RectangleShape& getBody() const { return body_; }
 	const sf::Texture& getTexture() const { return texture_; }
@@ -25,4 +26,3 @@ public:
 
 	bool collides(const Entity& other) const;
 };
-

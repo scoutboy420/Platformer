@@ -11,8 +11,13 @@ private:
 public:
 	Scene(Player player, Room currentRoom);
 
-	void Update(float deltaTime, sf::RenderWindow& window);
+	void update(float deltaTime, sf::RenderWindow& window);
 
 	Player& getPlayer() const;
 	Room& getRoom() const;
+
+	void changeRoom(Room& room);
+	bool isPlayerInBounds();
+
+	void checkCollisions();
 };
