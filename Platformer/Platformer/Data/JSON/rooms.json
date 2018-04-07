@@ -1,0 +1,26 @@
+{
+  "name": "rooms",
+  "room1": {
+    "colorB": 255,
+    "colorG": 255,
+    "colorR": 255,
+    "entities": [
+      {
+        "positionX": 150.0,
+        "positionY": 300.0
+      },
+      {
+        "positionX": 200.0,
+        "positionY": 300.0
+      },
+      {
+        "positionX": 250.0,
+        "positionY": 300.0
+      },
+      {
+        "positionX": 300.0,
+        "positionY": 300.0
+      }
+    ]
+  }
+}
