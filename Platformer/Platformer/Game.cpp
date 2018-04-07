@@ -63,8 +63,6 @@ void Game::update(float deltaTime)
 
 	CheckCollisions();
 
-	//printf("%f, %f\n", player_.getCenter().x, player_.getCenter().y);
-
 	view_.setCenter(player_.getCenter());
 }
 

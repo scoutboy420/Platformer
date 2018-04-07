@@ -1,8 +1,8 @@
 ﻿{
   "positionX": 200.0,
   "positionY": 250.0,
-  "speed": 100.0,
+  "speed": 200.0,
   "jumpSpeed": 500.0,
-  "drag": 500.0,
+  "drag": 1000.0,
   "gravity": 900.0
 }
