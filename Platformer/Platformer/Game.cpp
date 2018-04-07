@@ -2,7 +2,7 @@
 #include "Utilities/Resources.h"
 #include "Utilities/JSON/json.hpp"
 
-void Game::CheckCollisions()
+void Game::checkCollisions()
 {
 	player_.onGround = false;
 
@@ -11,11 +11,8 @@ void Game::CheckCollisions()
 		if(player_.collides(entity))
 		{
 			auto push = player_.checkPush(entity);
-			if(push.y > 0) player_.onGround = true;
+			if(push.y > 0) player_.onGround = true; //if it pushes the player upwards, then the player is on top of something
 			player_.move(push);
-
-			if(push.x != 0.0f) player_.stopX();
-			if(push.y != 0.0f) player_.stopY();
 		}
 	}
 }
@@ -61,7 +58,7 @@ void Game::update(float deltaTime)
 {
 	player_.update(deltaTime);
 
-	CheckCollisions();
+	checkCollisions();
 
 	view_.setCenter(player_.getCenter());
 }
@@ -74,7 +71,7 @@ void Game::draw()
 
 	for(const auto& entity : currentRoom_.getEntities())
 	{
-		if(entity.getBody().getTextureRect().intersects(viewInt))
+		if(entity.getBody().getTextureRect().intersects(viewInt)) //draw only entities that are inside view
 		{
 			window_.draw(entity.getBody());
 		}
@@ -104,9 +101,7 @@ Game::Game(sf::VideoMode mode, std::string title) : window_(mode, title)
 
 	player_ = Player(Resources::textures_.at("player"), playerPosition, playerSpeed, playerDrag);
 
-	CheckCollisions();
-	player_.onGround = true;
-	//Check if player is on ground
+	checkCollisions();
 
 	view_ = sf::View(player_.getCenter(), sf::Vector2f(mode.width, mode.height));
 
@@ -117,15 +112,15 @@ Game::Game(sf::VideoMode mode, std::string title) : window_(mode, title)
 
 bool Game::play()
 {
-	if(!handleWindowEvents()) return false;
+	if(!handleWindowEvents()) return false; //Check what happened with window
 
-	handleInput();
+	handleInput(); //Check pressed keys
 
 	float deltaTime = clock_.restart().asSeconds();
-	if(deltaTime > 1.0f / 60.0f) deltaTime = 1.0f / 60.0f;
+	if(deltaTime > 1.0f / 60.0f) deltaTime = 1.0f / 60.0f; //limit framerate to 60 fps
 
-	update(deltaTime);
-	draw();
+	update(deltaTime); //update everything that is moving
+	draw(); //draw everything to the screen
 
 	return true;
 }

@@ -5,9 +5,7 @@ int main()
 {
 	Game game(sf::VideoMode(500, 500), "Game");
 
-	while(game.play())
-	{
-	}
+	while(game.play()) { }
 
 	return 0;
 }

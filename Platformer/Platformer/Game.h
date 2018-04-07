@@ -9,9 +9,9 @@ private:
 	Room currentRoom_;
 	sf::RenderWindow window_;
 	sf::View view_;
-	sf::Clock clock_;
+	sf::Clock clock_; //to count time between frames
 
-	void CheckCollisions();
+	void checkCollisions();
 	void handleInput();
 	bool handleWindowEvents();
 	void update(float deltaTime);

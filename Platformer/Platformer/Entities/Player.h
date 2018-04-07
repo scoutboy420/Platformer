@@ -9,14 +9,10 @@ class Player :
 public:
 	bool onGround;
 
-	Player() : onGround(false)
-	{
-	}
+	Player() : onGround(false) { }
 
 	Player(sf::Texture& texture, sf::Vector2f position, sf::Vector2f speed, sf::Vector2f drag) :
-		Entity(texture, position), velocity_(0.0f, 0.0f), speed_(speed), drag_(drag), onGround(false)
-	{
-	}
+		Entity(texture, position), velocity_(0.0f, 0.0f), speed_(speed), drag_(drag), onGround(false) { }
 
 	const sf::Sprite& getBody() const { return body_; }
 

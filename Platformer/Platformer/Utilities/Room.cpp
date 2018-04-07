@@ -5,6 +5,8 @@ Room::Room(int roomId)
 {
 	blocks_ = Resources::createEntities(roomId);
 
+	//calculateSize();
+
 	std::string roomName = "room" + std::to_string(roomId);
 
 	int R = Resources::rooms_.at(roomName).at("colorR").get<int>();
