@@ -32,11 +32,11 @@ void Resources::load()
 std::vector<Entity> Resources::createEntities(int roomId)
 {
 	std::vector<Entity> entities;
-	std::string roomName = "room" + std::to_string(roomId);
+	const std::string roomName = "room" + std::to_string(roomId);
 
 	for(auto& entity : rooms_.at(roomName).at("entities"))
 	{
-		sf::Vector2f position(entity.at("positionX").get<float>(), entity.at("positionY").get<float>());
+		const sf::Vector2f position(entity.at("positionX").get<float>(), entity.at("positionY").get<float>());
 
 		entities.push_back(Entity(textures_["block"], position));
 	}
@@ -60,7 +60,7 @@ int Resources::getStartingRoomId()
 {
 	std::string roomName = map_.at("startingRoom").get<std::string>();
 
-	std::string num = roomName.substr(4);
+	const std::string num = roomName.substr(4);
 
 	return std::stoi(num);
 }

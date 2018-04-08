@@ -10,10 +10,10 @@ Entity::Entity(sf::Texture& texture, sf::Vector2f position)
 
 sf::Vector2f Entity::getCenter() const
 {
-	float posX = getPosition().x;
-	float posY = getPosition().y;
-	float sizeX = getSize().x;
-	float sizeY = getSize().y;
+	const float posX = getPosition().x;
+	const float posY = getPosition().y;
+	const float sizeX = getSize().x;
+	const float sizeY = getSize().y;
 
 	return {posX + sizeX * 0.5f, posY + sizeY * 0.5f};
 }
@@ -21,11 +21,11 @@ sf::Vector2f Entity::getCenter() const
 bool Entity::collides(const Entity& other) const
 {
 	//Distances
-	float deltaX = other.getCenter().x - getCenter().x;
-	float deltaY = other.getCenter().y - getCenter().y;
+	const float deltaX = other.getCenter().x - getCenter().x;
+	const float deltaY = other.getCenter().y - getCenter().y;
 	//Intersections
-	float intersectX = std::fabs(deltaX) - (other.getSize().x * 0.5f + getSize().x * 0.5f);
-	float intersectY = std::fabs(deltaY) - (other.getSize().y * 0.5f + getSize().y * 0.5f);
+	const float intersectX = std::fabs(deltaX) - (other.getSize().x * 0.5f + getSize().x * 0.5f);
+	const float intersectY = std::fabs(deltaY) - (other.getSize().y * 0.5f + getSize().y * 0.5f);
 
 	return intersectX < 0.0f && intersectY < 0.0f; //if both intersections are negative, then objects collide
 }
