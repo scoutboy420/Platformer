@@ -35,6 +35,8 @@ sf::Vector2f Player::checkPush(const Entity& other) const
 	const float intersectX = std::fabs(deltaX) - (other.getSize().x * 0.5f + getSize().x * 0.5f);
 	const float intersectY = std::fabs(deltaY) - (other.getSize().y * 0.5f + getSize().y * 0.5f);
 
+	float pushX, pushY;
+
 	if(intersectX < 0.0f && intersectY < 0.0f)
 	{
 		if(intersectX > intersectY)
@@ -47,6 +49,8 @@ sf::Vector2f Player::checkPush(const Entity& other) const
 			if(deltaY > 0.0f) return {0.0f, -intersectY};
 			else return {0.0f, intersectY};
 		}
+
+		return { pushX, pushY };
 	}
 
 	return {0.0f, 0.0f};

@@ -17,7 +17,6 @@ void Game::checkCollisions()
 			printf("Position: %f,%f, Push: %f,%f\n", player_.getCenter().x, player_.getCenter().y, push.x, push.y);
 
 			if(push.y != 0.0f) player_.stopY();
-			if(push.x != 0.0f) player_.stopX();
 		}
 	}
 }

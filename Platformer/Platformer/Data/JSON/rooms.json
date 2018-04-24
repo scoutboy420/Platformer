@@ -6,10 +6,6 @@
     "colorR": 255,
     "entities": [
       {
-        "positionX": 150.0,
-        "positionY": 300.0
-      },
-      {
         "positionX": 200.0,
         "positionY": 300.0
       },
@@ -20,6 +16,46 @@
       {
         "positionX": 300.0,
         "positionY": 300.0
+      },
+      {
+        "positionX": 350.0,
+        "positionY": 200.0
+      },
+      {
+        "positionX": 400.0,
+        "positionY": 200.0
+      },
+      {
+        "positionX": 450.0,
+        "positionY": 200.0
+      },
+      {
+        "positionX": 450.0,
+        "positionY": 150.0
+      },
+      {
+        "positionX": 450.0,
+        "positionY": 100.0
+      },
+      {
+        "positionX": 450.0,
+        "positionY": 50.0
+      },
+      {
+        "positionX": 450.0,
+        "positionY": 0.0
+      },
+      {
+        "positionX": 450.0,
+        "positionY": -50.0
+      },
+      {
+        "positionX": 450.0,
+        "positionY": -100.0
+      },
+      {
+        "positionX": 450.0,
+        "positionY": -150.0
       }
     ]
   }
