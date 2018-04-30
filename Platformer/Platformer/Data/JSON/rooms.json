@@ -1,9 +1,9 @@
 {
   "name": "rooms",
   "room1": {
-    "colorB": 255,
-    "colorG": 255,
-    "colorR": 255,
+    "colorB": 220,
+    "colorG": 213,
+    "colorR": 247,
     "entities": [
       {
         "positionX": 0.0,

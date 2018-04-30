@@ -39,6 +39,28 @@ void Game::checkRoomChange()
 	else if(dir == Resources::direction::RIGHT) player_.move({ -currentRoom_.getSize().x + 1.0f, 0.0f });
 	else if(dir == Resources::direction::UP) player_.move({ 0.0f, currentRoom_.getSize().y - 1.0f });
 	else if(dir == Resources::direction::DOWN) player_.move({ 0.0f, -currentRoom_.getSize().y + 1.0f });
+
+	scaleView();
+}
+
+void Game::checkCamera()
+{
+	float camX = player_.getCenter().x, camY = player_.getCenter().y;
+
+	if(camX - view_.getSize().x*0.5f < 0.0f) camX += (view_.getSize().x*0.5f - camX);
+	if(camX + view_.getSize().x*0.5f > currentRoom_.getSize().x) camX -= (camX + view_.getSize().x*0.5f - currentRoom_.getSize().x);
+	if(camY - view_.getSize().y*0.5f < 0.0f) camY += (view_.getSize().y*0.5f - camY);
+	if(camY + view_.getSize().y*0.5f > currentRoom_.getSize().y) camY -= (camY + view_.getSize().y*0.5f - currentRoom_.getSize().y);
+
+	view_.setCenter(camX, camY);
+}
+
+void Game::scaleView()
+{
+	const float ratioX = currentRoom_.getSize().x / view_.getSize().x, ratioY = currentRoom_.getSize().y / view_.getSize().y;
+	const float dominatingRatio = std::min(ratioX, ratioY);
+
+	if(dominatingRatio < 1.0f) view_.zoom(dominatingRatio);
 }
 
 void Game::handleInput()
@@ -85,7 +107,7 @@ void Game::update(float deltaTime)
 
 	checkRoomChange();
 
-	view_.setCenter(player_.getCenter());
+	checkCamera();
 }
 
 void Game::draw()
@@ -136,6 +158,8 @@ Game::Game(sf::VideoMode mode, std::string title) : window_(mode, title)
 	checkCollisions();
 
 	view_ = sf::View(player_.getCenter(), sf::Vector2f(mode.width, mode.height));
+
+	scaleView();
 
 	window_.setView(view_);
 

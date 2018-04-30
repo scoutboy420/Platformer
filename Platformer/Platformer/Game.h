@@ -13,6 +13,8 @@ private:
 
 	void checkCollisions();
 	void checkRoomChange();
+	void checkCamera();
+	void scaleView();
 	void handleInput();
 	bool handleWindowEvents();
 	void update(float deltaTime);
