@@ -5,15 +5,21 @@
 class Room
 {
 	std::vector<Entity> blocks_;
-	sf::Color background_;
-	sf::Vector2u size_;
+	sf::Color backgroundColor_;
+	sf::RectangleShape background_;
+	sf::Vector2f size_; //size of room from 0,0 to bottom right corner of bottom right block
 
-	void calculateSize(); //TODO: implement. should calculate the size of the map by blocks
+	std::vector<std::vector<sf::Vertex>> gradientEdges_;
+
+	void calculateSize();
+	void addGradient();
 public:
 	Room() = default;
 	Room(int roomId);
 
-	sf::Vector2u getSize() const { return size_; }
+	sf::Vector2f getSize() const { return size_; }
 	const std::vector<Entity>& getEntities() const { return blocks_; }
-	sf::Color getBackground() const { return background_; }
+	std::vector<std::vector<sf::Vertex>> getGradientEdges() const { return gradientEdges_; }
+	sf::Color getBackgroundColor() const { return backgroundColor_; }
+	sf::RectangleShape getBackground() const { return background_; }
 };

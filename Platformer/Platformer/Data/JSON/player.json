@@ -1,6 +1,6 @@
 ﻿{
-  "positionX": 200.0,
-  "positionY": 250.0,
+  "positionX": 125.0,
+  "positionY": 125.0,
   "speed": 500.0,
   "jumpSpeed": 1200.0,
   "gravity": 4000.0,

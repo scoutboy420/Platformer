@@ -68,9 +68,11 @@ void Game::update(float deltaTime)
 
 void Game::draw()
 {
-	window_.clear(currentRoom_.getBackground());
+	window_.clear(sf::Color::Black);
 
 	window_.setView(view_);
+
+	window_.draw(currentRoom_.getBackground());
 
 	const sf::IntRect viewInt = sf::IntRect(view_.getViewport());
 
@@ -83,6 +85,11 @@ void Game::draw()
 	}
 
 	window_.draw(player_.getBody());
+
+	for(auto e : currentRoom_.getGradientEdges())
+	{
+		window_.draw(e.data(), 4, sf::Quads);
+	}
 
 	window_.display();
 }
