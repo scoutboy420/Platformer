@@ -17,9 +17,10 @@ public:
 	static std::unordered_map<std::string, sf::Texture> textures_;
 
 	static void load(); //Loads every resource from disk
-	static int getNextRoomId(int currenRoomX, int currentRoomY, direction direction); //TODO: implement. should look up next room in rooms json
 	static std::vector<Entity> createEntities(int roomId);
 
 	static int getRoomCount();
-	static int getStartingRoomId();
+	static int getRoomId(std::string roomName);
+
+	static std::string directionToString(direction dir);
 };

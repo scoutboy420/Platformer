@@ -1,9 +1,11 @@
 ﻿{
   "startingRoom": "room1",
   "room1": {
-    "up": "room2",
-    "right": "room3",
-    "down": "room4",
-    "left": "room5"
-  }
+    "left": "room2"
+  },
+  "room2":
+  {
+    "right": "room1"
+  },
+  "name": "map"
 }

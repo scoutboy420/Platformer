@@ -56,11 +56,22 @@ int Resources::getRoomCount()
 	return i;
 }
 
-int Resources::getStartingRoomId()
+int Resources::getRoomId(std::string roomName)
 {
-	std::string roomName = map_.at("startingRoom").get<std::string>();
-
-	const std::string num = roomName.substr(4);
+	const auto num = roomName.substr(4);
 
 	return std::stoi(num);
+}
+
+std::string Resources::directionToString(direction dir)
+{
+	switch(dir)
+	{
+	case direction::LEFT: return "left";
+	case direction::RIGHT: return "right";
+	case direction::UP: return "up";
+	case direction::DOWN: return "down";
+	}
+
+	throw std::invalid_argument("Invalid enum value");
 }

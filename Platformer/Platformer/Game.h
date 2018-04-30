@@ -12,6 +12,7 @@ private:
 	sf::Clock clock_; //to count time between frames
 
 	void checkCollisions();
+	void checkRoomChange();
 	void handleInput();
 	bool handleWindowEvents();
 	void update(float deltaTime);

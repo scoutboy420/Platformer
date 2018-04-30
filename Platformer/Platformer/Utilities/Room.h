@@ -4,6 +4,7 @@
 
 class Room
 {
+	int id_;
 	std::vector<Entity> blocks_;
 	sf::Color backgroundColor_;
 	sf::RectangleShape background_;
@@ -17,6 +18,7 @@ public:
 	Room() = default;
 	Room(int roomId);
 
+	int getID() const { return id_; }
 	sf::Vector2f getSize() const { return size_; }
 	const std::vector<Entity>& getEntities() const { return blocks_; }
 	std::vector<std::vector<sf::Vertex>> getGradientEdges() const { return gradientEdges_; }

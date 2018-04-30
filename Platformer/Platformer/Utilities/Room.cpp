@@ -56,6 +56,8 @@ void Room::addGradient()
 
 Room::Room(int roomId)
 {
+	id_ = roomId;
+
 	blocks_ = Resources::createEntities(roomId);
 
 	calculateSize();

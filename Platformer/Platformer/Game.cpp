@@ -21,6 +21,26 @@ void Game::checkCollisions()
 	}
 }
 
+void Game::checkRoomChange()
+{
+	const std::string currentRoomName = "room" + std::to_string(currentRoom_.getID());
+	Resources::direction dir;
+	if(player_.getCenter().x <= 0.0f) dir = Resources::direction::LEFT;
+	else if(player_.getCenter().x >= currentRoom_.getSize().x) dir = Resources::direction::RIGHT;
+	else if(player_.getCenter().y <= 0.0f) dir = Resources::direction::UP;
+	else if(player_.getCenter().y >= currentRoom_.getSize().y) dir = Resources::direction::DOWN;
+	else return;
+
+	const std::string roomName = Resources::map_.at(currentRoomName).at(Resources::directionToString(dir)).get<std::string>();
+
+	currentRoom_ = Room(Resources::getRoomId(roomName));
+
+	if(dir == Resources::direction::LEFT) player_.move({ currentRoom_.getSize().x - 1.0f, 0.0f });
+	else if(dir == Resources::direction::RIGHT) player_.move({ -currentRoom_.getSize().x + 1.0f, 0.0f });
+	else if(dir == Resources::direction::UP) player_.move({ 0.0f, currentRoom_.getSize().y - 1.0f });
+	else if(dir == Resources::direction::DOWN) player_.move({ 0.0f, -currentRoom_.getSize().y + 1.0f });
+}
+
 void Game::handleInput()
 {
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
@@ -63,6 +83,8 @@ void Game::update(float deltaTime)
 
 	checkCollisions();
 
+	checkRoomChange();
+
 	view_.setCenter(player_.getCenter());
 }
 
@@ -100,7 +122,7 @@ Game::Game(sf::VideoMode mode, std::string title) : window_(mode, title)
 
 	Resources::load();
 
-	currentRoom_ = Room(Resources::getStartingRoomId());
+	currentRoom_ = Room(Resources::getRoomId(Resources::map_.at("startingRoom").get<std::string>()));
 
 	const sf::Vector2f playerPosition(Resources::playerData_.at("positionX").get<float>(),
 	                                  Resources::playerData_.at("positionY").get<float>());
