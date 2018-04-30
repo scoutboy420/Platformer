@@ -21,7 +21,8 @@ public:
 	void update(float deltaTime);
 
 	void jump();
-	void move(sf::Vector2f transform);
+	void move(sf::Vector2f transform) { body_.move(sf::Vector2f(transform.x, -transform.y)); }
+	void setPosition(sf::Vector2f position) { body_.setPosition(position); }
 	void stopX() { velocity_.x = 0.0f; }
 	void stopY() { velocity_.y = 0.0f; }
 

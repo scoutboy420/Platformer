@@ -4,6 +4,9 @@
     "colorB": 220,
     "colorG": 213,
     "colorR": 247,
+    "entrances": {
+      "left": {"x": 0.0, "y": 550.0 } 
+    },
     "entities": [
       {
         "positionX": 0.0,
@@ -467,6 +470,9 @@
     "colorB": 206,
     "colorG": 245,
     "colorR": 196,
+    "entrances": {
+      "right": {"x": 1000.0, "y": 750.0 }
+    },
     "entities": [
       {
         "positionX": 0.0,
@@ -674,19 +680,19 @@
       },
       {
         "positionX": 1000.0,
+        "positionY": 500.0
+      },
+      {
+        "positionX": 1000.0,
+        "positionY": 550.0
+      },
+      {
+        "positionX": 1000.0,
         "positionY": 600.0
       },
       {
         "positionX": 1000.0,
         "positionY": 650.0
-      },
-      {
-        "positionX": 1000.0,
-        "positionY": 700.0
-      },
-      {
-        "positionX": 1000.0,
-        "positionY": 750.0
       },
       {
         "positionX": 1000.0,

@@ -23,11 +23,6 @@ void Player::jump()
 	}
 }
 
-void Player::move(sf::Vector2f transform)
-{
-	body_.move(sf::Vector2f(transform.x, -transform.y));
-}
-
 sf::Vector2f Player::checkPush(const Entity& other) const
 {
 	const float deltaX = other.getCenter().x - getCenter().x;

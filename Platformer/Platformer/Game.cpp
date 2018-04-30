@@ -23,7 +23,6 @@ void Game::checkCollisions()
 
 void Game::checkRoomChange()
 {
-	const std::string currentRoomName = "room" + std::to_string(currentRoom_.getID());
 	Resources::direction dir;
 	if(player_.getCenter().x <= 0.0f) dir = Resources::direction::LEFT;
 	else if(player_.getCenter().x >= currentRoom_.getSize().x) dir = Resources::direction::RIGHT;
@@ -31,14 +30,30 @@ void Game::checkRoomChange()
 	else if(player_.getCenter().y >= currentRoom_.getSize().y) dir = Resources::direction::DOWN;
 	else return;
 
-	const std::string roomName = Resources::map_.at(currentRoomName).at(Resources::directionToString(dir)).get<std::string>();
+	const std::string dirName = Resources::directionToString(dir);
+	const std::string oldRoomName = "room" + std::to_string(currentRoom_.getID());
+	const std::string currentRoomName = Resources::map_.at(oldRoomName).at(dirName).get<std::string>();
 
-	currentRoom_ = Room(Resources::getRoomId(roomName));
+	currentRoom_ = Room(Resources::getRoomId(currentRoomName));
+	nlohmann::json oldEntrances = Resources::rooms_.at(oldRoomName).at("entrances");
+	nlohmann::json currentEntrances = Resources::rooms_.at(currentRoomName).at("entrances");
 
-	if(dir == Resources::direction::LEFT) player_.move({ currentRoom_.getSize().x - 1.0f, 0.0f });
-	else if(dir == Resources::direction::RIGHT) player_.move({ -currentRoom_.getSize().x + 1.0f, 0.0f });
-	else if(dir == Resources::direction::UP) player_.move({ 0.0f, currentRoom_.getSize().y - 1.0f });
-	else if(dir == Resources::direction::DOWN) player_.move({ 0.0f, -currentRoom_.getSize().y + 1.0f });
+	if(dir == Resources::direction::LEFT) 
+		player_.setPosition(
+			{ currentEntrances.at("right").at("x").get<float>(), 
+				currentEntrances.at("right").at("y").get<float>() + (player_.getPosition().y - oldEntrances.at("left").at("y").get<float>()) });
+	else if(dir == Resources::direction::RIGHT) 
+		player_.setPosition(
+			{ currentEntrances.at("left").at("x").get<float>(), 
+				currentEntrances.at("left").at("y").get<float>() + (player_.getPosition().y - oldEntrances.at("right").at("y").get<float>()) });
+	else if(dir == Resources::direction::UP) 
+		player_.setPosition(
+			{ currentEntrances.at("down").at("x").get<float>() + (player_.getPosition().x - oldEntrances.at("down").at("x").get<float>()),
+				currentEntrances.at("down").at("y").get<float>() });
+	else if(dir == Resources::direction::DOWN) 
+		player_.setPosition(
+			{ currentEntrances.at("up").at("x").get<float>() + (player_.getPosition().x - oldEntrances.at("up").at("x").get<float>()),
+				currentEntrances.at("up").at("y").get<float>() });
 
 	scaleView();
 }
