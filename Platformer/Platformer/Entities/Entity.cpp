@@ -4,7 +4,7 @@ Entity::Entity(sf::Texture& texture, sf::Vector2f position)
 {
 	body_.setTexture(texture, true);
 	body_.setPosition(position);
-	size_ = body_.getTexture()->getSize();
+	size_ = sf::Vector2f(body_.getTexture()->getSize());
 	isActive_ = true;
 }
 

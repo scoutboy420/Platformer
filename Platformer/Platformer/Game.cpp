@@ -191,7 +191,7 @@ Game::Game(sf::VideoMode mode, std::string title) : window_(mode, title)
 
 	checkCollisions();
 
-	defaultViewSize_ = sf::Vector2f(mode.width, mode.height);
+	defaultViewSize_ = sf::Vector2f(float(mode.width), float(mode.height));
 	view_ = sf::View(player_.getCenter(), defaultViewSize_);
 
 	scaleView();
