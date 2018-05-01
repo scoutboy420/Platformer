@@ -5,10 +5,12 @@ void Room::calculateSize()
 {
 	if(blocks_.empty())
 	{
-		size_ = { 0.0f, 0.0f };
+		size_ = {0.0f, 0.0f};
 		return;
 	}
-	
+
+	//Assumes that room starts at (0,0), it is rectangular and every block is 50x50
+
 	sf::Vector2f lowerRight = blocks_[0].getPosition();
 
 	for(const auto& b : blocks_)
@@ -19,39 +21,44 @@ void Room::calculateSize()
 		else if(pos.y > lowerRight.y) lowerRight = pos;
 	}
 
-	size_ = { lowerRight.x + 50.0f, lowerRight.y + 50.0f };
+	size_ = {lowerRight.x + 50.0f, lowerRight.y + 50.0f};
 }
 
 void Room::addGradient()
 {
+	//Assumes that wall blocks are 50x50
 
+	//left
 	gradientEdges_.push_back({
-		sf::Vertex({ 0.0f, 0.0f }, sf::Color::Black),
-		sf::Vertex({ 0.0f, size_.y }, sf::Color::Black),
-		sf::Vertex({ 50.0f, size_.y }, sf::Color::Transparent),
-		sf::Vertex({ 50.0f, 0.0f }, sf::Color::Transparent)
+		sf::Vertex({0.0f, 0.0f}, sf::Color::Black),
+		sf::Vertex({0.0f, size_.y}, sf::Color::Black),
+		sf::Vertex({50.0f, size_.y}, sf::Color::Transparent),
+		sf::Vertex({50.0f, 0.0f}, sf::Color::Transparent)
 	});
 
+	//up
 	gradientEdges_.push_back({
-		sf::Vertex({ 0.0f, 0.0f }, sf::Color::Black),
-		sf::Vertex({ size_.x, 0.0f }, sf::Color::Black),
-		sf::Vertex({ size_.x, 50.0f }, sf::Color::Transparent),
-		sf::Vertex({ 0.0f, 50.0f }, sf::Color::Transparent)
-		});
+		sf::Vertex({0.0f, 0.0f}, sf::Color::Black),
+		sf::Vertex({size_.x, 0.0f}, sf::Color::Black),
+		sf::Vertex({size_.x, 50.0f}, sf::Color::Transparent),
+		sf::Vertex({0.0f, 50.0f}, sf::Color::Transparent)
+	});
 
+	//right
 	gradientEdges_.push_back({
-		sf::Vertex({ size_.x, 0.0f }, sf::Color::Black),
-		sf::Vertex({ size_.x, size_.y }, sf::Color::Black),
-		sf::Vertex({ size_.x - 50.0f, size_.y }, sf::Color::Transparent),
-		sf::Vertex({ size_.x - 50.0f, 0.0f }, sf::Color::Transparent)
-		});
+		sf::Vertex({size_.x, 0.0f}, sf::Color::Black),
+		sf::Vertex({size_.x, size_.y}, sf::Color::Black),
+		sf::Vertex({size_.x - 50.0f, size_.y}, sf::Color::Transparent),
+		sf::Vertex({size_.x - 50.0f, 0.0f}, sf::Color::Transparent)
+	});
 
+	//down
 	gradientEdges_.push_back({
-		sf::Vertex({ 0.0f, size_.y }, sf::Color::Black),
-		sf::Vertex({ size_.x, size_.y }, sf::Color::Black),
-		sf::Vertex({ size_.x, size_.y - 50.0f }, sf::Color::Transparent),
-		sf::Vertex({ 0.0f, size_.y - 50.0f }, sf::Color::Transparent)
-		});
+		sf::Vertex({0.0f, size_.y}, sf::Color::Black),
+		sf::Vertex({size_.x, size_.y}, sf::Color::Black),
+		sf::Vertex({size_.x, size_.y - 50.0f}, sf::Color::Transparent),
+		sf::Vertex({0.0f, size_.y - 50.0f}, sf::Color::Transparent)
+	});
 }
 
 Room::Room(int roomId)

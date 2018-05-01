@@ -30,48 +30,67 @@ void Game::checkRoomChange()
 	else if(player_.getCenter().y >= currentRoom_.getSize().y) dir = Resources::direction::DOWN;
 	else return;
 
+	changeRoom(dir);
+}
+
+void Game::changeRoom(Resources::direction dir)
+{
 	const std::string dirName = Resources::directionToString(dir);
 	const std::string oldRoomName = "room" + std::to_string(currentRoom_.getID());
 	const std::string currentRoomName = Resources::map_.at(oldRoomName).at(dirName).get<std::string>();
 
 	currentRoom_ = Room(Resources::getRoomId(currentRoomName));
-	nlohmann::json oldEntrances = Resources::rooms_.at(oldRoomName).at("entrances");
-	nlohmann::json currentEntrances = Resources::rooms_.at(currentRoomName).at("entrances");
+	auto oldEntrances = Resources::rooms_.at(oldRoomName).at("entrances");
+	auto currentEntrances = Resources::rooms_.at(currentRoomName).at("entrances");
 
-	if(dir == Resources::direction::LEFT) 
-		player_.setPosition(
-			{ currentEntrances.at("right").at("x").get<float>(), 
-				currentEntrances.at("right").at("y").get<float>() + (player_.getPosition().y - oldEntrances.at("left").at("y").get<float>()) });
-	else if(dir == Resources::direction::RIGHT) 
-		player_.setPosition(
-			{ currentEntrances.at("left").at("x").get<float>(), 
-				currentEntrances.at("left").at("y").get<float>() + (player_.getPosition().y - oldEntrances.at("right").at("y").get<float>()) });
-	else if(dir == Resources::direction::UP) 
-		player_.setPosition(
-			{ currentEntrances.at("down").at("x").get<float>() + (player_.getPosition().x - oldEntrances.at("down").at("x").get<float>()),
-				currentEntrances.at("down").at("y").get<float>() });
-	else if(dir == Resources::direction::DOWN) 
-		player_.setPosition(
-			{ currentEntrances.at("up").at("x").get<float>() + (player_.getPosition().x - oldEntrances.at("up").at("x").get<float>()),
-				currentEntrances.at("up").at("y").get<float>() });
+	//Change player's position to equivalent entrance at new room
 
-	scaleView();
+	if(dir == Resources::direction::LEFT)
+		player_.setPosition(
+			{ 
+				currentEntrances.at("right").at("x").get<float>(),
+				currentEntrances.at("right").at("y").get<float>() + (player_.getPosition().y - oldEntrances.at("left").at("y").get<float>()) 
+			});
+	else if(dir == Resources::direction::RIGHT)
+		player_.setPosition(
+			{ 
+				currentEntrances.at("left").at("x").get<float>(),
+				currentEntrances.at("left").at("y").get<float>() + (player_.getPosition().y - oldEntrances.at("right").at("y").get<float>()) 
+			});
+	else if(dir == Resources::direction::UP)
+		player_.setPosition(
+			{
+				currentEntrances.at("down").at("x").get<float>() + (player_.getPosition().x - oldEntrances.at("down").at("x").get<float>()),
+				currentEntrances.at("down").at("y").get<float>() 
+			});
+	else if(dir == Resources::direction::DOWN)
+		player_.setPosition(
+			{ 
+				currentEntrances.at("up").at("x").get<float>() + (player_.getPosition().x - oldEntrances.at("up").at("x").get<float>()),
+				currentEntrances.at("up").at("y").get<float>() 
+			});
+
+	scaleView(); //Scale view if new room is smaller than old room
 }
 
 void Game::checkCamera()
 {
 	float camX = player_.getCenter().x, camY = player_.getCenter().y;
 
-	if(camX - view_.getSize().x*0.5f < 0.0f) camX += (view_.getSize().x*0.5f - camX);
-	if(camX + view_.getSize().x*0.5f > currentRoom_.getSize().x) camX -= (camX + view_.getSize().x*0.5f - currentRoom_.getSize().x);
-	if(camY - view_.getSize().y*0.5f < 0.0f) camY += (view_.getSize().y*0.5f - camY);
-	if(camY + view_.getSize().y*0.5f > currentRoom_.getSize().y) camY -= (camY + view_.getSize().y*0.5f - currentRoom_.getSize().y);
+	//Bound camera if it goes outside walls (assuming room is rectangular)
+	if(camX - view_.getSize().x * 0.5f < 0.0f) camX += (view_.getSize().x * 0.5f - camX);
+	if(camX + view_.getSize().x * 0.5f > currentRoom_.getSize().x) camX -= (camX + view_.getSize().x * 0.5f - currentRoom_.getSize().x);
+	if(camY - view_.getSize().y * 0.5f < 0.0f) camY += (view_.getSize().y * 0.5f - camY);
+	if(camY + view_.getSize().y * 0.5f > currentRoom_.getSize().y) camY -= (camY + view_.getSize().y * 0.5f - currentRoom_.getSize().y);
 
 	view_.setCenter(camX, camY);
 }
 
 void Game::scaleView()
 {
+	view_.setSize(defaultViewSize_);
+	//If current view is bigger than entire room, scale it down to fit entire room (and no more)
+
 	const float ratioX = currentRoom_.getSize().x / view_.getSize().x, ratioY = currentRoom_.getSize().y / view_.getSize().y;
 	const float dominatingRatio = std::min(ratioX, ratioY);
 
@@ -172,7 +191,8 @@ Game::Game(sf::VideoMode mode, std::string title) : window_(mode, title)
 
 	checkCollisions();
 
-	view_ = sf::View(player_.getCenter(), sf::Vector2f(mode.width, mode.height));
+	defaultViewSize_ = sf::Vector2f(mode.width, mode.height);
+	view_ = sf::View(player_.getCenter(), defaultViewSize_);
 
 	scaleView();
 

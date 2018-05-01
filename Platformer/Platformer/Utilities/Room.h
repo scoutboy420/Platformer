@@ -10,7 +10,7 @@ class Room
 	sf::RectangleShape background_;
 	sf::Vector2f size_; //size of room from 0,0 to bottom right corner of bottom right block
 
-	std::vector<std::vector<sf::Vertex>> gradientEdges_;
+	std::vector<std::vector<sf::Vertex>> gradientEdges_; //effect of fading to black on edges od the room
 
 	void calculateSize();
 	void addGradient();

@@ -10,9 +10,11 @@ private:
 	sf::RenderWindow window_;
 	sf::View view_;
 	sf::Clock clock_; //to count time between frames
+	sf::Vector2f defaultViewSize_;
 
 	void checkCollisions();
 	void checkRoomChange();
+	void changeRoom(Resources::direction dir);
 	void checkCamera();
 	void scaleView();
 	void handleInput();
