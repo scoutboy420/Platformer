@@ -290,3 +290,8 @@ __pycache__/
 *.filters
 *.sln
 /Platformer/sfml
+Platformer/Platformer/sfml-audio-2.dll
+*.dll
+Platformer/Platformer/Platformer CBPv2e.cbp
+Platformer/Platformer/Platformer CBPv2e.depend
+Platformer/Platformer/Platformer CBPv2e.layout

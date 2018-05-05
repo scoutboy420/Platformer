@@ -30,14 +30,14 @@ sf::Vector2f Player::checkPush(const Entity& other) const
 	const float intersectX = std::fabs(deltaX) - (other.getSize().x * 0.5f + getSize().x * 0.5f);
 	const float intersectY = std::fabs(deltaY) - (other.getSize().y * 0.5f + getSize().y * 0.5f);
 
-	if(intersectX < 0.0f && intersectY < 0.0f)
+	if(intersectX < 0.0f && intersectY < 0.0f && (intersectX < -2.0f || intersectY < -2.0f))
 	{
-		if(intersectX > intersectY)
+		if(intersectX > intersectY /*|| (intersectX > -2.0f && intersectY < -20.0f)*/ /*|| intersectY < -5.0f*/ /*(intersectX > -5.0f && intersectY > -5.0f)*/)
 		{
 			if(deltaX > 0.0f) return {intersectX, 0.0f};
 			return {-intersectX, 0.0f};
 		}
-		if(intersectX < intersectY)
+		if(intersectX < intersectY /*&& !(intersectY < -20.0f && intersectX > -2.0f)*/)
 		{
 			if(deltaY > 0.0f) return {0.0f, -intersectY};
 			return {0.0f, intersectY};
