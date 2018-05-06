@@ -2,7 +2,7 @@
 #include "Utilities/Resources.h"
 #include "Utilities/JSON/json.hpp"
 
-void Game::checkCollisions()
+void Game::checkCollisions(float deltaTime)
 {
 	player_.onGround = false;
 
@@ -10,7 +10,7 @@ void Game::checkCollisions()
 	{
 		if(player_.collides(entity))
 		{
-			const auto push = player_.checkPush(entity);
+			const auto push = player_.checkPush(entity, deltaTime);
 			if(push.y > 0) player_.onGround = true; //if it pushes the player upwards, then the player is on top of something
 			player_.move(push);
 
@@ -47,27 +47,27 @@ void Game::changeRoom(Resources::direction dir)
 
 	if(dir == Resources::direction::LEFT)
 		player_.setPosition(
-			{ 
+			{
 				currentEntrances.at("right").at("x").get<float>(),
-				currentEntrances.at("right").at("y").get<float>() + (player_.getPosition().y - oldEntrances.at("left").at("y").get<float>()) 
+				currentEntrances.at("right").at("y").get<float>() + (player_.getPosition().y - oldEntrances.at("left").at("y").get<float>())
 			});
 	else if(dir == Resources::direction::RIGHT)
 		player_.setPosition(
-			{ 
+			{
 				currentEntrances.at("left").at("x").get<float>(),
-				currentEntrances.at("left").at("y").get<float>() + (player_.getPosition().y - oldEntrances.at("right").at("y").get<float>()) 
+				currentEntrances.at("left").at("y").get<float>() + (player_.getPosition().y - oldEntrances.at("right").at("y").get<float>())
 			});
 	else if(dir == Resources::direction::UP)
 		player_.setPosition(
 			{
 				currentEntrances.at("down").at("x").get<float>() + (player_.getPosition().x - oldEntrances.at("down").at("x").get<float>()),
-				currentEntrances.at("down").at("y").get<float>() 
+				currentEntrances.at("down").at("y").get<float>()
 			});
 	else if(dir == Resources::direction::DOWN)
 		player_.setPosition(
-			{ 
+			{
 				currentEntrances.at("up").at("x").get<float>() + (player_.getPosition().x - oldEntrances.at("up").at("x").get<float>()),
-				currentEntrances.at("up").at("y").get<float>() 
+				currentEntrances.at("up").at("y").get<float>()
 			});
 
 	scaleView(); //Scale view if new room is smaller than old room
@@ -137,7 +137,7 @@ void Game::update(float deltaTime)
 {
 	player_.update(deltaTime);
 
-	checkCollisions();
+	checkCollisions(deltaTime);
 
 	checkRoomChange();
 
@@ -189,7 +189,7 @@ Game::Game(sf::VideoMode mode, std::string title) : window_(mode, title)
 
 	player_ = Player(Resources::textures_.at("player"), playerPosition, playerSpeed, gravity, friction);
 
-	checkCollisions();
+	checkCollisions(0.0f);      //not sure how big deltaTime should be
 
 	defaultViewSize_ = sf::Vector2f(float(mode.width), float(mode.height));
 	view_ = sf::View(player_.getCenter(), defaultViewSize_);

@@ -27,6 +27,8 @@ void Resources::load()
 
 	textures_["player"].loadFromFile("Data/Textures/player.png");
 	textures_["block"].loadFromFile("Data/Textures/block.png");
+	/*textures_["door2"].loadFromFile("Data/Textures/door2.png");
+	textures_["key"].loadFromFile("Data/Textures/key.png");*/
 }
 
 std::vector<Entity> Resources::createEntities(int roomId)

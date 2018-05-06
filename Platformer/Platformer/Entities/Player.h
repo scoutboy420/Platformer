@@ -32,5 +32,5 @@ public:
 		if(direction == Resources::direction::RIGHT) velocity_.x = speed_.x;
 	}
 
-	sf::Vector2f checkPush(const Entity& other) const;
+	sf::Vector2f checkPush(const Entity& other, float deltaTime) const;
 };
