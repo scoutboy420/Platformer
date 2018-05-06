@@ -14,7 +14,7 @@ private:
 
 	void checkCollisions();
 	void checkRoomChange();
-	void changeRoom(Resources::direction dir);
+	void changeRoom(int roomID, int entranceID, sf::Vector2f offset);
 	void checkCamera();
 	void scaleView();
 	void handleInput();

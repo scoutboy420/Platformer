@@ -24,53 +24,94 @@ void Game::checkCollisions()
 void Game::checkRoomChange()
 {
 	Resources::direction dir;
-	if(player_.getCenter().x <= 0.0f) dir = Resources::direction::LEFT;
-	else if(player_.getCenter().x >= currentRoom_.getSize().x) dir = Resources::direction::RIGHT;
-	else if(player_.getCenter().y <= 0.0f) dir = Resources::direction::UP;
-	else if(player_.getCenter().y >= currentRoom_.getSize().y) dir = Resources::direction::DOWN;
+	if(player_.getCenter().x < 0.0f) dir = Resources::direction::LEFT;
+	else if(player_.getCenter().x > currentRoom_.getSize().x) dir = Resources::direction::RIGHT;
+	else if(player_.getCenter().y < 0.0f) dir = Resources::direction::UP;
+	else if(player_.getCenter().y > currentRoom_.getSize().y) dir = Resources::direction::DOWN;
 	else return;
 
-	changeRoom(dir);
+	//Messy and assumes blocks are 50x50 but works
+
+	int roomID = 0, entranceID = 0;
+	sf::Vector2f offset = { 0.0f, 0.0f };
+	const std::string roomName = "room" + std::to_string(currentRoom_.getID());
+	for(const auto& entrance : Resources::rooms_.at(roomName).at("entrances"))
+	{
+		if(dir == Resources::direction::LEFT)
+		{
+			if(player_.getCenter().y >= entrance.at("y").get<float>() && 
+				player_.getCenter().y <= entrance.at("y").get<float>() + entrance.at("height").get<float>() * 50.0f)
+			{
+				if(entrance.at("x").get<float>() == 0.0f)
+				{
+					roomID = entrance.at("to").at("roomID").get<int>();
+					entranceID = entrance.at("to").at("entranceID").get<int>();
+					offset = sf::Vector2f(-player_.getSize().x * 0.5f + 50.0f, player_.getPosition().y - entrance.at("y").get<float>());
+				}
+			}
+		}
+		else if(dir == Resources::direction::RIGHT)
+		{
+			if(player_.getCenter().y >= entrance.at("y").get<float>() && 
+				player_.getCenter().y <= entrance.at("y").get<float>() + entrance.at("height").get<float>() * 50.0f)
+			{
+				if(entrance.at("x").get<float>() + 50.0f == currentRoom_.getSize().x)
+				{
+					roomID = entrance.at("to").at("roomID").get<int>();
+					entranceID = entrance.at("to").at("entranceID").get<int>();
+					offset = sf::Vector2f(-player_.getSize().x * 0.5f, player_.getPosition().y - entrance.at("y").get<float>());
+				}
+			}
+		}
+		else if(dir == Resources::direction::UP)
+		{
+			if(player_.getCenter().x >= entrance.at("x").get<float>() && 
+				player_.getCenter().x <= entrance.at("x").get<float>() + entrance.at("width").get<float>() * 50.0f)
+			{
+				if(entrance.at("y").get<float>() == 0.0f)
+				{
+					roomID = entrance.at("to").at("roomID").get<int>();
+					entranceID = entrance.at("to").at("entranceID").get<int>();
+					offset = sf::Vector2f(player_.getPosition().x - entrance.at("x").get<float>(), -player_.getSize().y * 0.5f + 50.0f);
+				}
+			}
+
+		}
+		else if(dir == Resources::direction::DOWN)
+		{
+			if(player_.getCenter().x >= entrance.at("x").get<float>() && 
+				player_.getCenter().x <= entrance.at("x").get<float>() + entrance.at("width").get<float>() * 50.0f)
+			{
+				if(entrance.at("y").get<float>() + 50.0f == currentRoom_.getSize().y)
+				{
+					roomID = entrance.at("to").at("roomID").get<int>();
+					entranceID = entrance.at("to").at("entranceID").get<int>();
+					offset = sf::Vector2f(player_.getPosition().x - entrance.at("x").get<float>(), -player_.getSize().y * 0.5f);
+				}
+			}
+		}
+	}
+
+	changeRoom(roomID, entranceID, offset);
 }
 
-void Game::changeRoom(Resources::direction dir)
+void Game::changeRoom(int roomID, int entranceID, sf::Vector2f offset)
 {
-	const std::string dirName = Resources::directionToString(dir);
-	const std::string oldRoomName = "room" + std::to_string(currentRoom_.getID());
-	const std::string currentRoomName = Resources::map_.at(oldRoomName).at(dirName).get<std::string>();
+	const std::string roomName = "room" + std::to_string(roomID);
 
-	currentRoom_ = Room(Resources::getRoomId(currentRoomName));
-	auto oldEntrances = Resources::rooms_.at(oldRoomName).at("entrances");
-	auto currentEntrances = Resources::rooms_.at(currentRoomName).at("entrances");
+	currentRoom_ = Room(roomID);
 
-	//Change player's position to equivalent entrance at new room
+	sf::Vector2f entrancePos = { 0.0f, 0.0f };
 
-	if(dir == Resources::direction::LEFT)
-		player_.setPosition(
-			{ 
-				currentEntrances.at("right").at("x").get<float>(),
-				currentEntrances.at("right").at("y").get<float>() + (player_.getPosition().y - oldEntrances.at("left").at("y").get<float>()) 
-			});
-	else if(dir == Resources::direction::RIGHT)
-		player_.setPosition(
-			{ 
-				currentEntrances.at("left").at("x").get<float>(),
-				currentEntrances.at("left").at("y").get<float>() + (player_.getPosition().y - oldEntrances.at("right").at("y").get<float>()) 
-			});
-	else if(dir == Resources::direction::UP)
-		player_.setPosition(
-			{
-				currentEntrances.at("down").at("x").get<float>() + (player_.getPosition().x - oldEntrances.at("down").at("x").get<float>()),
-				currentEntrances.at("down").at("y").get<float>() 
-			});
-	else if(dir == Resources::direction::DOWN)
-		player_.setPosition(
-			{ 
-				currentEntrances.at("up").at("x").get<float>() + (player_.getPosition().x - oldEntrances.at("up").at("x").get<float>()),
-				currentEntrances.at("up").at("y").get<float>() 
-			});
+	for(const auto& entrances : Resources::rooms_.at(roomName).at("entrances"))
+	{
+		if(entrances.at("id").get<int>() == entranceID)
+			entrancePos = sf::Vector2f(entrances.at("x").get<float>(), entrances.at("y").get<float>());
+	}
 
-	scaleView(); //Scale view if new room is smaller than old room
+	player_.setPosition(entrancePos + offset);
+
+	scaleView();
 }
 
 void Game::checkCamera()

@@ -1,29 +1,6 @@
 #include "Room.h"
 #include "Resources.h"
 
-void Room::calculateSize()
-{
-	if(blocks_.empty())
-	{
-		size_ = {0.0f, 0.0f};
-		return;
-	}
-
-	//Assumes that room starts at (0,0), it is rectangular and every block is 50x50
-
-	sf::Vector2f lowerRight = blocks_[0].getPosition();
-
-	for(const auto& b : blocks_)
-	{
-		const sf::Vector2f pos = b.getPosition();
-
-		if(pos.x > lowerRight.x) lowerRight = pos;
-		else if(pos.y > lowerRight.y) lowerRight = pos;
-	}
-
-	size_ = {lowerRight.x + 50.0f, lowerRight.y + 50.0f};
-}
-
 void Room::addGradient()
 {
 	//Assumes that wall blocks are 50x50
@@ -64,13 +41,12 @@ void Room::addGradient()
 Room::Room(int roomId)
 {
 	id_ = roomId;
+	const std::string roomName = "room" + std::to_string(roomId);
 
 	blocks_ = Resources::createEntities(roomId);
 
-	calculateSize();
+	size_ = sf::Vector2f(Resources::rooms_.at(roomName).at("width").get<float>() * 50.0f, Resources::rooms_.at(roomName).at("height").get<float>() * 50.0f);
 	addGradient();
-
-	const std::string roomName = "room" + std::to_string(roomId);
 
 	const int r = Resources::rooms_.at(roomName).at("colorR").get<int>();
 	const int g = Resources::rooms_.at(roomName).at("colorG").get<int>();

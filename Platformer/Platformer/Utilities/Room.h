@@ -12,7 +12,6 @@ class Room
 
 	std::vector<std::vector<sf::Vertex>> gradientEdges_; //effect of fading to black on edges od the room
 
-	void calculateSize();
 	void addGradient();
 public:
 	Room() = default;
