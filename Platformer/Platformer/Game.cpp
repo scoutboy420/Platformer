@@ -219,7 +219,7 @@ Game::Game(sf::VideoMode mode, std::string title) : window_(mode, title)
 
 	Resources::load();
 
-	currentRoom_ = Room(Resources::getRoomId(Resources::map_.at("startingRoom").get<std::string>()));
+	currentRoom_ = Room(Resources::getRoomId(Resources::playerData_.at("startingRoom").get<std::string>()));
 
 	const sf::Vector2f playerPosition(Resources::playerData_.at("positionX").get<float>(),
 	                                  Resources::playerData_.at("positionY").get<float>());
