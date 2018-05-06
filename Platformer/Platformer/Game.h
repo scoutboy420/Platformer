@@ -12,7 +12,7 @@ private:
 	sf::Clock clock_; //to count time between frames
 	sf::Vector2f defaultViewSize_;
 
-	void checkCollisions();
+	void checkCollisions(float deltaTime);
 	void checkRoomChange();
 	void changeRoom(int roomID, int entranceID, sf::Vector2f offset);
 	void checkCamera();

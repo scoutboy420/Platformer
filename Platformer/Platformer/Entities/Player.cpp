@@ -23,14 +23,14 @@ void Player::jump()
 	}
 }
 
-sf::Vector2f Player::checkPush(const Entity& other) const
+sf::Vector2f Player::checkPush(const Entity& other, float deltaTime) const
 {
 	const float deltaX = other.getCenter().x - getCenter().x;
 	const float deltaY = other.getCenter().y - getCenter().y;
 	const float intersectX = std::fabs(deltaX) - (other.getSize().x * 0.5f + getSize().x * 0.5f);
 	const float intersectY = std::fabs(deltaY) - (other.getSize().y * 0.5f + getSize().y * 0.5f);
 
-	if(intersectX < 0.0f && intersectY < 0.0f && (intersectX < -5.0f || intersectY < -5.0f))
+	if(intersectX < 0.0f && intersectY < 0.0f && (intersectX <= -fabs(deltaTime*velocity_.x)-0.001f || intersectY <= -fabs(deltaTime*velocity_.y)-0.001f))
 	{
 		if(intersectX > intersectY)
 		{

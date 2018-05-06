@@ -2,7 +2,7 @@
 #include "Utilities/Resources.h"
 #include "Utilities/JSON/json.hpp"
 
-void Game::checkCollisions()
+void Game::checkCollisions(float deltaTime)
 {
 	player_.onGround = false;
 
@@ -10,7 +10,7 @@ void Game::checkCollisions()
 	{
 		if(player_.collides(entity))
 		{
-			const auto push = player_.checkPush(entity);
+			const auto push = player_.checkPush(entity, deltaTime);
 			if(push.y > 0) player_.onGround = true; //if it pushes the player upwards, then the player is on top of something
 			player_.move(push);
 
@@ -178,7 +178,7 @@ void Game::update(float deltaTime)
 {
 	player_.update(deltaTime);
 
-	checkCollisions();
+	checkCollisions(deltaTime);
 
 	checkRoomChange();
 
@@ -230,7 +230,7 @@ Game::Game(sf::VideoMode mode, std::string title) : window_(mode, title)
 
 	player_ = Player(Resources::textures_.at("player"), playerPosition, playerSpeed, gravity, friction);
 
-	checkCollisions();
+	checkCollisions(0.0f);      //not sure how big deltaTime should be
 
 	defaultViewSize_ = sf::Vector2f(float(mode.width), float(mode.height));
 	view_ = sf::View(player_.getCenter(), defaultViewSize_);
