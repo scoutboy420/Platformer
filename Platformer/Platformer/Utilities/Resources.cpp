@@ -25,6 +25,21 @@ void Resources::load()
 	textures_["key"].loadFromFile("Data/Textures/key.png");*/
 }
 
+void Resources::save()
+{
+	std::ofstream o;
+
+	o.open("Data/JSON/rooms.json", std::ofstream::out | std::ofstream::trunc);
+	o << rooms_;
+	o.close();
+	o.clear();
+	
+	o.open("Data/JSON/player.json", std::ofstream::out | std::ofstream::trunc);
+	o << playerData_;
+	o.close();
+	o.clear();
+}
+
 std::vector<Entity> Resources::createEntities(int roomId)
 {
 	std::vector<Entity> entities;

@@ -16,6 +16,7 @@ public:
 	static std::unordered_map<std::string, sf::Texture> textures_;
 
 	static void load(); //Loads every resource from disk
+	static void save();
 	static std::vector<Entity> createEntities(int roomId);
 
 	static int getRoomId(std::string roomName);

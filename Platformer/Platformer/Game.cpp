@@ -163,9 +163,15 @@ bool Game::handleWindowEvents()
 	{
 		switch(e.type)
 		{
-		case sf::Event::Closed:
-			window_.close();
-			return false;
+			case sf::Event::Closed:
+			{
+				Resources::playerData_["positionX"] = player_.getPosition().x;
+				Resources::playerData_["positionY"] = player_.getPosition().y;
+				Resources::playerData_["startingRoom"] = "room" + std::to_string(currentRoom_.getID());
+				Resources::save();
+				window_.close();
+				return false;
+			}
 		default:
 			break;
 		}
