@@ -20,6 +20,29 @@ void Game::checkCollisions(float deltaTime)
 			if(push.y != 0.0f) player_.stopY();
 		}
 	}
+	for(const auto& key : currentRoom_.getKeys())
+    {
+        int id = key.getId();
+        if(player_.collides(key) && openedDoors_[id] == false)
+        {
+            openedDoors_[id] = true;
+            //and reload/update the room
+            currentRoom_ = Room(currentRoom_.getID(), openedDoors_);
+        }
+    }
+    for(const auto& door : currentRoom_.getDoors())
+	{
+		if(player_.collides(door))
+		{
+			const auto push = player_.checkPush(door, deltaTime);
+			if(push.y > 0) player_.onGround = true; //if it pushes the player upwards, then the player is on top of something
+			player_.move(push);
+
+			printf("Position: %f,%f, Push: %f,%f (locked door)\n", player_.getCenter().x, player_.getCenter().y, push.x, push.y);
+
+			if(push.y != 0.0f) player_.stopY();
+		}
+	}
 }
 
 /* Sebastian Pietras */
@@ -43,7 +66,7 @@ void Game::checkRoomChange()
 	{
 		if(dir == Resources::direction::LEFT)
 		{
-			if(player_.getCenter().y >= entrance.at("y").get<float>() && 
+			if(player_.getCenter().y >= entrance.at("y").get<float>() &&
 				player_.getCenter().y <= entrance.at("y").get<float>() + entrance.at("height").get<float>() * 50.0f)
 			{
 				if(entrance.at("x").get<float>() == 0.0f)
@@ -56,7 +79,7 @@ void Game::checkRoomChange()
 		}
 		else if(dir == Resources::direction::RIGHT)
 		{
-			if(player_.getCenter().y >= entrance.at("y").get<float>() && 
+			if(player_.getCenter().y >= entrance.at("y").get<float>() &&
 				player_.getCenter().y <= entrance.at("y").get<float>() + entrance.at("height").get<float>() * 50.0f)
 			{
 				if(entrance.at("x").get<float>() + 50.0f == currentRoom_.getSize().x)
@@ -69,7 +92,7 @@ void Game::checkRoomChange()
 		}
 		else if(dir == Resources::direction::UP)
 		{
-			if(player_.getCenter().x >= entrance.at("x").get<float>() && 
+			if(player_.getCenter().x >= entrance.at("x").get<float>() &&
 				player_.getCenter().x <= entrance.at("x").get<float>() + entrance.at("width").get<float>() * 50.0f)
 			{
 				if(entrance.at("y").get<float>() == 0.0f)
@@ -83,7 +106,7 @@ void Game::checkRoomChange()
 		}
 		else if(dir == Resources::direction::DOWN)
 		{
-			if(player_.getCenter().x >= entrance.at("x").get<float>() && 
+			if(player_.getCenter().x >= entrance.at("x").get<float>() &&
 				player_.getCenter().x <= entrance.at("x").get<float>() + entrance.at("width").get<float>() * 50.0f)
 			{
 				if(entrance.at("y").get<float>() + 50.0f == currentRoom_.getSize().y)
@@ -104,7 +127,7 @@ void Game::changeRoom(int roomID, int entranceID, sf::Vector2f offset)
 {
 	const std::string roomName = "room" + std::to_string(roomID);
 
-	currentRoom_ = Room(roomID);
+	currentRoom_ = Room(roomID, openedDoors_);
 
 	sf::Vector2f entrancePos = { 0.0f, 0.0f };
 
@@ -235,8 +258,8 @@ void Game::draw()
 	{
 		window_.draw(e.data(), 4, sf::Quads);
 	}
-	
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Tab))	
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Tab))
 		showMiniMap();
 
 	window_.display();
@@ -252,7 +275,7 @@ void Game::showMiniMap()
 	const float outlineThickness = 2.0f;
 	const float scale = std::min(float(window_.getSize().x), float(window_.getSize().y)) / 50.0f;
 
-	for(auto it = Resources::rooms_.begin(); it != Resources::rooms_.end(); ++it) 
+	for(auto it = Resources::rooms_.begin(); it != Resources::rooms_.end(); ++it)
 	{
 		if(!it.value().at("visited").get<bool>()) continue;
 
@@ -287,7 +310,7 @@ void Game::showMiniMap()
 	const sf::Vector2f size = sf::Vector2f(fabs(upperLeft.x - lowerRight.x), fabs(upperLeft.y - lowerRight.y));
 	//Background
 	sf::RectangleShape background = sf::RectangleShape(sf::Vector2f(size.x * 1.25f, size.y * 1.25f));
-	background.setPosition(sf::Vector2f(window_.getSize().x * 0.5f, window_.getSize().y * 0.5f) - sf::Vector2f(background.getSize().x * 0.5f, background.getSize().y * 0.5f));				
+	background.setPosition(sf::Vector2f(window_.getSize().x * 0.5f, window_.getSize().y * 0.5f) - sf::Vector2f(background.getSize().x * 0.5f, background.getSize().y * 0.5f));
 	background.setFillColor(sf::Color::White);
 	background.setOutlineColor(sf::Color::Black);
 	background.setOutlineThickness(outlineThickness);
@@ -308,14 +331,20 @@ void Game::showMiniMap()
 	window_.draw(currentRoomShape);
 }
 
-/* Sebastian Pietras */
+/* Sebastian Pietras, Bernard Lesiewicz */
 Game::Game(sf::VideoMode mode, std::string title) : window_(mode, title)
 {
 	window_.setVisible(false);
 
 	Resources::load();
 
-	currentRoom_ = Room(Resources::getRoomId(Resources::playerData_.at("startingRoom").get<std::string>()));
+    int n = Resources::highestDoorId();     //all doors are closed at the beginning
+	for(int i=0; i<=n; i++)
+    {
+        openedDoors_.push_back(false);
+    }
+
+	currentRoom_ = Room(Resources::getRoomId(Resources::playerData_.at("startingRoom").get<std::string>()), openedDoors_);
 
 	const sf::Vector2f playerPosition(Resources::playerData_.at("positionX").get<float>(),
 	                                  Resources::playerData_.at("positionY").get<float>());

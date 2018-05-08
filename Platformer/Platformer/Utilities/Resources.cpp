@@ -22,8 +22,25 @@ void Resources::load()
 
 	textures_["player"].loadFromFile("Data/Textures/player.png");
 	textures_["block"].loadFromFile("Data/Textures/block.png");
-	/*textures_["door2"].loadFromFile("Data/Textures/door2.png");
-	textures_["key"].loadFromFile("Data/Textures/key.png");*/
+
+	/*textures: Bernard Lesiewicz*/
+    textures_["door_rd"].loadFromFile("Data/Textures/door_rd.png");
+	textures_["door_gr"].loadFromFile("Data/Textures/door_gr.png");
+	textures_["door_bl"].loadFromFile("Data/Textures/door_bl.png");
+	textures_["door_or"].loadFromFile("Data/Textures/door_or.png");
+	textures_["door_mg"].loadFromFile("Data/Textures/door_mg.png");
+	textures_["door_yl"].loadFromFile("Data/Textures/door_yl.png");
+	textures_["door_wh"].loadFromFile("Data/Textures/door_wh.png");
+	textures_["door_gy"].loadFromFile("Data/Textures/door_gy.png");
+
+	textures_["key_rd"].loadFromFile("Data/Textures/key_rd.png");
+	textures_["key_gr"].loadFromFile("Data/Textures/key_gr.png");
+	textures_["key_bl"].loadFromFile("Data/Textures/key_bl.png");
+	textures_["key_or"].loadFromFile("Data/Textures/key_or.png");
+	textures_["key_mg"].loadFromFile("Data/Textures/key_mg.png");
+	textures_["key_yl"].loadFromFile("Data/Textures/key_yl.png");
+	textures_["key_wh"].loadFromFile("Data/Textures/key_wh.png");
+	textures_["key_gy"].loadFromFile("Data/Textures/key_gy.png");
 }
 
 /* Sebastian Pietras */
@@ -35,7 +52,7 @@ void Resources::save()
 	o << std::setw(4) << rooms_;
 	o.close();
 	o.clear();
-	
+
 	o.open("Data/JSON/player.json", std::ofstream::out | std::ofstream::trunc);
 	o << std::setw(4) << playerData_;
 	o.close();
@@ -106,10 +123,75 @@ std::vector<Entity> Resources::createEntities(int roomId)
 	return entities;
 }
 
+/*Bernard Lesiewicz*/
+std::vector<Door> Resources::createDoors(int roomId, std::vector<bool> openedDoors_)
+{
+    std::vector<Door> doors;
+	const std::string roomName = "room" + std::to_string(roomId);
+	for(auto& door : rooms_.at(roomName).at("doors"))
+	{
+		const sf::Vector2f position(door.at("positionX").get<float>(), door.at("positionY").get<float>());
+
+        int id = door.at("id").get<int>();
+        if(openedDoors_[id] == false)
+        {
+            doors.push_back(Door(textures_[door.at("texture")], position, id));
+        }
+	}
+	return doors;
+}
+
+/*Bernard Lesiewicz*/
+std::vector<Key> Resources::createKeys(int roomId, std::vector<bool> openedDoors_)
+{
+    std::vector<Key> keys;
+	const std::string roomName = "room" + std::to_string(roomId);
+	for(auto& key : rooms_.at(roomName).at("keys"))
+	{
+		const sf::Vector2f position(key.at("positionX").get<float>(), key.at("positionY").get<float>());
+        int id = key.at("id").get<int>();
+
+        if(openedDoors_[id] == false)
+        {
+            keys.push_back(Key(textures_[key.at("texture")], position, id));
+        }
+	}
+	return keys;
+}
+
+/*Sebastian Pietras*/
+int Resources::countRooms()
+{
+	int i = 0;
+
+	for(json::iterator it = rooms_.begin(); it != rooms_.end(); ++it)
+	{
+		if(it.key().find("room") != std::string::npos) i++;
+	}
+
+	return i;
+}
+
 /* Sebastian Pietras */
 int Resources::getRoomId(std::string roomName)
 {
 	const auto num = roomName.substr(4);
 
 	return std::stoi(num);
+}
+
+/*Bernard Lesiewicz*/
+int Resources::highestDoorId()
+{
+    int lastDoor = 0;
+    //int r = countRooms();
+    for(int roomId = 1, r = countRooms(); roomId <= r; roomId++)
+    {
+        const std::string roomName = "room" + std::to_string(roomId);
+        for(auto& key : rooms_.at(roomName).at("doors"))
+        {
+            lastDoor = std::max(lastDoor, key.at("id").get<int>());
+        }
+	}
+	return lastDoor;
 }

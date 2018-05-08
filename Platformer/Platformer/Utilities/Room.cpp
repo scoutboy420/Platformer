@@ -39,13 +39,15 @@ void Room::addGradient()
 	});
 }
 
-/* Sebastian Pietras */
-Room::Room(int roomId)
+/* Sebastian Pietras, Bernard Lesiewicz */
+Room::Room(int roomId, std::vector<bool> openedDoors_)
 {
 	id_ = roomId;
 	const std::string roomName = "room" + std::to_string(roomId);
 
 	blocks_ = Resources::createEntities(roomId);
+    doors_ = Resources::createDoors(roomId, openedDoors_);
+	keys_ = Resources::createKeys(roomId, openedDoors_);
 
 	size_ = sf::Vector2f(Resources::rooms_.at(roomName).at("width").get<float>() * 50.0f, Resources::rooms_.at(roomName).at("height").get<float>() * 50.0f);
 	addGradient();

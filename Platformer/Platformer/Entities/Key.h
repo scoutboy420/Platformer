@@ -2,14 +2,14 @@
 #include "Entity.h"
 #include "Door.h"
 
+/* Bernard Lesiewicz */
 class Key:
     public Entity
 {
+    int id_;
 public:
-    bool collected;
-    Door *door;
-    Key(sf::Texture& texture, sf::Vector2f position, Door *door) :
-		Entity(texture, position), collected(false), door(door) { }
+    Key(sf::Texture& texture, sf::Vector2f position , int id) :
+		Entity(texture, position), id_(id) { }
 
-    void collect();  //makes the door able to open, (++displays an icon on the screen (or menu/minimap))
+    const int getId() const {return id_;}
 };

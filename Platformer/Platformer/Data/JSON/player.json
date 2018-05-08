@@ -3,8 +3,8 @@
     "gravity": 4000.0,
     "jumpSpeed": 1200.0,
     "name": "player",
-    "positionX": 110.75674438476563,
-    "positionY": 250.0,
+    "positionX": 161.04248046875,
+    "positionY": 400.0,
     "speed": 500.0,
-    "startingRoom": "room11"
+    "startingRoom": "room5"
 }

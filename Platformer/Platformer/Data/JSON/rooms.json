@@ -3,6 +3,7 @@
         "colorB": 255,
         "colorG": 255,
         "colorR": 255,
+        "doors": [],
         "entities": [
             {
                 "height": 1,
@@ -50,6 +51,7 @@
         "globalX": 0.0,
         "globalY": 0.0,
         "height": 10,
+        "keys": [],
         "visited": true,
         "width": 18
     },
@@ -57,6 +59,7 @@
         "colorB": 255,
         "colorG": 255,
         "colorR": 255,
+        "doors": [],
         "entities": [
             {
                 "height": 1,
@@ -104,6 +107,7 @@
         "globalX": 0.0,
         "globalY": -600.0,
         "height": 10,
+        "keys": [],
         "visited": true,
         "width": 14
     },
@@ -111,6 +115,7 @@
         "colorB": 255,
         "colorG": 255,
         "colorR": 255,
+        "doors": [],
         "entities": [],
         "entrances": [
             {
@@ -128,6 +133,7 @@
         "globalX": 0.0,
         "globalY": -950.0,
         "height": 7,
+        "keys": [],
         "visited": true,
         "width": 7
     },
@@ -135,6 +141,7 @@
         "colorB": 255,
         "colorG": 255,
         "colorR": 255,
+        "doors": [],
         "entities": [
             {
                 "height": 1,
@@ -206,6 +213,7 @@
         "globalX": 900.0,
         "globalY": -500.0,
         "height": 20,
+        "keys": [],
         "visited": true,
         "width": 8
     },
@@ -213,6 +221,7 @@
         "colorB": 255,
         "colorG": 255,
         "colorR": 255,
+        "doors": [],
         "entities": [],
         "entrances": [
             {
@@ -241,6 +250,7 @@
         "globalX": 1300.0,
         "globalY": -500.0,
         "height": 5,
+        "keys": [],
         "visited": true,
         "width": 5
     },
@@ -248,6 +258,7 @@
         "colorB": 255,
         "colorG": 255,
         "colorR": 255,
+        "doors": [],
         "entities": [
             {
                 "height": 5,
@@ -283,6 +294,7 @@
         "globalX": 1300.0,
         "globalY": -250.0,
         "height": 9,
+        "keys": [],
         "visited": true,
         "width": 12
     },
@@ -290,6 +302,7 @@
         "colorB": 255,
         "colorG": 255,
         "colorR": 255,
+        "doors": [],
         "entities": [
             {
                 "height": 1,
@@ -337,6 +350,7 @@
         "globalX": 1300.0,
         "globalY": 200.0,
         "height": 14,
+        "keys": [],
         "visited": true,
         "width": 12
     },
@@ -344,6 +358,7 @@
         "colorB": 255,
         "colorG": 255,
         "colorR": 255,
+        "doors": [],
         "entities": [
             {
                 "height": 1,
@@ -379,6 +394,7 @@
         "globalX": 300.0,
         "globalY": 500.0,
         "height": 8,
+        "keys": [],
         "visited": true,
         "width": 20
     },
@@ -386,6 +402,7 @@
         "colorB": 255,
         "colorG": 255,
         "colorR": 255,
+        "doors": [],
         "entities": [],
         "entrances": [
             {
@@ -414,6 +431,7 @@
         "globalX": -500.0,
         "globalY": 550.0,
         "height": 6,
+        "keys": [],
         "visited": true,
         "width": 16
     },
@@ -421,6 +439,7 @@
         "colorB": 255,
         "colorG": 255,
         "colorR": 255,
+        "doors": [],
         "entities": [
             {
                 "height": 1,
@@ -462,6 +481,7 @@
         "globalX": -800.0,
         "globalY": 300.0,
         "height": 12,
+        "keys": [],
         "visited": true,
         "width": 6
     },
@@ -469,6 +489,7 @@
         "colorB": 255,
         "colorG": 255,
         "colorR": 255,
+        "doors": [],
         "entities": [
             {
                 "height": 1,
@@ -521,6 +542,7 @@
         "globalX": -800.0,
         "globalY": -400.0,
         "height": 14,
+        "keys": [],
         "visited": true,
         "width": 16
     }

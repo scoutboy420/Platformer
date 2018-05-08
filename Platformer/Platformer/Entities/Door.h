@@ -1,15 +1,12 @@
 #pragma once
 #include "Entity.h"
 
+/* Bernard Lesiewicz */
 class Door:
     public Entity
 {
+    int id_;
 public:
-    bool locked;
-
-    Door(sf::Texture& texture, sf::Vector2f position) :
-		Entity(texture, position), locked(true) { }
-
-    Door();  //creates a key on the map
-    ~Door();
+    Door(sf::Texture& texture, sf::Vector2f position, int id) :
+		Entity(texture, position), id_(id) { }
 };

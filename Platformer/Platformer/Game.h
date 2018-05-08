@@ -6,6 +6,7 @@ class Game
 {
 private:
 	Player player_;
+    std::vector<bool> openedDoors_;
 	Room currentRoom_;
 	sf::RenderWindow window_;
 	sf::View view_;
