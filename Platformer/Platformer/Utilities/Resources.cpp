@@ -5,6 +5,7 @@ json Resources::rooms_;
 json Resources::playerData_;
 std::unordered_map<std::string, sf::Texture> Resources::textures_;
 
+/* Sebastian Pietras */
 void Resources::load()
 {
 	std::ifstream i;
@@ -25,6 +26,7 @@ void Resources::load()
 	textures_["key"].loadFromFile("Data/Textures/key.png");*/
 }
 
+/* Sebastian Pietras */
 void Resources::save()
 {
 	std::ofstream o;
@@ -40,6 +42,7 @@ void Resources::save()
 	o.clear();
 }
 
+/* Sebastian Pietras */
 std::vector<Entity> Resources::createEntities(int roomId)
 {
 	std::vector<Entity> entities;
@@ -103,6 +106,7 @@ std::vector<Entity> Resources::createEntities(int roomId)
 	return entities;
 }
 
+/* Sebastian Pietras */
 int Resources::getRoomId(std::string roomName)
 {
 	const auto num = roomName.substr(4);

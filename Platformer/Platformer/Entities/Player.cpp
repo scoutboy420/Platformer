@@ -1,5 +1,6 @@
 #include "Player.h"
 
+/* Sebastian Pietras, Bernard Lesiewicz */
 void Player::update(float deltaTime)
 {
 	velocity_.y -= gravity_ * deltaTime;
@@ -14,6 +15,7 @@ void Player::update(float deltaTime)
 	move(transform);
 }
 
+/* Sebastian Pietras */
 void Player::jump()
 {
 	if(onGround)
@@ -23,6 +25,7 @@ void Player::jump()
 	}
 }
 
+/* Sebastian Pietras, Bernard Lesiewicz */
 sf::Vector2f Player::checkPush(const Entity& other, float deltaTime) const
 {
 	const float deltaX = other.getCenter().x - getCenter().x;

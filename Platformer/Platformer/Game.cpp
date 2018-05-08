@@ -2,6 +2,7 @@
 #include "Utilities/Resources.h"
 #include "Utilities/JSON/json.hpp"
 
+/* Sebastian Pietras */
 void Game::checkCollisions(float deltaTime)
 {
 	player_.onGround = false;
@@ -21,6 +22,7 @@ void Game::checkCollisions(float deltaTime)
 	}
 }
 
+/* Sebastian Pietras */
 void Game::checkRoomChange()
 {
 	Resources::direction dir;
@@ -97,6 +99,7 @@ void Game::checkRoomChange()
 	changeRoom(roomID, entranceID, offset);
 }
 
+/* Sebastian Pietras */
 void Game::changeRoom(int roomID, int entranceID, sf::Vector2f offset)
 {
 	const std::string roomName = "room" + std::to_string(roomID);
@@ -119,6 +122,7 @@ void Game::changeRoom(int roomID, int entranceID, sf::Vector2f offset)
 	scaleView();
 }
 
+/* Sebastian Pietras */
 void Game::checkCamera()
 {
 	float camX = player_.getCenter().x, camY = player_.getCenter().y;
@@ -132,6 +136,7 @@ void Game::checkCamera()
 	view_.setCenter(camX, camY);
 }
 
+/* Sebastian Pietras */
 void Game::scaleView()
 {
 	view_.setSize(sf::Vector2f(window_.getSize()));
@@ -143,6 +148,7 @@ void Game::scaleView()
 	if(dominatingRatio < 1.0f) view_.zoom(dominatingRatio);
 }
 
+/* Sebastian Pietras */
 void Game::handleInput()
 {
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
@@ -160,6 +166,7 @@ void Game::handleInput()
 	}
 }
 
+/* Sebastian Pietras */
 bool Game::handleWindowEvents()
 {
 	sf::Event e;
@@ -190,6 +197,7 @@ bool Game::handleWindowEvents()
 	return true;
 }
 
+/* Sebastian Pietras */
 void Game::update(float deltaTime)
 {
 	player_.update(deltaTime);
@@ -201,6 +209,7 @@ void Game::update(float deltaTime)
 	checkCamera();
 }
 
+/* Sebastian Pietras */
 void Game::draw()
 {
 	window_.clear(sf::Color::Black);
@@ -233,6 +242,7 @@ void Game::draw()
 	window_.display();
 }
 
+/* Sebastian Pietras */
 void Game::showMiniMap()
 {
 	std::vector<sf::RectangleShape> roomShapes;
@@ -298,6 +308,7 @@ void Game::showMiniMap()
 	window_.draw(currentRoomShape);
 }
 
+/* Sebastian Pietras */
 Game::Game(sf::VideoMode mode, std::string title) : window_(mode, title)
 {
 	window_.setVisible(false);
@@ -326,6 +337,7 @@ Game::Game(sf::VideoMode mode, std::string title) : window_(mode, title)
 	window_.setVisible(true);
 }
 
+/* Sebastian Pietras */
 bool Game::play()
 {
 	if(!handleWindowEvents()) return false; //Check what happened with window

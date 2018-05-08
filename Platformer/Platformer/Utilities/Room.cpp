@@ -1,6 +1,7 @@
 #include "Room.h"
 #include "Resources.h"
 
+/* Sebastian Pietras */
 void Room::addGradient()
 {
 	//Assumes that wall blocks are 50x50
@@ -38,6 +39,7 @@ void Room::addGradient()
 	});
 }
 
+/* Sebastian Pietras */
 Room::Room(int roomId)
 {
 	id_ = roomId;
