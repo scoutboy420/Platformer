@@ -56,4 +56,6 @@ Room::Room(int roomId)
 
 	background_ = sf::RectangleShape(size_);
 	background_.setFillColor(backgroundColor_);
+
+	Resources::rooms_.at(roomName).at("visited") = true;
 }

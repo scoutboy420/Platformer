@@ -1,179 +1,527 @@
 {
-  "name": "rooms",
-  "room1": {
-    "colorR": 247,
-    "colorG": 213,
-    "colorB": 220,
-    "width": 20,
-    "height": 20,
-    "entrances": [
-      {
-        "id": 1,
-        "to": {
-          "roomID": 2,
-          "entranceID": 1
-        },
-        "x": 0.0,
-        "y": 500.0,
-        "width": 1,
-        "height": 2
-      },
-      {
-        "id": 2,
-        "to": {
-          "roomID": 3,
-          "entranceID": 1
-        },
-        "x": 950.0,
-        "y": 750.0,
-        "width": 1,
-        "height": 3
-      },
-      {
-        "id": 3,
-        "to": {
-          "roomID": 4,
-          "entranceID": 1
-        },
-        "x": 800.0,
-        "y": 0.0,
-        "width": 2,
-        "height": 1
-      }
-    ],
-    "entities": [
-      {
-        "positionX": 150.0,
-        "positionY": 850.0,
-        "width": 4,
-        "height": 1
-      },
-      {
-        "positionX": 500.0,
-        "positionY": 700.0,
-        "width": 3,
-        "height": 1
-      },
-      {
-        "positionX": 500.0,
-        "positionY": 500.0,
-        "width": 3,
-        "height": 1
-      },
-      {
-        "positionX": 800.0,
-        "positionY": 650.0,
-        "width": 3,
-        "height": 1
-      },
-      {
-        "positionX": 100.0,
-        "positionY": 600.0,
-        "width": 4,
-        "height": 1
-      },
-      {
-        "positionX": 700.0,
-        "positionY": 400.0,
-        "width": 1,
-        "height": 1
-      },
-      {
-        "positionX": 750.0,
-        "positionY": 300.0,
-        "width": 1,
-        "height": 1
-      },
-      {
-        "positionX": 800.0,
-        "positionY": 200.0,
-        "width": 1,
-        "height": 1
-      },
-      {
-        "positionX": 850.0,
-        "positionY": 100.0,
-        "width": 1,
-        "height": 1
-      }
-    ]
-  },
-  "room2": {
-    "colorR": 196,
-    "colorG": 245,
-    "colorB": 206,
-    "width": 10,
-    "height": 10,
-    "entrances": [
-      {
-        "id": 1,
-        "to": {
-          "roomID": 1,
-          "entranceID": 1
-        },
-        "x": 450.0,
-        "y": 300.0,
-        "width": 1,
-        "height": 2
-      }
-    ],
-    "entities": [
-      {
-        "positionX": 350.0,
-        "positionY": 350.0,
-        "width": 1,
-        "height": 1
-      },
-      {
-        "positionX": 200.0,
-        "positionY": 400.0,
-        "width": 1,
-        "height": 1
-      }
-    ]
-  },
-  "room3": {
-    "colorR": 199,
-    "colorG": 213,
-    "colorB": 246,
-    "width": 15,
-    "height": 15,
-    "entrances": [
-      {
-        "id": 1,
-        "to": {
-          "roomID": 1,
-          "entranceID": 2
-        },
-        "x": 0.0,
-        "y": 550.0,
-        "width": 1,
-        "height": 3
-      }
-    ],
-    "entities": [
-    ]
-  },
-  "room4": {
-    "colorR": 57,
-    "colorG": 98,
-    "colorB": 122,
-    "width": 5,
-    "height": 5,
-    "entrances": [
-      {
-        "id": 1,
-        "to": {
-          "roomID": 1,
-          "entranceID": 3
-        },
-        "x": 100.0,
-        "y": 200.0,
-        "width": 2,
-        "height": 1
-      }
-    ],
-    "entities": [
-    ]
-  }
+    "room1": {
+        "colorB": 255,
+        "colorG": 255,
+        "colorR": 255,
+        "entities": [
+            {
+                "height": 1,
+                "positionX": 100.0,
+                "positionY": 250.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 150.0,
+                "positionY": 300.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 200.0,
+                "positionY": 350.0,
+                "width": 1
+            }
+        ],
+        "entrances": [
+            {
+                "height": 2,
+                "id": 1,
+                "to": {
+                    "entranceID": 1,
+                    "roomID": 2
+                },
+                "width": 1,
+                "x": 850.0,
+                "y": 350.0
+            },
+            {
+                "height": 2,
+                "id": 2,
+                "to": {
+                    "entranceID": 2,
+                    "roomID": 9
+                },
+                "width": 1,
+                "x": 0.0,
+                "y": 100.0
+            }
+        ],
+        "globalX": 0.0,
+        "globalY": 0.0,
+        "height": 10,
+        "visited": true,
+        "width": 18
+    },
+    "room10": {
+        "colorB": 255,
+        "colorG": 255,
+        "colorR": 255,
+        "entities": [
+            {
+                "height": 1,
+                "positionX": 50.0,
+                "positionY": 300.0,
+                "width": 11
+            },
+            {
+                "height": 1,
+                "positionX": 100.0,
+                "positionY": 200.0,
+                "width": 11
+            },
+            {
+                "height": 1,
+                "positionX": 50.0,
+                "positionY": 100.0,
+                "width": 11
+            }
+        ],
+        "entrances": [
+            {
+                "height": 2,
+                "id": 1,
+                "to": {
+                    "entranceID": 3,
+                    "roomID": 9
+                },
+                "width": 1,
+                "x": 0.0,
+                "y": 350.0
+            },
+            {
+                "height": 1,
+                "id": 2,
+                "to": {
+                    "entranceID": 1,
+                    "roomID": 11
+                },
+                "width": 1,
+                "x": 50.0,
+                "y": 0.0
+            }
+        ],
+        "globalX": 0.0,
+        "globalY": -600.0,
+        "height": 10,
+        "visited": true,
+        "width": 14
+    },
+    "room11": {
+        "colorB": 255,
+        "colorG": 255,
+        "colorR": 255,
+        "entities": [],
+        "entrances": [
+            {
+                "height": 1,
+                "id": 1,
+                "to": {
+                    "entranceID": 2,
+                    "roomID": 10
+                },
+                "width": 1,
+                "x": 50.0,
+                "y": 300.0
+            }
+        ],
+        "globalX": 0.0,
+        "globalY": -950.0,
+        "height": 7,
+        "visited": true,
+        "width": 7
+    },
+    "room2": {
+        "colorB": 255,
+        "colorG": 255,
+        "colorR": 255,
+        "entities": [
+            {
+                "height": 1,
+                "positionX": 300.0,
+                "positionY": 800.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 150.0,
+                "positionY": 700.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 300.0,
+                "positionY": 550.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 150.0,
+                "positionY": 450.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 50.0,
+                "positionY": 350.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 150.0,
+                "positionY": 250.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 300.0,
+                "positionY": 200.0,
+                "width": 1
+            }
+        ],
+        "entrances": [
+            {
+                "height": 2,
+                "id": 1,
+                "to": {
+                    "entranceID": 1,
+                    "roomID": 1
+                },
+                "width": 1,
+                "x": 0.0,
+                "y": 850.0
+            },
+            {
+                "height": 2,
+                "id": 2,
+                "to": {
+                    "entranceID": 1,
+                    "roomID": 3
+                },
+                "width": 1,
+                "x": 350.0,
+                "y": 50.0
+            }
+        ],
+        "globalX": 900.0,
+        "globalY": -500.0,
+        "height": 20,
+        "visited": true,
+        "width": 8
+    },
+    "room3": {
+        "colorB": 255,
+        "colorG": 255,
+        "colorR": 255,
+        "entities": [],
+        "entrances": [
+            {
+                "height": 2,
+                "id": 1,
+                "to": {
+                    "entranceID": 2,
+                    "roomID": 2
+                },
+                "width": 1,
+                "x": 0.0,
+                "y": 50.0
+            },
+            {
+                "height": 1,
+                "id": 2,
+                "to": {
+                    "entranceID": 1,
+                    "roomID": 4
+                },
+                "width": 1,
+                "x": 100.0,
+                "y": 200.0
+            }
+        ],
+        "globalX": 1300.0,
+        "globalY": -500.0,
+        "height": 5,
+        "visited": true,
+        "width": 5
+    },
+    "room4": {
+        "colorB": 255,
+        "colorG": 255,
+        "colorR": 255,
+        "entities": [
+            {
+                "height": 5,
+                "positionX": 200.0,
+                "positionY": 50.0,
+                "width": 7
+            }
+        ],
+        "entrances": [
+            {
+                "height": 1,
+                "id": 1,
+                "to": {
+                    "entranceID": 2,
+                    "roomID": 3
+                },
+                "width": 1,
+                "x": 100.0,
+                "y": 0.0
+            },
+            {
+                "height": 1,
+                "id": 2,
+                "to": {
+                    "entranceID": 1,
+                    "roomID": 5
+                },
+                "width": 2,
+                "x": 450.0,
+                "y": 400.0
+            }
+        ],
+        "globalX": 1300.0,
+        "globalY": -250.0,
+        "height": 9,
+        "visited": true,
+        "width": 12
+    },
+    "room5": {
+        "colorB": 255,
+        "colorG": 255,
+        "colorR": 255,
+        "entities": [
+            {
+                "height": 1,
+                "positionX": 100.0,
+                "positionY": 450.0,
+                "width": 2
+            },
+            {
+                "height": 1,
+                "positionX": 200.0,
+                "positionY": 500.0,
+                "width": 2
+            },
+            {
+                "height": 1,
+                "positionX": 300.0,
+                "positionY": 550.0,
+                "width": 2
+            }
+        ],
+        "entrances": [
+            {
+                "height": 1,
+                "id": 1,
+                "to": {
+                    "entranceID": 2,
+                    "roomID": 4
+                },
+                "width": 2,
+                "x": 450.0,
+                "y": 0.0
+            },
+            {
+                "height": 2,
+                "id": 2,
+                "to": {
+                    "entranceID": 1,
+                    "roomID": 6
+                },
+                "width": 1,
+                "x": 0.0,
+                "y": 350.0
+            }
+        ],
+        "globalX": 1300.0,
+        "globalY": 200.0,
+        "height": 14,
+        "visited": true,
+        "width": 12
+    },
+    "room6": {
+        "colorB": 255,
+        "colorG": 255,
+        "colorR": 255,
+        "entities": [
+            {
+                "height": 1,
+                "positionX": 850.0,
+                "positionY": 200.0,
+                "width": 1
+            }
+        ],
+        "entrances": [
+            {
+                "height": 2,
+                "id": 1,
+                "to": {
+                    "entranceID": 2,
+                    "roomID": 5
+                },
+                "width": 1,
+                "x": 950.0,
+                "y": 50.0
+            },
+            {
+                "height": 2,
+                "id": 2,
+                "to": {
+                    "entranceID": 1,
+                    "roomID": 7
+                },
+                "width": 1,
+                "x": 0.0,
+                "y": 200.0
+            }
+        ],
+        "globalX": 300.0,
+        "globalY": 500.0,
+        "height": 8,
+        "visited": true,
+        "width": 20
+    },
+    "room7": {
+        "colorB": 255,
+        "colorG": 255,
+        "colorR": 255,
+        "entities": [],
+        "entrances": [
+            {
+                "height": 2,
+                "id": 1,
+                "to": {
+                    "entranceID": 2,
+                    "roomID": 6
+                },
+                "width": 1,
+                "x": 750.0,
+                "y": 150.0
+            },
+            {
+                "height": 2,
+                "id": 2,
+                "to": {
+                    "entranceID": 1,
+                    "roomID": 8
+                },
+                "width": 1,
+                "x": 0.0,
+                "y": 50.0
+            }
+        ],
+        "globalX": -500.0,
+        "globalY": 550.0,
+        "height": 6,
+        "visited": true,
+        "width": 16
+    },
+    "room8": {
+        "colorB": 255,
+        "colorG": 255,
+        "colorR": 255,
+        "entities": [
+            {
+                "height": 1,
+                "positionX": 50.0,
+                "positionY": 250.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 150.0,
+                "positionY": 100.0,
+                "width": 2
+            }
+        ],
+        "entrances": [
+            {
+                "height": 2,
+                "id": 1,
+                "to": {
+                    "entranceID": 2,
+                    "roomID": 7
+                },
+                "width": 1,
+                "x": 250.0,
+                "y": 300.0
+            },
+            {
+                "height": 1,
+                "id": 2,
+                "to": {
+                    "entranceID": 1,
+                    "roomID": 9
+                },
+                "width": 2,
+                "x": 100.0,
+                "y": 0.0
+            }
+        ],
+        "globalX": -800.0,
+        "globalY": 300.0,
+        "height": 12,
+        "visited": true,
+        "width": 6
+    },
+    "room9": {
+        "colorB": 255,
+        "colorG": 255,
+        "colorR": 255,
+        "entities": [
+            {
+                "height": 1,
+                "positionX": 550.0,
+                "positionY": 450.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 700.0,
+                "positionY": 350.0,
+                "width": 1
+            }
+        ],
+        "entrances": [
+            {
+                "height": 1,
+                "id": 1,
+                "to": {
+                    "entranceID": 2,
+                    "roomID": 8
+                },
+                "width": 2,
+                "x": 100.0,
+                "y": 650.0
+            },
+            {
+                "height": 2,
+                "id": 2,
+                "to": {
+                    "entranceID": 2,
+                    "roomID": 1
+                },
+                "width": 1,
+                "x": 750.0,
+                "y": 500.0
+            },
+            {
+                "height": 2,
+                "id": 3,
+                "to": {
+                    "entranceID": 1,
+                    "roomID": 10
+                },
+                "width": 1,
+                "x": 750.0,
+                "y": 150.0
+            }
+        ],
+        "globalX": -800.0,
+        "globalY": -400.0,
+        "height": 14,
+        "visited": true,
+        "width": 16
+    }
 }

@@ -30,12 +30,12 @@ void Resources::save()
 	std::ofstream o;
 
 	o.open("Data/JSON/rooms.json", std::ofstream::out | std::ofstream::trunc);
-	o << rooms_;
+	o << std::setw(4) << rooms_;
 	o.close();
 	o.clear();
 	
 	o.open("Data/JSON/player.json", std::ofstream::out | std::ofstream::trunc);
-	o << playerData_;
+	o << std::setw(4) << playerData_;
 	o.close();
 	o.clear();
 }
@@ -45,7 +45,7 @@ std::vector<Entity> Resources::createEntities(int roomId)
 	std::vector<Entity> entities;
 	const std::string roomName = "room" + std::to_string(roomId);
 
-	std::vector<sf::Vector2f> emptyPos;
+	std::vector<sf::Vector2f> emptyPos; //where to not create blocks (like in entrances)
 
 	for(const auto& entrances : rooms_.at(roomName).at("entrances"))
 	{

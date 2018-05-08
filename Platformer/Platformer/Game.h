@@ -10,7 +10,6 @@ private:
 	sf::RenderWindow window_;
 	sf::View view_;
 	sf::Clock clock_; //to count time between frames
-	sf::Vector2f defaultViewSize_;
 
 	void checkCollisions(float deltaTime);
 	void checkRoomChange();
@@ -21,6 +20,7 @@ private:
 	bool handleWindowEvents();
 	void update(float deltaTime);
 	void draw();
+	void showMiniMap();
 public:
 	Game(sf::VideoMode mode, std::string title);
 
