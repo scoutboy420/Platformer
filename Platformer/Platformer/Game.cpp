@@ -204,7 +204,7 @@ bool Game::handleWindowEvents()
 				Resources::playerData_.at("positionX") = player_.getPosition().x;
 				Resources::playerData_.at("positionY") = player_.getPosition().y;
 				Resources::playerData_.at("startingRoom") = "room" + std::to_string(currentRoom_.getID());
-				Resources::save();
+//				Resources::save();
 				window_.close();
 				return false;
 			}
@@ -232,7 +232,7 @@ void Game::update(float deltaTime)
 	checkCamera();
 }
 
-/* Sebastian Pietras */
+/* Sebastian Pietras, Bernard Lesiewicz */
 void Game::draw()
 {
 	window_.clear(sf::Color::Black);
@@ -249,6 +249,24 @@ void Game::draw()
 		if(viewRect.intersects(entityRect)) //draw only entities that are inside view
 		{
 			window_.draw(entity.getBody());
+		}
+	}
+
+    for(const auto& door : currentRoom_.getDoors())
+	{
+		const auto entityRect = door.getBody().getGlobalBounds();
+		if(viewRect.intersects(entityRect)) //draw only entities that are inside view
+		{
+			window_.draw(door.getBody());
+		}
+	}
+
+	for(const auto& key : currentRoom_.getKeys())
+	{
+		const auto entityRect = key.getBody().getGlobalBounds();
+		if(viewRect.intersects(entityRect)) //draw only entities that are inside view
+		{
+			window_.draw(key.getBody());
 		}
 	}
 

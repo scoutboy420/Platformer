@@ -3,7 +3,14 @@
         "colorB": 255,
         "colorG": 255,
         "colorR": 255,
-        "doors": [],
+        "doors": [
+            {
+                "positionX": 850,
+                "positionY": 350,
+                "id": 0,
+                "texture": "door_yl"
+            }
+        ],
         "entities": [
             {
                 "height": 1,
@@ -141,7 +148,14 @@
         "colorB": 255,
         "colorG": 255,
         "colorR": 255,
-        "doors": [],
+        "doors": [
+            {
+                "positionX": 350,
+                "positionY": 50,
+                "id": 1,
+                "texture": "door_bl"
+            }
+        ],
         "entities": [
             {
                 "height": 1,
@@ -213,7 +227,14 @@
         "globalX": 900.0,
         "globalY": -500.0,
         "height": 20,
-        "keys": [],
+        "keys": [
+            {
+                "positionX": 150,
+                "positionY": 200,
+                "id": 1,
+                "texture": "key_bl"
+            }
+        ],
         "visited": true,
         "width": 8
     },
@@ -542,7 +563,14 @@
         "globalX": -800.0,
         "globalY": -400.0,
         "height": 14,
-        "keys": [],
+        "keys": [
+            {
+                "positionX": 550,
+                "positionY": 400,
+                "id": 0,
+                "texture": "key_yl"
+            }
+        ],
         "visited": true,
         "width": 16
     }
