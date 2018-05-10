@@ -1,8 +1,8 @@
 {
     "room1": {
         "colorB": 255,
-        "colorG": 255,
-        "colorR": 255,
+        "colorG": 191,
+        "colorR": 128,
         "doors": [
             {
                 "positionX": 850,
@@ -88,9 +88,9 @@
         "width": 18
     },
     "room10": {
-        "colorB": 255,
+        "colorB": 128,
         "colorG": 255,
-        "colorR": 255,
+        "colorR": 191,
         "doors": [],
         "entities": [
             {
@@ -145,8 +145,8 @@
     },
     "room11": {
         "colorB": 255,
-        "colorG": 255,
-        "colorR": 255,
+        "colorG": 128,
+        "colorR": 191,
         "doors": [],
         "entities": [],
         "entrances": [
@@ -178,8 +178,8 @@
     },
     "room2": {
         "colorB": 255,
-        "colorG": 255,
-        "colorR": 255,
+        "colorG": 128,
+        "colorR": 191,
         "doors": [
         ],
         "entities": [
@@ -249,7 +249,7 @@
     "room3": {
         "colorB": 255,
         "colorG": 255,
-        "colorR": 255,
+        "colorR": 128,
         "doors": [
             {
                 "positionX": 250,
@@ -322,7 +322,7 @@
         "width": 12
     },
     "room4": {
-        "colorB": 255,
+        "colorB": 128,
         "colorG": 255,
         "colorR": 255,
         "doors": [
@@ -398,8 +398,8 @@
     },
     "room12": {
         "colorB": 255,
-        "colorG": 255,
-        "colorR": 255,
+        "colorG": 128,
+        "colorR": 128,
         "doors": [
         ],
         "entities": [
@@ -527,8 +527,8 @@
         "width": 20
     },
     "room5": {
-        "colorB": 255,
-        "colorG": 255,
+        "colorB": 128,
+        "colorG": 191,
         "colorR": 255,
         "doors": [
             {
@@ -633,8 +633,8 @@
         "width": 12
     },
     "room6": {
-        "colorB": 255,
-        "colorG": 255,
+        "colorB": 128,
+        "colorG": 128,
         "colorR": 255,
         "doors": [
             {
@@ -716,8 +716,8 @@
     },
     "room7": {
         "colorB": 255,
-        "colorG": 255,
-        "colorR": 255,
+        "colorG": 191,
+        "colorR": 128,
         "doors": [],
         "entities": [
             {
@@ -789,7 +789,7 @@
         "width": 16
     },
     "room8": {
-        "colorB": 255,
+        "colorB": 128,
         "colorG": 255,
         "colorR": 255,
         "doors": [
@@ -859,8 +859,8 @@
         "width": 6
     },
     "room9": {
-        "colorB": 255,
-        "colorG": 255,
+        "colorB": 128,
+        "colorG": 128,
         "colorR": 255,
         "doors": [
             {
@@ -994,9 +994,9 @@
         "width": 16
     },
     "room13": {
-        "colorB": 255,
+        "colorB": 128,
         "colorG": 255,
-        "colorR": 255,
+        "colorR": 128,
         "doors": [],
         "entities": [
             {
