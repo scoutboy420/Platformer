@@ -313,7 +313,7 @@ void Game::showMiniMap()
 
 		shape.setFillColor(sf::Color(r, g, b));
 
-		shape.setOutlineColor(sf::Color::Black);
+		shape.setOutlineColor(sf::Color::Blue);
 		shape.setOutlineThickness(outlineThickness);
 
 		if(it.key() == "room" + std::to_string(currentRoom_.getID())) //current room
@@ -329,7 +329,7 @@ void Game::showMiniMap()
 	//Background
 	sf::RectangleShape background = sf::RectangleShape(sf::Vector2f(size.x * 1.25f, size.y * 1.25f));
 	background.setPosition(sf::Vector2f(window_.getSize().x * 0.5f, window_.getSize().y * 0.5f) - sf::Vector2f(background.getSize().x * 0.5f, background.getSize().y * 0.5f));
-	background.setFillColor(sf::Color::White);
+	background.setFillColor(sf::Color::Black);
 	background.setOutlineColor(sf::Color::Black);
 	background.setOutlineThickness(outlineThickness);
 

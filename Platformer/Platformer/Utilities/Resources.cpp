@@ -32,6 +32,7 @@ void Resources::load()
 	textures_["door_yl"].loadFromFile("Data/Textures/door_yl.png");
 	textures_["door_wh"].loadFromFile("Data/Textures/door_wh.png");
 	textures_["door_gy"].loadFromFile("Data/Textures/door_gy.png");
+	textures_["door_bk"].loadFromFile("Data/Textures/door_bk.png");
 
 	textures_["key_rd"].loadFromFile("Data/Textures/key_rd.png");
 	textures_["key_gr"].loadFromFile("Data/Textures/key_gr.png");
@@ -41,6 +42,7 @@ void Resources::load()
 	textures_["key_yl"].loadFromFile("Data/Textures/key_yl.png");
 	textures_["key_wh"].loadFromFile("Data/Textures/key_wh.png");
 	textures_["key_gy"].loadFromFile("Data/Textures/key_gy.png");
+	textures_["key_bk"].loadFromFile("Data/Textures/key_bk.png");
 }
 
 /* Sebastian Pietras */
