@@ -2,7 +2,7 @@
 #include "Utilities/Resources.h"
 #include "Utilities/JSON/json.hpp"
 
-/* Sebastian Pietras */
+/* Sebastian Pietras, Bernard Lesiewicz*/
 void Game::checkCollisions(float deltaTime)
 {
 	player_.onGround = false;

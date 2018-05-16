@@ -77,12 +77,6 @@
         "globalY": 0.0,
         "height": 10,
         "keys": [
-            {   "c": "TEMP",
-                "positionX": 750,
-                "positionY": 350,
-                "id": 0,
-                "texture": "aaaaaakey_or"
-            }
         ],
         "visited": false,
         "width": 18
@@ -182,38 +176,38 @@
         "colorR": 191,
         "doors": [
         ],
-        "entities": [
-            {
-                "height": 1,
-                "positionX": 300.0,
-                "positionY": 800.0,
-                "width": 1
-            },
-            {
-                "height": 1,
-                "positionX": 150.0,
-                "positionY": 550.0,
-                "width": 1
-            },
-            {
-                "height": 1,
-                "positionX": 300.0,
-                "positionY": 650.0,
-                "width": 1
-            },
-            {
-                "height": 1,
-                "positionX": 50.0,
-                "positionY": 400.0,
-                "width": 1
-            },
-            {
-                "height": 1,
-                "positionX": 300.0,
-                "positionY": 250.0,
-                "width": 1
-            }
-        ],
+      "entities": [
+        {
+          "height": 1,
+          "positionX": 300.0,
+          "positionY": 800.0,
+          "width": 1
+        },
+        {
+          "height": 1,
+          "positionX": 150.0,
+          "positionY": 550.0,
+          "width": 1
+        },
+        {
+          "height": 1,
+          "positionX": 300.0,
+          "positionY": 650.0,
+          "width": 1
+        },
+        {
+          "height": 1,
+          "positionX": 50.0,
+          "positionY": 400.0,
+          "width": 1
+        },
+        {
+          "height": 1,
+          "positionX": 300.0,
+          "positionY": 250.0,
+          "width": 1
+        }
+      ],
         "entrances": [
             {
                 "height": 2,
@@ -876,74 +870,80 @@
                 "texture": "door_yl"
             }
         ],
-        "entities": [
-            {
-                "height": 1,
-                "positionX": 50.0,
-                "positionY": 250.0,
-                "width": 1
-            },
-            {
-                "height": 1,
-                "positionX": 150.0,
-                "positionY": 150.0,
-                "width": 1
-            },
-            {
-                "height": 4,
-                "positionX": 200.0,
-                "positionY": 150.0,
-                "width": 1
-            },
-            {
-                "height": 1,
-                "positionX": 150.0,
-                "positionY": 350.0,
-                "width": 5
-            },
-            {
-                "height": 2,
-                "positionX": 350.0,
-                "positionY": 250.0,
-                "width": 1
-            },
-            {
-                "height": 2,
-                "positionX": 350.0,
-                "positionY": 50.0,
-                "width": 1
-            },
-            {
-                "height": 2,
-                "positionX": 600.0,
-                "positionY": 150.0,
-                "width": 1
-            },
-            {
-                "height": 1,
-                "positionX": 600.0,
-                "positionY": 250.0,
-                "width": 3
-            },
-            {
-                "height": 1,
-                "positionX": 450.0,
-                "positionY": 450.0,
-                "width": 1
-            },
-            {
-                "height": 1,
-                "positionX": 50.0,
-                "positionY": 500.0,
-                "width": 9
-            },
-            {
-                "height": 1,
-                "positionX": 700.0,
-                "positionY": 500.0,
-                "width": 1
-            }
-        ],
+      "entities": [
+        {
+          "height": 1,
+          "positionX": 50.0,
+          "positionY": 250.0,
+          "width": 1
+        },
+        {
+          "height": 1,
+          "positionX": 150.0,
+          "positionY": 150.0,
+          "width": 1
+        },
+        {
+          "height": 4,
+          "positionX": 200.0,
+          "positionY": 150.0,
+          "width": 1
+        },
+        {
+          "height": 1,
+          "positionX": 150.0,
+          "positionY": 350.0,
+          "width": 5
+        },
+        {
+          "height": 2,
+          "positionX": 350.0,
+          "positionY": 250.0,
+          "width": 1
+        },
+        {
+          "height": 2,
+          "positionX": 350.0,
+          "positionY": 50.0,
+          "width": 1
+        },
+        {
+          "height": 2,
+          "positionX": 600.0,
+          "positionY": 150.0,
+          "width": 1
+        },
+        {
+          "height": 1,
+          "positionX": 600.0,
+          "positionY": 250.0,
+          "width": 3
+        },
+        {
+          "height": 1,
+          "positionX": 450.0,
+          "positionY": 450.0,
+          "width": 1
+        },
+        {
+          "height": 1,
+          "positionX": 50.0,
+          "positionY": 500.0,
+          "width": 9
+        },
+        {
+          "height": 1,
+          "positionX": 700.0,
+          "positionY": 500.0,
+          "width": 1
+        },
+        {
+          "height": 1,
+          "positionX": 400.0,
+          "positionY": 250.0,
+          "width": 1
+        }
+      ],
         "entrances": [
             {
                 "height": 1,
