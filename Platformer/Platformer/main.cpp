@@ -3,7 +3,7 @@
 
 int main()
 {
-	Game game(sf::VideoMode(500, 500), "Game");
+	Game game(sf::VideoMode(1280, 720), "Game");
 
 	while(game.play()) { }
 

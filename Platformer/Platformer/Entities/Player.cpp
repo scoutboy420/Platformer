@@ -1,5 +1,6 @@
 #include "Player.h"
 
+/* Sebastian Pietras, Bernard Lesiewicz */
 void Player::update(float deltaTime)
 {
 	velocity_.y -= gravity_ * deltaTime;
@@ -14,6 +15,7 @@ void Player::update(float deltaTime)
 	move(transform);
 }
 
+/* Sebastian Pietras */
 void Player::jump()
 {
 	if(onGround)
@@ -23,30 +25,28 @@ void Player::jump()
 	}
 }
 
-void Player::move(sf::Vector2f transform)
-{
-	body_.move(sf::Vector2f(transform.x, -transform.y));
-}
-
-sf::Vector2f Player::checkPush(const Entity& other) const
+/* Sebastian Pietras, Bernard Lesiewicz */
+sf::Vector2f Player::checkPush(const Entity& other, float deltaTime) const
 {
 	const float deltaX = other.getCenter().x - getCenter().x;
 	const float deltaY = other.getCenter().y - getCenter().y;
 	const float intersectX = std::fabs(deltaX) - (other.getSize().x * 0.5f + getSize().x * 0.5f);
 	const float intersectY = std::fabs(deltaY) - (other.getSize().y * 0.5f + getSize().y * 0.5f);
 
-	if(intersectX < 0.0f && intersectY < 0.0f)
+	if(intersectX < 0.0f && intersectY < 0.0f && (intersectX <= -fabs(deltaTime*velocity_.x)-0.001f || intersectY <= -fabs(deltaTime*velocity_.y)-0.001f))
 	{
 		if(intersectX > intersectY)
 		{
 			if(deltaX > 0.0f) return {intersectX, 0.0f};
-			else return {-intersectX, 0.0f};
+			return {-intersectX, 0.0f};
 		}
-		else
+		if(intersectX < intersectY)
 		{
 			if(deltaY > 0.0f) return {0.0f, -intersectY};
-			else return {0.0f, intersectY};
+			return {0.0f, intersectY};
 		}
+
+		return { intersectX, -intersectY };
 	}
 
 	return {0.0f, 0.0f};

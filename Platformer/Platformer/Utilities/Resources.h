@@ -2,6 +2,8 @@
 #include "JSON/json.hpp"
 #include "SFML/Graphics.hpp"
 #include "../Entities/Entity.h"
+#include "../Entities/Door.h"
+#include "../Entities/Key.h"
 #include <unordered_map>
 
 using json = nlohmann::json;
@@ -13,13 +15,15 @@ public:
 
 	static json rooms_;
 	static json playerData_;
-	static json map_;
 	static std::unordered_map<std::string, sf::Texture> textures_;
 
 	static void load(); //Loads every resource from disk
-	static int getNextRoomId(int currenRoomX, int currentRoomY, direction direction); //TODO: implement. should look up next room in rooms json
+	static void save();
 	static std::vector<Entity> createEntities(int roomId);
+	static std::vector<Door> createDoors(int roomId, std::vector<bool> openedDoors_);
+	static std::vector<Key> createKeys(int roomId, std::vector<bool> openedDoors_);
 
-	static int getRoomCount();
-	static int getStartingRoomId();
+	static int countRooms();
+	static int getRoomId(std::string roomName);
+	static int highestDoorId();
 };
