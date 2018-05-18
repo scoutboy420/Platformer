@@ -11,6 +11,7 @@ private:
 	sf::RenderWindow window_;
 	sf::View view_;
 	sf::Clock clock_; //to count time between frames
+	sf::Text playerHealthText_;
 
 	void checkCollisions(float deltaTime);
 	void checkRoomChange();

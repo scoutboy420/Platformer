@@ -1,53 +1,24 @@
 #include "Player.h"
 
-/* Sebastian Pietras, Bernard Lesiewicz */
-void Player::update(float deltaTime)
+void Player::setHp(int hp)
 {
-	velocity_.y -= gravity_ * deltaTime;
+	if(hp > 100) hp = 100;
+	else if(hp < 0) hp = 0;
 
-	velocity_.x *= 1.0f / (1.0f + deltaTime * friction_);
-
-	if(std::fabs(velocity_.x) < 0.0001f) velocity_.x = 0.0f;
-
-	printf("Velocity: %f,%f\n", velocity_.x, velocity_.y);
-
-	const sf::Vector2f transform = sf::Vector2f(velocity_.x * deltaTime, velocity_.y * deltaTime);
-	move(transform);
+	healthPoints_ = hp;
 }
 
-/* Sebastian Pietras */
-void Player::jump()
+bool Player::hurt(int damage)
 {
-	if(onGround)
+	if(damage < 0) damage = 0;
+	
+	healthPoints_ -= damage;
+	
+	if(healthPoints_ <= 0)
 	{
-		velocity_.y = speed_.y;
-		onGround = false;
-	}
-}
-
-/* Sebastian Pietras, Bernard Lesiewicz */
-sf::Vector2f Player::checkPush(const Entity& other, float deltaTime) const
-{
-	const float deltaX = other.getCenter().x - getCenter().x;
-	const float deltaY = other.getCenter().y - getCenter().y;
-	const float intersectX = std::fabs(deltaX) - (other.getSize().x * 0.5f + getSize().x * 0.5f);
-	const float intersectY = std::fabs(deltaY) - (other.getSize().y * 0.5f + getSize().y * 0.5f);
-
-	if(intersectX < 0.0f && intersectY < 0.0f && (intersectX <= -fabs(deltaTime*velocity_.x)-0.001f || intersectY <= -fabs(deltaTime*velocity_.y)-0.001f))
-	{
-		if(intersectX > intersectY)
-		{
-			if(deltaX > 0.0f) return {intersectX, 0.0f};
-			return {-intersectX, 0.0f};
-		}
-		if(intersectX < intersectY)
-		{
-			if(deltaY > 0.0f) return {0.0f, -intersectY};
-			return {0.0f, intersectY};
-		}
-
-		return { intersectX, -intersectY };
+		healthPoints_ = 0;
+		return true;
 	}
 
-	return {0.0f, 0.0f};
+	return false;
 }

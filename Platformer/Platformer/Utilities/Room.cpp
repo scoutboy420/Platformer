@@ -49,17 +49,17 @@ Room::Room(int roomId, std::vector<bool> openedDoors_)
     doors_ = Resources::createDoors(roomId, openedDoors_);
 	keys_ = Resources::createKeys(roomId, openedDoors_);
 
-	size_ = sf::Vector2f(Resources::rooms_.at(roomName).at("width").get<float>() * 50.0f, Resources::rooms_.at(roomName).at("height").get<float>() * 50.0f);
+	size_ = sf::Vector2f(Resources::rooms.at(roomName).at("width").get<float>() * 50.0f, Resources::rooms.at(roomName).at("height").get<float>() * 50.0f);
 	addGradient();
 
-	const int r = Resources::rooms_.at(roomName).at("colorR").get<int>();
-	const int g = Resources::rooms_.at(roomName).at("colorG").get<int>();
-	const int b = Resources::rooms_.at(roomName).at("colorB").get<int>();
+	const int r = Resources::rooms.at(roomName).at("colorR").get<int>();
+	const int g = Resources::rooms.at(roomName).at("colorG").get<int>();
+	const int b = Resources::rooms.at(roomName).at("colorB").get<int>();
 
 	backgroundColor_ = sf::Color(r, g, b);
 
 	background_ = sf::RectangleShape(size_);
 	background_.setFillColor(backgroundColor_);
 
-	Resources::rooms_.at(roomName).at("visited") = true;
+	Resources::rooms.at(roomName).at("visited") = true;
 }

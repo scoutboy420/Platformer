@@ -13,9 +13,10 @@ class Resources
 public:
 	enum class direction { RIGHT, LEFT, UP, DOWN };
 
-	static json rooms_;
-	static json playerData_;
-	static std::unordered_map<std::string, sf::Texture> textures_;
+	static json rooms;
+	static json playerData;
+	static std::unordered_map<std::string, sf::Texture> textures;
+	static std::unordered_map<std::string, sf::Font> fonts;
 
 	static void load(); //Loads every resource from disk
 	static void save();
@@ -24,6 +25,6 @@ public:
 	static std::vector<Key> createKeys(int roomId, std::vector<bool> openedDoors_);
 
 	static int countRooms();
-	static int getRoomId(std::string roomName);
+	static int getRoomId(const std::string& roomName);
 	static int highestDoorId();
 };

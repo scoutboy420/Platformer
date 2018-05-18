@@ -12,7 +12,14 @@ void Game::checkCollisions(float deltaTime)
 		if(player_.collides(entity))
 		{
 			const auto push = player_.checkPush(entity, deltaTime);
-			if(push.y > 0) player_.onGround = true; //if it pushes the player upwards, then the player is on top of something
+			if(push.y > 0) //if it pushes the player upwards, then the player is on top of something
+			{
+				player_.onGround = true;
+				if(-player_.getVelocity().y >= 2000.0f)
+				{
+					player_.hurt(int((-player_.getVelocity().y - 2000.0f)*0.02f));
+				}
+			}
 			player_.move(push);
 
 			printf("Position: %f,%f, Push: %f,%f\n", player_.getCenter().x, player_.getCenter().y, push.x, push.y);
@@ -22,8 +29,8 @@ void Game::checkCollisions(float deltaTime)
 	}
 	for(const auto& key : currentRoom_.getKeys())
     {
-        int id = key.getId();
-        if(player_.collides(key) && openedDoors_[id] == false)
+	    const int id = key.getId();
+        if(player_.collides(key) && !openedDoors_[id])
         {
             openedDoors_[id] = true;
             //and reload/update the room
@@ -62,7 +69,7 @@ void Game::checkRoomChange()
 	const std::string roomName = "room" + std::to_string(currentRoom_.getID());
 
 	//Find which entrance this entrance leads to and player position relative to this entrance
-	for(const auto& entrance : Resources::rooms_.at(roomName).at("entrances"))
+	for(const auto& entrance : Resources::rooms.at(roomName).at("entrances"))
 	{
 		if(dir == Resources::direction::LEFT)
 		{
@@ -131,7 +138,7 @@ void Game::changeRoom(int roomID, int entranceID, sf::Vector2f offset)
 
 	sf::Vector2f entrancePos = { 0.0f, 0.0f };
 
-	for(const auto& entrances : Resources::rooms_.at(roomName).at("entrances"))
+	for(const auto& entrances : Resources::rooms.at(roomName).at("entrances"))
 	{
 		if(entrances.at("id").get<int>() == entranceID)
 		{
@@ -201,9 +208,9 @@ bool Game::handleWindowEvents()
 			case sf::Event::Closed:
 			{
 				//Save all data
-				Resources::playerData_.at("positionX") = player_.getPosition().x;
-				Resources::playerData_.at("positionY") = player_.getPosition().y;
-				Resources::playerData_.at("startingRoom") = "room" + std::to_string(currentRoom_.getID());
+				Resources::playerData.at("positionX") = player_.getPosition().x;
+				Resources::playerData.at("positionY") = player_.getPosition().y;
+				Resources::playerData.at("startingRoom") = "room" + std::to_string(currentRoom_.getID());
 //				Resources::save();
 				window_.close();
 				return false;
@@ -280,6 +287,10 @@ void Game::draw()
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Tab))
 		showMiniMap();
 
+	window_.setView(sf::View(sf::Vector2f(window_.getSize().x * 0.5f, window_.getSize().y * 0.5f), sf::Vector2f(window_.getSize())));
+	playerHealthText_.setString(std::to_string(player_.getHp()));
+	window_.draw(playerHealthText_);
+
 	window_.display();
 }
 
@@ -293,7 +304,7 @@ void Game::showMiniMap()
 	const float outlineThickness = 2.0f;
 	const float scale = std::min(float(window_.getSize().x), float(window_.getSize().y)) / 50.0f;
 
-	for(auto it = Resources::rooms_.begin(); it != Resources::rooms_.end(); ++it)
+	for(auto it = Resources::rooms.begin(); it != Resources::rooms.end(); ++it)
 	{
 		if(!it.value().at("visited").get<bool>()) continue;
 
@@ -307,9 +318,9 @@ void Game::showMiniMap()
 		if(shape.getPosition().x + shape.getSize().x > lowerRight.x) lowerRight.x = shape.getPosition().x + shape.getSize().x;
 		if(shape.getPosition().y + shape.getSize().y > lowerRight.y) lowerRight.y = shape.getPosition().y + shape.getSize().y;
 
-		const int r = it.value().at("colorR").get<int>();
-		const int g = it.value().at("colorG").get<int>();
-		const int b = it.value().at("colorB").get<int>();
+		const auto r = it.value().at("colorR").get<int>();
+		const auto g = it.value().at("colorG").get<int>();
+		const auto b = it.value().at("colorB").get<int>();
 
 		shape.setFillColor(sf::Color(r, g, b));
 
@@ -356,24 +367,31 @@ Game::Game(sf::VideoMode mode, std::string title) : window_(mode, title)
 
 	Resources::load();
 
-    int n = Resources::highestDoorId();     //all doors are closed at the beginning
+	const int n = Resources::highestDoorId();     //all doors are closed at the beginning
 	for(int i=0; i<=n; i++)
     {
         openedDoors_.push_back(false);
     }
 
-	currentRoom_ = Room(Resources::getRoomId(Resources::playerData_.at("startingRoom").get<std::string>()), openedDoors_);
+	currentRoom_ = Room(Resources::getRoomId(Resources::playerData.at("startingRoom").get<std::string>()), openedDoors_);
 
-	const sf::Vector2f playerPosition(Resources::playerData_.at("positionX").get<float>(),
-	                                  Resources::playerData_.at("positionY").get<float>());
-	const sf::Vector2f playerSpeed(Resources::playerData_.at("speed").get<float>(),
-	                               Resources::playerData_.at("jumpSpeed").get<float>());
-	const auto gravity = Resources::playerData_.at("gravity").get<float>();
-	const auto friction = Resources::playerData_.at("friction").get<float>();
+	const sf::Vector2f playerPosition(Resources::playerData.at("positionX").get<float>(),
+	                                  Resources::playerData.at("positionY").get<float>());
+	const sf::Vector2f playerSpeed(Resources::playerData.at("speed").get<float>(),
+	                               Resources::playerData.at("jumpSpeed").get<float>());
+	const auto gravity = Resources::playerData.at("gravity").get<float>();
+	const auto friction = Resources::playerData.at("friction").get<float>();
 
-	player_ = Player(Resources::textures_.at("player"), playerPosition, playerSpeed, gravity, friction);
+	player_ = Player(Resources::textures.at("player"), playerPosition, playerSpeed, gravity, friction);
 
 	checkCollisions(0.0f);      //not sure how big deltaTime should be
+
+	playerHealthText_.setFont(Resources::fonts["vcr"]);
+	playerHealthText_.setFillColor(sf::Color::White);
+	playerHealthText_.setOutlineColor(sf::Color::Black);
+	playerHealthText_.setOutlineThickness(1.0f);
+	playerHealthText_.setPosition(10.0f, 10.0f);
+	playerHealthText_.setCharacterSize(20);
 
 	view_ = sf::View(player_.getCenter(), sf::Vector2f(window_.getSize()));
 
