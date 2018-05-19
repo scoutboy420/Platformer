@@ -2,11 +2,11 @@
 #include "Entity.h"
 
 /* Bernard Lesiewicz */
-class Door:
-    public Entity
+class Door : public Entity
 {
-    int id_;
+	int id_;
 public:
-    Door(sf::Texture& texture, sf::Vector2f position, int id) :
-		Entity(texture, position), id_(id) { }
+	Door(sf::Texture& texture, const sf::Vector2f position, const int id)
+		: Entity(texture, position)
+		, id_(id) { }
 };

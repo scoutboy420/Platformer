@@ -1,15 +1,14 @@
 #pragma once
 #include "Entity.h"
-#include "Door.h"
 
 /* Bernard Lesiewicz */
-class Key:
-    public Entity
+class Key : public Entity
 {
-    int id_;
+	int id_;
 public:
-    Key(sf::Texture& texture, sf::Vector2f position , int id) :
-		Entity(texture, position), id_(id) { }
+	Key(sf::Texture& texture, const sf::Vector2f position, const int id)
+		: Entity(texture, position)
+		, id_(id) { }
 
-    const int getId() const {return id_;}
+	int getId() const { return id_; }
 };

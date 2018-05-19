@@ -8,7 +8,8 @@ protected:
 	sf::Vector2f size_;
 	bool isActive_;
 public:
-	Entity() : isActive_(false) { }
+	Entity()
+		: isActive_(false) { }
 
 	Entity(sf::Texture& texture, sf::Vector2f position);
 

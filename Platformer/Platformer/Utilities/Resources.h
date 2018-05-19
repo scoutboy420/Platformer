@@ -10,6 +10,14 @@ using json = nlohmann::json;
 
 class Resources
 {
+	static std::vector<sf::Vector2f> getEmptyPositions(const std::string& roomName);
+	static void createWalls(const std::string& roomName,
+	                        std::vector<sf::Vector2f> emptyPositions,
+	                        std::vector<Entity>& blocks);
+	static void createInternalBlocks(const std::string& roomName,
+	                                 const std::vector<sf::Vector2f>& emptyPositions,
+	                                 std::vector<Entity>& blocks);
+
 public:
 	enum class direction { RIGHT, LEFT, UP, DOWN };
 
@@ -20,9 +28,9 @@ public:
 
 	static void load(); //Loads every resource from disk
 	static void save();
-	static std::vector<Entity> createEntities(int roomId);
-	static std::vector<Door> createDoors(int roomId, std::vector<bool> openedDoors_);
-	static std::vector<Key> createKeys(int roomId, std::vector<bool> openedDoors_);
+	static std::vector<Entity> createBlocks(int roomId);
+	static std::vector<Door> createDoors(int roomId, std::vector<bool> openedDoors);
+	static std::vector<Key> createKeys(int roomId, std::vector<bool> openedDoors);
 
 	static int countRooms();
 	static int getRoomId(const std::string& roomName);

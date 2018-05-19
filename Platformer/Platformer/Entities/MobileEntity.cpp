@@ -1,7 +1,7 @@
 #include "MobileEntity.h"
 
 /* Sebastian Pietras, Bernard Lesiewicz */
-void MobileEntity::update(float deltaTime)
+void MobileEntity::update(const float deltaTime)
 {
 	velocity_.y -= gravity_ * deltaTime;
 
@@ -9,9 +9,7 @@ void MobileEntity::update(float deltaTime)
 
 	if(std::fabs(velocity_.x) < 0.0001f) velocity_.x = 0.0f;
 
-	printf("Velocity: %f,%f\n", velocity_.x, velocity_.y);
-
-	const sf::Vector2f transform = sf::Vector2f(velocity_.x * deltaTime, velocity_.y * deltaTime);
+	const auto transform = sf::Vector2f(velocity_.x * deltaTime, velocity_.y * deltaTime);
 	move(transform);
 }
 
@@ -26,28 +24,29 @@ void MobileEntity::jump()
 }
 
 /* Sebastian Pietras, Bernard Lesiewicz */
-sf::Vector2f MobileEntity::checkPush(const Entity& other, float deltaTime) const
+sf::Vector2f MobileEntity::checkPush(const Entity& other, const float deltaTime) const
 {
-	const float deltaX = other.getCenter().x - getCenter().x;
-	const float deltaY = other.getCenter().y - getCenter().y;
-	const float intersectX = std::fabs(deltaX) - (other.getSize().x * 0.5f + getSize().x * 0.5f);
-	const float intersectY = std::fabs(deltaY) - (other.getSize().y * 0.5f + getSize().y * 0.5f);
+	const auto deltaX = other.getCenter().x - getCenter().x;
+	const auto deltaY = other.getCenter().y - getCenter().y;
+	const auto intersectX = std::fabs(deltaX) - (other.getSize().x * 0.5f + getSize().x * 0.5f);
+	const auto intersectY = std::fabs(deltaY) - (other.getSize().y * 0.5f + getSize().y * 0.5f);
 
-	if(intersectX < 0.0f && intersectY < 0.0f && (intersectX <= -fabs(deltaTime*velocity_.x) - 0.001f || intersectY <= -fabs(deltaTime*velocity_.y) - 0.001f))
+	if(intersectX < 0.0f && intersectY < 0.0f &&
+	   (intersectX <= -fabs(deltaTime * velocity_.x) - 0.001f || intersectY <= -fabs(deltaTime * velocity_.y) - 0.001f))
 	{
 		if(intersectX > intersectY)
 		{
-			if(deltaX > 0.0f) return { intersectX, 0.0f };
-			return { -intersectX, 0.0f };
+			if(deltaX > 0.0f) return {intersectX, 0.0f};
+			return {-intersectX, 0.0f};
 		}
 		if(intersectX < intersectY)
 		{
-			if(deltaY > 0.0f) return { 0.0f, -intersectY };
-			return { 0.0f, intersectY };
+			if(deltaY > 0.0f) return {0.0f, -intersectY};
+			return {0.0f, intersectY};
 		}
 
-		return { intersectX, -intersectY };
+		return {intersectX, -intersectY};
 	}
 
-	return { 0.0f, 0.0f };
+	return {0.0f, 0.0f};
 }

@@ -1,5 +1,6 @@
 #include "Player.h"
 
+/* Sebastian Pietras */
 void Player::setHp(int hp)
 {
 	if(hp > 100) hp = 100;
@@ -8,12 +9,13 @@ void Player::setHp(int hp)
 	healthPoints_ = hp;
 }
 
+/* Sebastian Pietras */
 bool Player::hurt(int damage)
 {
 	if(damage < 0) damage = 0;
-	
+
 	healthPoints_ -= damage;
-	
+
 	if(healthPoints_ <= 0)
 	{
 		healthPoints_ = 0;

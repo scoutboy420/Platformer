@@ -18,10 +18,10 @@ class Room
 
 	void addGradient();
 public:
-	Room() = default;
-	Room(int roomId, std::vector<bool> openedDoors_);
+	Room() : id_(0) {}
+	Room(int roomId, const std::vector<bool>& openedDoors);
 
-	int getID() const { return id_; }
+	int getId() const { return id_; }
 	sf::Vector2f getSize() const { return size_; }
 	const std::vector<Entity>& getEntities() const { return blocks_; }
 	const std::vector<Key>& getKeys() const { return keys_; }

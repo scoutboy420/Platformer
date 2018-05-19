@@ -40,21 +40,22 @@ void Room::addGradient()
 }
 
 /* Sebastian Pietras, Bernard Lesiewicz */
-Room::Room(int roomId, std::vector<bool> openedDoors_)
+Room::Room(const int roomId, const std::vector<bool>& openedDoors)
 {
 	id_ = roomId;
-	const std::string roomName = "room" + std::to_string(roomId);
+	const auto roomName = "room" + std::to_string(roomId);
 
-	blocks_ = Resources::createEntities(roomId);
-    doors_ = Resources::createDoors(roomId, openedDoors_);
-	keys_ = Resources::createKeys(roomId, openedDoors_);
+	blocks_ = Resources::createBlocks(roomId);
+	doors_ = Resources::createDoors(roomId, openedDoors);
+	keys_ = Resources::createKeys(roomId, openedDoors);
 
-	size_ = sf::Vector2f(Resources::rooms.at(roomName).at("width").get<float>() * 50.0f, Resources::rooms.at(roomName).at("height").get<float>() * 50.0f);
+	size_ = sf::Vector2f(Resources::rooms.at(roomName).at("width").get<float>() * 50.0f,
+	                     Resources::rooms.at(roomName).at("height").get<float>() * 50.0f);
 	addGradient();
 
-	const int r = Resources::rooms.at(roomName).at("colorR").get<int>();
-	const int g = Resources::rooms.at(roomName).at("colorG").get<int>();
-	const int b = Resources::rooms.at(roomName).at("colorB").get<int>();
+	const auto r = Resources::rooms.at(roomName).at("colorR").get<int>();
+	const auto g = Resources::rooms.at(roomName).at("colorG").get<int>();
+	const auto b = Resources::rooms.at(roomName).at("colorB").get<int>();
 
 	backgroundColor_ = sf::Color(r, g, b);
 
