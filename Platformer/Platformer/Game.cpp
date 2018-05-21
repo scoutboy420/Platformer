@@ -33,7 +33,7 @@ void Game::checkCollisions(const float deltaTime)
 		{
 			openedDoors_[id] = true;
 			//and reload/update the room
-			currentRoom_ = Room(currentRoom_.getId(), openedDoors_);
+			currentRoom_ = Room(currentRoom_.getRoomName(), openedDoors_);
 		}
 	}
 	for(const auto& door : currentRoom_.getDoors()) checkBlockCollision(deltaTime, door);
@@ -42,7 +42,7 @@ void Game::checkCollisions(const float deltaTime)
 /* Sebastian Pietras */
 bool Game::findTransportLocation(const Resources::direction dir,
                                  const nlohmann::json& entrance,
-                                 int& roomId,
+                                 std::string& roomName,
                                  int& entranceId,
                                  sf::Vector2f& offset) const
 {
@@ -53,7 +53,7 @@ bool Game::findTransportLocation(const Resources::direction dir,
 		{
 			if(entrance.at("x").get<float>() == 0.0f)
 			{
-				roomId = entrance.at("to").at("roomID").get<int>();
+				roomName = entrance.at("to").at("roomName").get<std::string>();
 				entranceId = entrance.at("to").at("entranceID").get<int>();
 				offset = sf::Vector2f(-player_.getSize().x * 0.5f + 50.0f, player_.getPosition().y - entrance.at("y").get<float>());
 				return true;
@@ -65,7 +65,7 @@ bool Game::findTransportLocation(const Resources::direction dir,
 		{
 			if(entrance.at("x").get<float>() + 50.0f == currentRoom_.getSize().x)
 			{
-				roomId = entrance.at("to").at("roomID").get<int>();
+				roomName = entrance.at("to").at("roomName").get<std::string>();
 				entranceId = entrance.at("to").at("entranceID").get<int>();
 				offset = sf::Vector2f(-player_.getSize().x * 0.5f, player_.getPosition().y - entrance.at("y").get<float>());
 				return true;
@@ -77,7 +77,7 @@ bool Game::findTransportLocation(const Resources::direction dir,
 		{
 			if(entrance.at("y").get<float>() == 0.0f)
 			{
-				roomId = entrance.at("to").at("roomID").get<int>();
+				roomName = entrance.at("to").at("roomName").get<std::string>();
 				entranceId = entrance.at("to").at("entranceID").get<int>();
 				offset = sf::Vector2f(player_.getPosition().x - entrance.at("x").get<float>(), -player_.getSize().y * 0.5f + 50.0f);
 				return true;
@@ -89,7 +89,7 @@ bool Game::findTransportLocation(const Resources::direction dir,
 		{
 			if(entrance.at("y").get<float>() + 50.0f == currentRoom_.getSize().y)
 			{
-				roomId = entrance.at("to").at("roomID").get<int>();
+				roomName = entrance.at("to").at("roomName").get<std::string>();
 				entranceId = entrance.at("to").at("entranceID").get<int>();
 				offset = sf::Vector2f(player_.getPosition().x - entrance.at("x").get<float>(), -player_.getSize().y * 0.5f);
 				return true;
@@ -113,29 +113,27 @@ void Game::checkRoomChange()
 
 	//Messy and assumes blocks are 50x50 but works
 
-	auto roomId = 0, entranceId = 0;
+	std::string roomName;
+	auto entranceId = 0;
 	sf::Vector2f offset = {0.0f, 0.0f};
-	const auto roomName = "room" + std::to_string(currentRoom_.getId());
 
 	//Find which entrance this entrance leads to and player position relative to this entrance
-	for(const auto& entrance : Resources::rooms.at(roomName).at("entrances"))
+	for(const auto& entrance : Resources::rooms.at(currentRoom_.getRoomName()).at("entrances"))
 	{
-		if(findTransportLocation(dir, entrance, roomId, entranceId, offset)) break;
+		if(findTransportLocation(dir, entrance, roomName, entranceId, offset)) break;
 	}
 
-	changeRoom(roomId, entranceId, offset);
+	changeRoom(roomName, entranceId, offset);
 }
 
 /* Sebastian Pietras */
-void Game::changeRoom(const int roomId, const int entranceId, const sf::Vector2f offset)
+void Game::changeRoom(const std::string& roomName, const int entranceId, const sf::Vector2f offset)
 {
-	const auto roomName = "room" + std::to_string(roomId);
-
-	currentRoom_ = Room(roomId, openedDoors_);
+	currentRoom_ = Room(roomName, openedDoors_);
 
 	sf::Vector2f entrancePos = {0.0f, 0.0f};
 
-	for(const auto& entrances : Resources::rooms.at(roomName).at("entrances"))
+	for(const auto& entrances : Resources::rooms.at(currentRoom_.getRoomName()).at("entrances"))
 	{
 		if(entrances.at("id").get<int>() == entranceId)
 		{
@@ -197,7 +195,7 @@ void Game::save() const
 {
 	Resources::playerData.at("positionX") = player_.getPosition().x;
 	Resources::playerData.at("positionY") = player_.getPosition().y;
-	Resources::playerData.at("startingRoom") = "room" + std::to_string(currentRoom_.getId());
+	Resources::playerData.at("startingRoom") = currentRoom_.getRoomName();
 	//Resources::save();
 }
 
@@ -236,6 +234,7 @@ void Game::update(const float deltaTime)
 /* Sebastian Pietras */
 bool Game::isInsideView(const sf::FloatRect& viewRect, const Entity& entity)
 {
+	if(!entity.isActive) return false;
 	const auto entityRect = entity.getBody().getGlobalBounds();
 	return viewRect.intersects(entityRect);
 }
@@ -365,7 +364,7 @@ void Game::showMiniMap()
 		if(shape.getPosition().x + shape.getSize().x > lowerRight.x) lowerRight.x = shape.getPosition().x + shape.getSize().x;
 		if(shape.getPosition().y + shape.getSize().y > lowerRight.y) lowerRight.y = shape.getPosition().y + shape.getSize().y;
 
-		if(it.key() == "room" + std::to_string(currentRoom_.getId())) //current room
+		if(it.key() == currentRoom_.getRoomName()) //current room
 		{
 			shape.setOutlineColor(sf::Color::Red);
 			currentRoomShape = shape;
@@ -406,7 +405,7 @@ Game::Game(const sf::VideoMode mode, const std::string& title)
 
 	for(auto i = 0; i <= n; i++) openedDoors_.push_back(false);
 
-	currentRoom_ = Room(Resources::getRoomId(Resources::playerData.at("startingRoom").get<std::string>()), openedDoors_);
+	currentRoom_ = Room(Resources::playerData.at("startingRoom").get<std::string>(), openedDoors_);
 
 	initializePlayer();
 

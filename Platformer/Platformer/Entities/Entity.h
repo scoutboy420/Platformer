@@ -6,10 +6,12 @@ class Entity
 protected:
 	sf::Sprite body_;
 	sf::Vector2f size_;
-	bool isActive_;
+
 public:
+	bool isActive;
+
 	Entity()
-		: isActive_(false) { }
+		: isActive(false) { }
 
 	Entity(sf::Texture& texture, sf::Vector2f position);
 

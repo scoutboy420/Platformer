@@ -28,11 +28,10 @@ public:
 
 	static void load(); //Loads every resource from disk
 	static void save();
-	static std::vector<Entity> createBlocks(int roomId);
-	static std::vector<Door> createDoors(int roomId, std::vector<bool> openedDoors);
-	static std::vector<Key> createKeys(int roomId, std::vector<bool> openedDoors);
+	static std::vector<Entity> createBlocks(const std::string& roomName);
+	static std::vector<Door> createDoors(const std::string& roomName, std::vector<bool> openedDoors);
+	static std::vector<Key> createKeys(const std::string& roomName, std::vector<bool> openedDoors);
 
 	static int countRooms();
-	static int getRoomId(const std::string& roomName);
 	static int highestDoorId();
 };

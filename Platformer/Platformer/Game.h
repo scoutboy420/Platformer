@@ -14,7 +14,7 @@ class Game
 
 	void checkCollisions(float deltaTime);
 	void checkRoomChange();
-	void changeRoom(int roomId, int entranceId, sf::Vector2f offset);
+	void changeRoom(const std::string& roomName, int entranceId, sf::Vector2f offset);
 	void checkCamera();
 	void scaleView();
 	void handleInput();
@@ -32,7 +32,7 @@ class Game
 	void initializePlayer();
 	bool findTransportLocation(Resources::direction dir,
 	                           const nlohmann::json& entrance,
-	                           int& roomId,
+		                       std::string& roomName,
 	                           int& entranceId,
 	                           sf::Vector2f& offset) const;
 	static sf::RectangleShape createRoomShape(const nlohmann::json& roomJson, float scale, float outlineThickness);

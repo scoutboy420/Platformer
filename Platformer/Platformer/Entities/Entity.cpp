@@ -6,7 +6,7 @@ Entity::Entity(sf::Texture& texture, const sf::Vector2f position)
 	body_.setTexture(texture, true);
 	body_.setPosition(position);
 	size_ = sf::Vector2f(body_.getTexture()->getSize());
-	isActive_ = true;
+	isActive = true;
 }
 
 /* Sebastian Pietras */
@@ -23,6 +23,8 @@ sf::Vector2f Entity::getCenter() const
 /* Sebastian Pietras */
 bool Entity::collides(const Entity& other) const
 {
+	if(!isActive || !other.isActive) return false;
+
 	//Distances
 	const auto deltaX = other.getCenter().x - getCenter().x;
 	const auto deltaY = other.getCenter().y - getCenter().y;

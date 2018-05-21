@@ -137,10 +137,9 @@ void Resources::createInternalBlocks(const std::string& roomName,
 }
 
 /* Sebastian Pietras */
-std::vector<Entity> Resources::createBlocks(const int roomId)
+std::vector<Entity> Resources::createBlocks(const std::string& roomName)
 {
 	std::vector<Entity> blocks;
-	const auto roomName = "room" + std::to_string(roomId);
 
 	const auto emptyPos = getEmptyPositions(roomName); //where to not create blocks (like in entrances)
 
@@ -153,10 +152,9 @@ std::vector<Entity> Resources::createBlocks(const int roomId)
 }
 
 /*Bernard Lesiewicz*/
-std::vector<Door> Resources::createDoors(const int roomId, std::vector<bool> openedDoors)
+std::vector<Door> Resources::createDoors(const std::string& roomName, std::vector<bool> openedDoors)
 {
 	std::vector<Door> doors;
-	const auto roomName = "room" + std::to_string(roomId);
 	for(auto& door : rooms.at(roomName).at("doors"))
 	{
 		const sf::Vector2f position(door.at("positionX").get<float>(), door.at("positionY").get<float>());
@@ -168,10 +166,9 @@ std::vector<Door> Resources::createDoors(const int roomId, std::vector<bool> ope
 }
 
 /*Bernard Lesiewicz*/
-std::vector<Key> Resources::createKeys(const int roomId, std::vector<bool> openedDoors)
+std::vector<Key> Resources::createKeys(const std::string& roomName, std::vector<bool> openedDoors)
 {
 	std::vector<Key> keys;
-	const auto roomName = "room" + std::to_string(roomId);
 	for(auto& key : rooms.at(roomName).at("keys"))
 	{
 		const sf::Vector2f position(key.at("positionX").get<float>(), key.at("positionY").get<float>());
@@ -190,14 +187,6 @@ int Resources::countRooms()
 	for(auto it = rooms.begin(); it != rooms.end(); ++it) if(it.key().find("room") != std::string::npos) i++;
 
 	return i;
-}
-
-/* Sebastian Pietras */
-int Resources::getRoomId(const std::string& roomName)
-{
-	const auto num = roomName.substr(4);
-
-	return std::stoi(num);
 }
 
 /*Bernard Lesiewicz*/
