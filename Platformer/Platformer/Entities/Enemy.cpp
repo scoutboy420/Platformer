@@ -1,4 +1,5 @@
 #include "Enemy.h"
+
 /* Sebastian Pietras */
 void Enemy::setHp(int hp)
 {

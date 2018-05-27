@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "../Utilities/Resources.h"
 
 /* Sebastian Pietras */
 void Player::setHp(int hp)
@@ -23,4 +24,12 @@ bool Player::hurt(int damage)
 	}
 
 	return false;
+}
+
+/* Sebastian Pietras */
+void Player::onRoomChange(const std::string& roomName)
+{
+	MobileEntity::onRoomChange(roomName);
+
+	Resources::getRoomJson(roomName).at("visited") = true;
 }

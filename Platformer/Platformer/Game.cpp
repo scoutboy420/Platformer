@@ -1,97 +1,137 @@
 #include "Game.h"
-#include "Utilities/Resources.h"
-#include "Utilities/JSON/json.hpp"
 
 /* Sebastian Pietras */
-void Game::checkBlockCollision(const float deltaTime, const Entity& entity)
+bool Game::collides(const Entity& e1, const Entity& e2) const
 {
-	if(player_.collides(entity))
-	{
-		const auto push = player_.checkPush(entity, deltaTime);
-		if(push.y > 0) //if it pushes the player upwards, then the player is on top of something
-		{
-			player_.onGround = true;
-			if(-player_.getVelocity().y >= 2000.0f) //fall damage
-				player_.hurt(int((-player_.getVelocity().y - 2000.0f) * 0.02f));
-		}
-		player_.move(push);
+	if(!e1.isActive || !e2.isActive) return false;
 
-		if(push.y != 0.0f) player_.stopY();
+	//Distances
+	const auto deltaX = e2.getCenter().x - e1.getCenter().x;
+	const auto deltaY = e2.getCenter().y - e1.getCenter().y;
+	//Intersections
+	const auto intersectX = std::fabs(deltaX) - (e2.getSize().x * 0.5f + e1.getSize().x * 0.5f);
+	const auto intersectY = std::fabs(deltaY) - (e2.getSize().y * 0.5f + e1.getSize().y * 0.5f);
+
+	return intersectX < 0.0f && intersectY < 0.0f; //if both intersections are negative, then objects collide
+}
+
+/* Sebastian Pietras, Bernard Lesiewicz */
+sf::Vector2f Game::checkPush(const MobileEntity& e1, const Entity& e2, const float deltaTime) const
+{
+	const auto deltaX = e2.getCenter().x - e1.getCenter().x;
+	const auto deltaY = e2.getCenter().y - e1.getCenter().y;
+	const auto intersectX = std::fabs(deltaX) - (e2.getSize().x * 0.5f + e1.getSize().x * 0.5f);
+	const auto intersectY = std::fabs(deltaY) - (e2.getSize().y * 0.5f + e1.getSize().y * 0.5f);
+
+	if(intersectX < 0.0f && intersectY < 0.0f && 
+	   (intersectX <= -fabs(deltaTime * e1.getVelocity().x) - 0.001f ||
+	    intersectY <= -fabs(deltaTime * e1.getVelocity().y) - 0.001f))
+	{
+		if(intersectX > intersectY)
+		{
+			if(deltaX > 0.0f) return {intersectX, 0.0f};
+			return {-intersectX, 0.0f};
+		}
+		if(intersectX < intersectY)
+		{
+			if(deltaY > 0.0f) return {0.0f, -intersectY};
+			return {0.0f, intersectY};
+		}
+
+		return {intersectX, -intersectY};
 	}
+
+	return {0.0f, 0.0f};
+}
+
+/* Sebastian Pietras */
+void Game::checkBlockCollision(MobileEntity& mobile, const Entity& block, const float deltaTime) const
+{
+	if(collides(mobile, block))
+	{
+		const auto push = checkPush(mobile, block, deltaTime);
+		mobile.move(push);
+		mobile.onCollision(block, push);
+	}
+}
+
+/* Sebastian Pietras */
+void Game::checkKeyCollision(const Player& player, Key& key) const
+{
+	if(collides(player_, key)) { key.onCollision(player, sf::Vector2f(0, 0)); }
 }
 
 /* Sebastian Pietras, Bernard Lesiewicz*/
 void Game::checkCollisions(const float deltaTime)
 {
-	player_.onGround = false;
+	auto& playerRoom = getCurrentRoom();
+	for(const auto& entity : playerRoom.getEntities()) checkBlockCollision(player_, entity, deltaTime);
+	for(const auto& door : playerRoom.getDoors()) checkBlockCollision(player_, door, deltaTime);
+	for(auto& key : playerRoom.getKeys()) checkKeyCollision(player_, key);
 
-	for(const auto& entity : currentRoom_.getEntities()) checkBlockCollision(deltaTime, entity);
-	for(const auto& key : currentRoom_.getKeys())
+	for(auto& enemy : enemies_)
 	{
-		const auto id = key.getId();
-		if(player_.collides(key) && !openedDoors_[id])
-		{
-			openedDoors_[id] = true;
-			//and reload/update the room
-			currentRoom_ = Room(currentRoom_.getRoomName(), openedDoors_);
-		}
+		auto& enemyRoom = loadedRooms_[enemy->getCurrentRoomName()];
+		for(const auto& entity : enemyRoom.getEntities()) checkBlockCollision(*enemy, entity, deltaTime);
+		for(const auto& door : enemyRoom.getDoors()) checkBlockCollision(*enemy, door, deltaTime);
 	}
-	for(const auto& door : currentRoom_.getDoors()) checkBlockCollision(deltaTime, door);
 }
 
 /* Sebastian Pietras */
-bool Game::findTransportLocation(const Resources::direction dir,
+bool Game::findTransportLocation(const MobileEntity& entity,
+                                 const Room& currentRoom,
+                                 const Resources::direction dir,
                                  const nlohmann::json& entrance,
                                  std::string& roomName,
                                  int& entranceId,
-                                 sf::Vector2f& offset) const
+                                 sf::Vector2f& offset)
 {
 	switch(dir)
 	{
-	case Resources::direction::LEFT: if(player_.getCenter().y >= entrance.at("y").get<float>() &&
-			player_.getCenter().y <= entrance.at("y").get<float>() + entrance.at("height").get<float>() * 50.0f)
+	case Resources::direction::LEFT: if(entity.getCenter().y >= entrance.at("y").get<float>() &&
+			entity.getCenter().y <= entrance.at("y").get<float>() + entrance.at("height").get<float>() * 50.0f)
 		{
 			if(entrance.at("x").get<float>() == 0.0f)
 			{
 				roomName = entrance.at("to").at("roomName").get<std::string>();
 				entranceId = entrance.at("to").at("entranceID").get<int>();
-				offset = sf::Vector2f(-player_.getSize().x * 0.5f + 50.0f, player_.getPosition().y - entrance.at("y").get<float>());
+				offset = sf::Vector2f(-entity.getSize().x * 0.5f + 50.0f, entity.getPosition().y - entrance.at("y").get<float>());
 				return true;
 			}
 		}
 		break;
-	case Resources::direction::RIGHT: if(player_.getCenter().y >= entrance.at("y").get<float>() &&
-			player_.getCenter().y <= entrance.at("y").get<float>() + entrance.at("height").get<float>() * 50.0f)
+	case Resources::direction::RIGHT: if(entity.getCenter().y >= entrance.at("y").get<float>() &&
+			entity.getCenter().y <= entrance.at("y").get<float>() + entrance.at("height").get<float>() * 50.0f)
 		{
-			if(entrance.at("x").get<float>() + 50.0f == currentRoom_.getSize().x)
+			if(entrance.at("x").get<float>() + 50.0f == currentRoom.getSize().x)
 			{
 				roomName = entrance.at("to").at("roomName").get<std::string>();
 				entranceId = entrance.at("to").at("entranceID").get<int>();
-				offset = sf::Vector2f(-player_.getSize().x * 0.5f, player_.getPosition().y - entrance.at("y").get<float>());
+				offset = sf::Vector2f(-entity.getSize().x * 0.5f, entity.getPosition().y - entrance.at("y").get<float>());
 				return true;
 			}
 		}
 		break;
-	case Resources::direction::UP: if(player_.getCenter().x >= entrance.at("x").get<float>() &&
-			player_.getCenter().x <= entrance.at("x").get<float>() + entrance.at("width").get<float>() * 50.0f)
+	case Resources::direction::UP: if(entity.getCenter().x >= entrance.at("x").get<float>() &&
+			entity.getCenter().x <= entrance.at("x").get<float>() + entrance.at("width").get<float>() * 50.0f)
 		{
 			if(entrance.at("y").get<float>() == 0.0f)
 			{
 				roomName = entrance.at("to").at("roomName").get<std::string>();
 				entranceId = entrance.at("to").at("entranceID").get<int>();
-				offset = sf::Vector2f(player_.getPosition().x - entrance.at("x").get<float>(), -player_.getSize().y * 0.5f + 50.0f);
+				offset = sf::Vector2f(entity.getPosition().x - entrance.at("x").get<float>(), -entity.getSize().y * 0.5f + 50.0f);
 				return true;
 			}
 		}
 		break;
-	case Resources::direction::DOWN: if(player_.getCenter().x >= entrance.at("x").get<float>() &&
-			player_.getCenter().x <= entrance.at("x").get<float>() + entrance.at("width").get<float>() * 50.0f)
+	case Resources::direction::DOWN: if(entity.getCenter().x >= entrance.at("x").get<float>() &&
+			entity.getCenter().x <= entrance.at("x").get<float>() + entrance.at("width").get<float>() * 50.0f)
 		{
-			if(entrance.at("y").get<float>() + 50.0f == currentRoom_.getSize().y)
+			if(entrance.at("y").get<float>() + 50.0f == currentRoom.getSize().y)
 			{
 				roomName = entrance.at("to").at("roomName").get<std::string>();
 				entranceId = entrance.at("to").at("entranceID").get<int>();
-				offset = sf::Vector2f(player_.getPosition().x - entrance.at("x").get<float>(), -player_.getSize().y * 0.5f);
+				offset = sf::Vector2f(entity.getPosition().x - entrance.at("x").get<float>(), -entity.getSize().y * 0.5f);
 				return true;
 			}
 		}
@@ -102,13 +142,15 @@ bool Game::findTransportLocation(const Resources::direction dir,
 }
 
 /* Sebastian Pietras */
-void Game::checkRoomChange()
+void Game::checkRoomChange(MobileEntity& entity)
 {
+	auto& currentRoom = loadedRooms_[entity.getCurrentRoomName()];
+
 	Resources::direction dir;
-	if(player_.getCenter().x < 0.0f) dir = Resources::direction::LEFT;
-	else if(player_.getCenter().x > currentRoom_.getSize().x) dir = Resources::direction::RIGHT;
-	else if(player_.getCenter().y < 0.0f) dir = Resources::direction::UP;
-	else if(player_.getCenter().y > currentRoom_.getSize().y) dir = Resources::direction::DOWN;
+	if(entity.getCenter().x < 0.0f) dir = Resources::direction::LEFT;
+	else if(entity.getCenter().x > currentRoom.getSize().x) dir = Resources::direction::RIGHT;
+	else if(entity.getCenter().y < 0.0f) dir = Resources::direction::UP;
+	else if(entity.getCenter().y > currentRoom.getSize().y) dir = Resources::direction::DOWN;
 	else return;
 
 	//Messy and assumes blocks are 50x50 but works
@@ -117,23 +159,24 @@ void Game::checkRoomChange()
 	auto entranceId = 0;
 	sf::Vector2f offset = {0.0f, 0.0f};
 
-	//Find which entrance this entrance leads to and player position relative to this entrance
-	for(const auto& entrance : Resources::rooms.at(currentRoom_.getRoomName()).at("entrances"))
+	//Find which entrance this entrance leads to and entity position relative to this entrance
+	for(const auto& entrance : json(Resources::getRoomJson(entity.getCurrentRoomName()).at("entrances")))
 	{
-		if(findTransportLocation(dir, entrance, roomName, entranceId, offset)) break;
+		if(findTransportLocation(entity, currentRoom, dir, entrance, roomName, entranceId, offset)) break;
 	}
 
-	changeRoom(roomName, entranceId, offset);
+	changeRoom(entity, roomName, entranceId, offset);
 }
 
 /* Sebastian Pietras */
-void Game::changeRoom(const std::string& roomName, const int entranceId, const sf::Vector2f offset)
+void Game::changeRoom(MobileEntity& entity,
+                      const std::string& roomName,
+                      const int entranceId,
+                      const sf::Vector2f offset)
 {
-	currentRoom_ = Room(roomName, openedDoors_);
-
 	sf::Vector2f entrancePos = {0.0f, 0.0f};
 
-	for(const auto& entrances : Resources::rooms.at(currentRoom_.getRoomName()).at("entrances"))
+	for(const auto& entrances : json(Resources::getRoomJson(roomName).at("entrances")))
 	{
 		if(entrances.at("id").get<int>() == entranceId)
 		{
@@ -142,28 +185,26 @@ void Game::changeRoom(const std::string& roomName, const int entranceId, const s
 		}
 	}
 
-	player_.setPosition(entrancePos + offset); //Apply offset so movement can be smooth
-
-	scaleView();
+	entity.setPosition(entrancePos + offset); //Apply offset so movement can be smooth
+	entity.onRoomChange(roomName);
 }
 
 /* Sebastian Pietras */
 void Game::checkCamera()
 {
 	auto camX = player_.getCenter().x, camY = player_.getCenter().y;
+	const auto& currentRoom = getCurrentRoom();
 
 	//Bound camera if it goes outside walls (assuming room is rectangular)
-	if(camX - view_.getSize().x * 0.5f < 0.0f)
-		camX += view_.getSize().x * 0.5f - camX;
+	if(camX - view_.getSize().x * 0.5f < 0.0f) camX += view_.getSize().x * 0.5f - camX;
 
-	if(camX + view_.getSize().x * 0.5f > currentRoom_.getSize().x)
-		camX -= camX + view_.getSize().x * 0.5f - currentRoom_.getSize().x;
+	if(camX + view_.getSize().x * 0.5f > currentRoom.getSize().x) 
+		camX -= camX + view_.getSize().x * 0.5f - currentRoom.getSize().x;
 
-	if(camY - view_.getSize().y * 0.5f < 0.0f)
-		camY += view_.getSize().y * 0.5f - camY;
+	if(camY - view_.getSize().y * 0.5f < 0.0f) camY += view_.getSize().y * 0.5f - camY;
 
-	if(camY + view_.getSize().y * 0.5f > currentRoom_.getSize().y)
-		camY -= camY + view_.getSize().y * 0.5f - currentRoom_.getSize().y;
+	if(camY + view_.getSize().y * 0.5f > currentRoom.getSize().y) 
+		camY -= camY + view_.getSize().y * 0.5f - currentRoom.getSize().y;
 
 	view_.setCenter(camX, camY);
 }
@@ -174,8 +215,8 @@ void Game::scaleView()
 	view_.setSize(sf::Vector2f(window_.getSize()));
 	//If current view is bigger than entire room, scale it down to fit entire room (and no more)
 
-	const auto ratioX = currentRoom_.getSize().x / view_.getSize().x,
-	           ratioY = currentRoom_.getSize().y / view_.getSize().y;
+	const auto ratioX = getCurrentRoom().getSize().x / view_.getSize().x,
+	           ratioY = getCurrentRoom().getSize().y / view_.getSize().y;
 	const auto dominatingRatio = std::min(ratioX, ratioY);
 
 	if(dominatingRatio < 1.0f) view_.zoom(dominatingRatio);
@@ -184,19 +225,20 @@ void Game::scaleView()
 /* Sebastian Pietras */
 void Game::handleInput()
 {
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) player_.run(Resources::direction::RIGHT);
-	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) player_.run(Resources::direction::LEFT);
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) player_.run(true);
+	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) player_.run(false);
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) player_.jump();
 }
 
 /* Sebastian Pietras */
-void Game::save() const
+void Game::save()
 {
 	Resources::playerData.at("positionX") = player_.getPosition().x;
 	Resources::playerData.at("positionY") = player_.getPosition().y;
-	Resources::playerData.at("startingRoom") = currentRoom_.getRoomName();
+	Resources::playerData.at("startingRoom") = getCurrentRoom().getRoomName();
 	//Resources::save();
+	//TODO: do this
 }
 
 /* Sebastian Pietras */
@@ -223,10 +265,13 @@ bool Game::handleWindowEvents()
 void Game::update(const float deltaTime)
 {
 	player_.update(deltaTime);
+	for(auto& enemy : enemies_) enemy->update(deltaTime);
 
 	checkCollisions(deltaTime);
 
-	checkRoomChange();
+	checkRoomChange(player_);
+	scaleView();
+	for(auto& enemy : enemies_) checkRoomChange(*enemy);
 
 	checkCamera();
 }
@@ -246,11 +291,19 @@ void Game::drawEntities()
 	                                                                     view_.getSize().y * 0.5f),
 	                                    view_.getSize());
 
-	for(const auto& entity : currentRoom_.getEntities()) if(isInsideView(viewRect, entity)) window_.draw(entity.getBody());
+	for(const auto& entity : getCurrentRoom().getEntities()) 
+		if(isInsideView(viewRect, entity)) window_.draw(entity.getBody());
 
-	for(const auto& door : currentRoom_.getDoors()) if(isInsideView(viewRect, door)) window_.draw(door.getBody());
+	for(const auto& door : getCurrentRoom().getDoors()) 
+		if(isInsideView(viewRect, door)) window_.draw(door.getBody());
 
-	for(const auto& key : currentRoom_.getKeys()) if(isInsideView(viewRect, key)) window_.draw(key.getBody());
+	for(const auto& key : getCurrentRoom().getKeys()) 
+		if(isInsideView(viewRect, key)) window_.draw(key.getBody());
+
+	for(auto& enemy : enemies_)
+	{
+		if(getCurrentRoom().getRoomName() == enemy->getCurrentRoomName()) window_.draw(enemy->getBody());
+	}
 
 	window_.draw(player_.getBody());
 }
@@ -258,7 +311,7 @@ void Game::drawEntities()
 /* Sebastian Pietras */
 void Game::drawOverlay()
 {
-	for(auto e : currentRoom_.getGradientEdges()) window_.draw(e.data(), 4, sf::Quads);
+	for(auto e : getCurrentRoom().getGradientEdges()) window_.draw(e.data(), 4, sf::Quads);
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Tab)) showMiniMap();
 
@@ -273,7 +326,7 @@ void Game::draw()
 {
 	window_.clear(sf::Color::Black);
 	window_.setView(view_);
-	window_.draw(currentRoom_.getBackground());
+	window_.draw(getCurrentRoom().getBackground());
 
 	drawEntities();
 	drawOverlay();
@@ -342,6 +395,14 @@ void Game::drawMiniMap(const sf::RectangleShape& background,
 }
 
 /* Sebastian Pietras */
+Room& Game::getCurrentRoom()
+{
+	const auto roomName = player_.getCurrentRoomName();
+
+	return loadedRooms_[roomName];
+}
+
+/* Sebastian Pietras */
 void Game::showMiniMap()
 {
 	std::vector<sf::RectangleShape> roomShapes;
@@ -351,12 +412,12 @@ void Game::showMiniMap()
 	const auto outlineThickness = 2.0f;
 	const auto scale = std::min(float(window_.getSize().x), float(window_.getSize().y)) / 50.0f;
 
-	for(auto it = Resources::rooms.begin(); it != Resources::rooms.end(); ++it)
+	for(auto room : Resources::rooms)
 	{
-		if(!it.value().at("visited").get<bool>()) continue;
+		if(!room.at("visited").get<bool>()) continue;
 
 		//Shape of room
-		auto shape = createRoomShape(it.value(), scale, outlineThickness);
+		auto shape = createRoomShape(room, scale, outlineThickness);
 
 		//Bounds
 		if(shape.getPosition().x < upperLeft.x) upperLeft.x = shape.getPosition().x;
@@ -364,7 +425,7 @@ void Game::showMiniMap()
 		if(shape.getPosition().x + shape.getSize().x > lowerRight.x) lowerRight.x = shape.getPosition().x + shape.getSize().x;
 		if(shape.getPosition().y + shape.getSize().y > lowerRight.y) lowerRight.y = shape.getPosition().y + shape.getSize().y;
 
-		if(it.key() == currentRoom_.getRoomName()) //current room
+		if(room.at("name").get<std::string>() == getCurrentRoom().getRoomName()) //current room
 		{
 			shape.setOutlineColor(sf::Color::Red);
 			currentRoomShape = shape;
@@ -388,8 +449,31 @@ void Game::initializePlayer()
 	                               Resources::playerData.at("jumpSpeed").get<float>());
 	const auto gravity = Resources::playerData.at("gravity").get<float>();
 	const auto friction = Resources::playerData.at("friction").get<float>();
+	const auto roomName = Resources::playerData.at("startingRoom").get<std::string>();
 
-	player_ = Player(Resources::textures.at("player"), playerPosition, playerSpeed, gravity, friction);
+	player_ = Player(Resources::textures.at("player"), playerPosition, playerSpeed, gravity, friction, roomName);
+
+	Resources::getRoomJson(roomName).at("visited") = true;
+}
+
+/* Sebastian Pietras */
+void Game::setKeys()
+{
+	for(auto& room : loadedRooms_)
+	{
+		for(auto& key : room.second.getKeys())
+		{
+			auto& doorRoom = loadedRooms_[key.getDoorRoomName()];
+			for(auto& door : doorRoom.getDoors())
+			{
+				if(door.getId() == key.getDoorId())
+				{
+					key.setDoor(&door);
+					break;
+				}
+			}
+		}
+	}
 }
 
 
@@ -401,11 +485,9 @@ Game::Game(const sf::VideoMode mode, const std::string& title)
 
 	Resources::load();
 
-	const auto n = Resources::highestDoorId(); //all doors are closed at the beginning
-
-	for(auto i = 0; i <= n; i++) openedDoors_.push_back(false);
-
-	currentRoom_ = Room(Resources::playerData.at("startingRoom").get<std::string>(), openedDoors_);
+	loadedRooms_ = Resources::createRooms();
+	setKeys();
+	enemies_ = Resources::createEnemies();
 
 	initializePlayer();
 

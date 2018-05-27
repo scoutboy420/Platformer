@@ -1,5 +1,5 @@
 #pragma once
-#include "SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 
 class Entity
 {
@@ -8,6 +8,7 @@ protected:
 	sf::Vector2f size_;
 
 public:
+	virtual ~Entity() = default;
 	bool isActive;
 
 	Entity()
@@ -20,5 +21,5 @@ public:
 	sf::Vector2f getCenter() const;
 	sf::Vector2f getSize() const { return size_; }
 
-	bool collides(const Entity& other) const;
+	virtual void onCollision(const Entity&, sf::Vector2f) {}
 };

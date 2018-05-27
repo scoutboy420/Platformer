@@ -19,18 +19,3 @@ sf::Vector2f Entity::getCenter() const
 
 	return {posX + sizeX * 0.5f, posY + sizeY * 0.5f};
 }
-
-/* Sebastian Pietras */
-bool Entity::collides(const Entity& other) const
-{
-	if(!isActive || !other.isActive) return false;
-
-	//Distances
-	const auto deltaX = other.getCenter().x - getCenter().x;
-	const auto deltaY = other.getCenter().y - getCenter().y;
-	//Intersections
-	const auto intersectX = std::fabs(deltaX) - (other.getSize().x * 0.5f + getSize().x * 0.5f);
-	const auto intersectY = std::fabs(deltaY) - (other.getSize().y * 0.5f + getSize().y * 0.5f);
-
-	return intersectX < 0.0f && intersectY < 0.0f; //if both intersections are negative, then objects collide
-}

@@ -16,37 +16,20 @@ void MobileEntity::update(const float deltaTime)
 /* Sebastian Pietras */
 void MobileEntity::jump()
 {
-	if(onGround)
+	if(onGround_)
 	{
 		velocity_.y = speed_.y;
-		onGround = false;
+		onGround_ = false;
 	}
 }
 
-/* Sebastian Pietras, Bernard Lesiewicz */
-sf::Vector2f MobileEntity::checkPush(const Entity& other, const float deltaTime) const
+/* Sebastian Pietras */
+void MobileEntity::onCollision(const Entity&, const sf::Vector2f push)
 {
-	const auto deltaX = other.getCenter().x - getCenter().x;
-	const auto deltaY = other.getCenter().y - getCenter().y;
-	const auto intersectX = std::fabs(deltaX) - (other.getSize().x * 0.5f + getSize().x * 0.5f);
-	const auto intersectY = std::fabs(deltaY) - (other.getSize().y * 0.5f + getSize().y * 0.5f);
-
-	if(intersectX < 0.0f && intersectY < 0.0f &&
-	   (intersectX <= -fabs(deltaTime * velocity_.x) - 0.001f || intersectY <= -fabs(deltaTime * velocity_.y) - 0.001f))
+	if(push.y > 0) //if it pushes the entity upwards, then the entity is on top of something
 	{
-		if(intersectX > intersectY)
-		{
-			if(deltaX > 0.0f) return {intersectX, 0.0f};
-			return {-intersectX, 0.0f};
-		}
-		if(intersectX < intersectY)
-		{
-			if(deltaY > 0.0f) return {0.0f, -intersectY};
-			return {0.0f, intersectY};
-		}
-
-		return {intersectX, -intersectY};
+		onGround_ = true;
+		stopY();
 	}
-
-	return {0.0f, 0.0f};
+	if(fabs(push.x) > 0) stopX();
 }

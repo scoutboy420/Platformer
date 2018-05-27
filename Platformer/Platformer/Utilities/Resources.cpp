@@ -1,8 +1,11 @@
 #include "Resources.h"
 #include <fstream>
+#include "../Entities/Walker.h"
+#include "Room.h"
 
 json Resources::rooms;
 json Resources::playerData;
+json Resources::enemiesData;
 std::unordered_map<std::string, sf::Texture> Resources::textures;
 std::unordered_map<std::string, sf::Font> Resources::fonts;
 
@@ -21,8 +24,14 @@ void Resources::load()
 	i.close();
 	i.clear();
 
+	i.open("Data/JSON/enemies.json");
+	i >> enemiesData;
+	i.close();
+	i.clear();
+
 	textures["player"].loadFromFile("Data/Textures/player.png");
 	textures["block"].loadFromFile("Data/Textures/block.png");
+	textures["enemy1"].loadFromFile("Data/Textures/enemy1.png");
 
 	/*textures: Bernard Lesiewicz*/
 	textures["door_rd"].loadFromFile("Data/Textures/door_rd.png");
@@ -62,6 +71,11 @@ void Resources::save()
 	o << std::setw(4) << playerData;
 	o.close();
 	o.clear();
+
+	o.open("Data/JSON/player.json", std::ofstream::out | std::ofstream::trunc);
+	o << std::setw(4) << playerData;
+	o.close();
+	o.clear();
 }
 
 /* Sebastian Pietras */
@@ -69,7 +83,7 @@ std::vector<sf::Vector2f> Resources::getEmptyPositions(const std::string& roomNa
 {
 	std::vector<sf::Vector2f> emptyPos;
 
-	for(const auto& entrances : rooms.at(roomName).at("entrances"))
+	for(const auto& entrances : json(getRoomJson(roomName).at("entrances")))
 	{
 		const auto entranceWidth = entrances.at("width").get<int>(), entranceHeight = entrances.at("height").get<int>();
 		const auto entrancePos = sf::Vector2f(entrances.at("x").get<float>(), entrances.at("y").get<float>());
@@ -91,15 +105,15 @@ void Resources::createWalls(const std::string& roomName,
                             std::vector<sf::Vector2f> emptyPositions,
                             std::vector<Entity>& blocks)
 {
-	const auto roomWidth = rooms.at(roomName).at("width").get<int>(),
-	           roomHeight = rooms.at(roomName).at("height").get<int>();
+	const auto roomWidth = getRoomJson(roomName).at("width").get<int>(),
+	           roomHeight = getRoomJson(roomName).at("height").get<int>();
 
 	for(auto i = 0; i < roomWidth; i++)
 	{
 		const auto posA = sf::Vector2f(i * 50.0f, 0.0f), posB = sf::Vector2f(i * 50.0f, (roomHeight - 1) * 50.0f);
-		if(std::find(emptyPositions.begin(), emptyPositions.end(), posA) == emptyPositions.end())
+		if(std::find(emptyPositions.begin(), emptyPositions.end(), posA) == emptyPositions.end()) 
 			blocks.push_back(Entity(textures["block"], posA));
-		if(std::find(emptyPositions.begin(), emptyPositions.end(), posB) == emptyPositions.end())
+		if(std::find(emptyPositions.begin(), emptyPositions.end(), posB) == emptyPositions.end()) 
 			blocks.push_back(Entity(textures["block"], posB));
 	}
 
@@ -118,7 +132,7 @@ void Resources::createInternalBlocks(const std::string& roomName,
                                      const std::vector<sf::Vector2f>& emptyPositions,
                                      std::vector<Entity>& blocks)
 {
-	for(auto& entity : rooms.at(roomName).at("entities"))
+	for(auto& entity : json(getRoomJson(roomName).at("blocks")))
 	{
 		const sf::Vector2f position(entity.at("positionX").get<float>(), entity.at("positionY").get<float>());
 		const auto width = entity.at("width").get<int>(), height = entity.at("height").get<int>();
@@ -151,53 +165,76 @@ std::vector<Entity> Resources::createBlocks(const std::string& roomName)
 	return blocks;
 }
 
-/*Bernard Lesiewicz*/
-std::vector<Door> Resources::createDoors(const std::string& roomName, std::vector<bool> openedDoors)
+/*Bernard Lesiewicz, Sebastian Pietras*/
+std::vector<Door> Resources::createDoors(const std::string& roomName)
 {
 	std::vector<Door> doors;
-	for(auto& door : rooms.at(roomName).at("doors"))
+	for(auto& door : json(getRoomJson(roomName).at("doors")))
 	{
 		const sf::Vector2f position(door.at("positionX").get<float>(), door.at("positionY").get<float>());
-
 		const auto id = door.at("id").get<int>();
-		if(!openedDoors[id]) doors.push_back(Door(textures[door.at("texture").get<std::string>()], position, id));
+		const auto opened = door.at("opened").get<bool>();
+		const auto textureName = door.at("texture").get<std::string>();
+		doors.push_back(Door(textures[textureName], position, id, opened));
 	}
 	return doors;
 }
 
-/*Bernard Lesiewicz*/
-std::vector<Key> Resources::createKeys(const std::string& roomName, std::vector<bool> openedDoors)
+/*Bernard Lesiewicz, Sebastian Pietras */
+std::vector<Key> Resources::createKeys(const std::string& roomName)
 {
 	std::vector<Key> keys;
-	for(auto& key : rooms.at(roomName).at("keys"))
+	for(auto& key : json(getRoomJson(roomName).at("keys")))
 	{
 		const sf::Vector2f position(key.at("positionX").get<float>(), key.at("positionY").get<float>());
-		const auto id = key.at("id").get<int>();
-
-		if(!openedDoors[id]) keys.push_back(Key(textures[key.at("texture").get<std::string>()], position, id));
+		const auto pickedUp = key.at("pickedUp").get<bool>();
+		const auto textureName = key.at("texture").get<std::string>();
+		const auto doorId = key.at("doorId").get<int>();
+		const auto doorRoomName = key.at("doorRoomName").get<std::string>();
+		keys.push_back(Key(textures[textureName], position, doorId, doorRoomName, pickedUp));
 	}
 	return keys;
 }
 
-/*Sebastian Pietras*/
-int Resources::countRooms()
+/* Sebastian Pietras */
+std::vector<std::unique_ptr<Enemy>> Resources::createEnemies()
 {
-	auto i = 0;
+	std::vector<std::unique_ptr<Enemy>> enemies;
+	for(auto enemy : enemiesData)
+	{
+		const auto type = enemy.at("type").get<int>(), id = enemy.at("id").get<int>();
+		const auto room = enemy.at("room").get<std::string>();
+		const sf::Vector2f position(enemy.at("positionX").get<float>(), enemy.at("positionY").get<float>());
+		const sf::Vector2f speed(enemy.at("speed").get<float>(), enemy.at("jumpSpeed").get<float>());
+		const auto gravity = enemy.at("gravity").get<float>(), friction = enemy.at("friction").get<float>();
 
-	for(auto it = rooms.begin(); it != rooms.end(); ++it) if(it.key().find("room") != std::string::npos) i++;
+		if(type == 1)
+		{
+			const auto walkingRight = enemy.at("walkingRight").get<bool>();
+			enemies.emplace_back(new Walker(textures["enemy1"], position, speed, gravity, friction, room, id, walkingRight));
+		}
+	}
 
-	return i;
+	return enemies;
 }
 
-/*Bernard Lesiewicz*/
-int Resources::highestDoorId()
+/* Sebastian Pietras */
+std::unordered_map<std::string, Room> Resources::createRooms()
 {
-	auto lastDoor = 0;
-	//int r = countRooms();
-	for(auto roomId = 1, r = countRooms(); roomId <= r; roomId++)
+	std::unordered_map<std::string, Room> roomMap;
+	for(auto room : rooms)
 	{
-		const auto roomName = "room" + std::to_string(roomId);
-		for(auto& key : rooms.at(roomName).at("doors")) { lastDoor = std::max(lastDoor, key.at("id").get<int>()); }
+		const auto roomName = room.at("name").get<std::string>();
+		roomMap[roomName] = Room(roomName);
 	}
-	return lastDoor;
+
+	return roomMap;
+}
+
+/* Sebastian Pietras */
+json& Resources::getRoomJson(const std::string& name)
+{
+	for(auto& room : rooms) { if(room.at("name").get<std::string>() == name) return room; }
+
+	throw; //TODO: Improve this
 }

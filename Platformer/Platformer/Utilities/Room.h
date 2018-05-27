@@ -1,9 +1,12 @@
 #pragma once
+#include <string>
 #include <vector>
+#include <SFML/Graphics.hpp>
 #include "../Entities/Entity.h"
-#include "../Entities/Door.h"
 #include "../Entities/Key.h"
+#include "../Entities/Door.h"
 #include "../Entities/Enemy.h"
+#include "Resources.h"
 
 class Room
 {
@@ -22,13 +25,13 @@ class Room
 	void addGradient();
 public:
 	Room() = default;
-	Room(const std::string& roomName, const std::vector<bool>& openedDoors);
+	explicit Room(const std::string& roomName);
 
 	std::string getRoomName() const { return roomName_; }
 	sf::Vector2f getSize() const { return size_; }
 	const std::vector<Entity>& getEntities() const { return blocks_; }
-	const std::vector<Key>& getKeys() const { return keys_; }
-	const std::vector<Door>& getDoors() const { return doors_; }
+	std::vector<Key>& getKeys() { return keys_; }
+	std::vector<Door>& getDoors() { return doors_; }
 	std::vector<std::vector<sf::Vertex>> getGradientEdges() const { return gradientEdges_; }
 	sf::Color getBackgroundColor() const { return backgroundColor_; }
 	sf::RectangleShape getBackground() const { return background_; }
