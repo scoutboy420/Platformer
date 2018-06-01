@@ -39,7 +39,7 @@ class Game
 	/* Helpers */
 	void checkBlockCollision(MobileEntity& mobile, const Entity& block, float deltaTime) const;
 	void checkKeyCollision(const Player& player, Key& key) const;
-	void checkEnemyCollision(Player& player, Enemy& enemy) const;
+	void checkEnemyCollision(Player& player, Enemy& enemy, float deltaTime) const;
 	void checkBulletCollision();
 	bool isInsideView(const sf::FloatRect& viewRect, const Entity& entity) const;
 	void drawEntities();

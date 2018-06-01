@@ -6,6 +6,7 @@ void Shooter::update(const float deltaTime,
                      const bool isPlayerVisible,
                      std::vector<Bullet>& bullets)
 {
+	if(!isActive) return;
 	MobileEntity::update(deltaTime, playerPos, isPlayerVisible, bullets);
 	//If player in visible, shoot at him every 2 seconds
 	if(!isPlayerVisible || shootClock_.getElapsedTime().asSeconds() < 2.0f) return;

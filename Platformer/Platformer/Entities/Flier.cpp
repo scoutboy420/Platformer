@@ -2,6 +2,10 @@
 
 void Flier::update(const float deltaTime, sf::Vector2f, bool, std::vector<Bullet>&)
 {
+	if(!isActive) return;
+
+	updateText();
+
 	//Movement in random direction every 0.75 seconds
 	if(movingClock_.getElapsedTime().asSeconds() >= 0.75f)
 	{

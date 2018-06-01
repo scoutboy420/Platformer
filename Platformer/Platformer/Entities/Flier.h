@@ -13,7 +13,7 @@ public:
 	      const float friction,
 	      const std::string& roomName,
 	      const int id)
-		: Enemy(texture, position, sf::Vector2f(0.0f, 0.0f), 0.0f, friction, roomName, id, 15)
+		: Enemy(texture, position, sf::Vector2f(0.0f, 500.0f), 0.0f, friction, roomName, id, 15)
 		, e2_(std::random_device()())
 		, dist_(0, 5) { }
 

@@ -1,8 +1,43 @@
 #include "MobileEntity.h"
+#include "../Utilities/Resources.h"
+
+void MobileEntity::updateText()
+{
+	healthText_.setString(std::to_string(healthPoints_));
+	const auto width = healthText_.getGlobalBounds().width, height = healthText_.getGlobalBounds().height;
+	const auto xPos = getCenter().x - width * 0.5f, yPos = getPosition().y - height - 10.0f;
+	healthText_.setPosition(xPos, yPos);
+}
+
+MobileEntity::MobileEntity(sf::Texture& texture,
+                           const sf::Vector2f position,
+                           const sf::Vector2f speed,
+                           const float gravity,
+                           const float friction,
+                           const std::string& roomName,
+                           const int hp)
+	: Entity(texture, position, roomName)
+	, velocity_(0.0f, 0.0f)
+	, speed_(speed)
+	, gravity_(gravity)
+	, friction_(friction)
+	, onGround_(false)
+	, healthPoints_(hp)
+{
+	healthText_.setFont(Resources::fonts["vcr"]);
+	healthText_.setFillColor(sf::Color::White);
+	healthText_.setOutlineColor(sf::Color::Black);
+	healthText_.setOutlineThickness(1.0f);
+	healthText_.setCharacterSize(20);
+}
 
 /* Sebastian Pietras, Bernard Lesiewicz */
 void MobileEntity::update(const float deltaTime, sf::Vector2f, bool, std::vector<Bullet>&)
 {
+	if(!isActive) return;
+
+	updateText();
+
 	velocity_.y -= gravity_ * deltaTime;
 
 	velocity_.x *= 1.0f / (1.0f + deltaTime * friction_);
@@ -14,9 +49,9 @@ void MobileEntity::update(const float deltaTime, sf::Vector2f, bool, std::vector
 }
 
 /* Sebastian Pietras */
-void MobileEntity::jump()
+void MobileEntity::jump(const bool force)
 {
-	if(onGround_)
+	if(onGround_ || force)
 	{
 		velocity_.y = speed_.y;
 		onGround_ = false;
@@ -46,21 +81,20 @@ void MobileEntity::setHp(int hp)
 /* Sebastian Pietras */
 bool MobileEntity::hurt(int damage)
 {
-	if(immunity_) return false;
+	if(isImmune()) return false;
 
 	if(damage < 0) damage = 0;
 
 	healthPoints_ -= damage;
 
-	immunity_ = true;
 	immunityClock_.restart();
 
-	velocity_.y = speed_.y;
-	onGround_ = false;
+	jump(true);
 
 	if(healthPoints_ <= 0)
 	{
 		healthPoints_ = 0;
+		isActive = false;
 		return true;
 	}
 

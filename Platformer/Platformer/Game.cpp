@@ -41,6 +41,7 @@ bool Game::isRectangleInWay(const sf::FloatRect& rect, const sf::Vector2f& p1, c
 bool Game::areInLine(const MobileEntity& e1, const MobileEntity& e2)
 {
 	if(e1.getCurrentRoomName() != e2.getCurrentRoomName()) return false;
+	if(!e1.isActive || !e2.isActive) return false;
 
 	auto lined = true;
 
@@ -84,6 +85,7 @@ bool Game::collides(const Entity& e1, const Entity& e2) const
 /* Sebastian Pietras, Bernard Lesiewicz */
 sf::Vector2f Game::checkPush(const MobileEntity& e1, const Entity& e2, const float deltaTime) const
 {
+	if(!e1.isActive || !e2.isActive) return {0.0f, 0.0f};
 	const auto deltaX = e2.getCenter().x - e1.getCenter().x;
 	const auto deltaY = e2.getCenter().y - e1.getCenter().y;
 	const auto intersectX = std::fabs(deltaX) - (e2.getSize().x * 0.5f + e1.getSize().x * 0.5f);
@@ -128,9 +130,9 @@ void Game::checkKeyCollision(const Player& player, Key& key) const
 }
 
 /* Sebastian Pietras */
-void Game::checkEnemyCollision(Player& player, Enemy& enemy) const
+void Game::checkEnemyCollision(Player& player, Enemy& enemy, const float deltaTime) const
 {
-	if(collides(player, enemy)) { enemy.onPlayerCollision(player, sf::Vector2f(0, 0)); }
+	if(collides(player, enemy)) { enemy.onPlayerCollision(player, checkPush(player, enemy, deltaTime)); }
 }
 
 void Game::checkBulletCollision()
@@ -188,7 +190,7 @@ void Game::checkCollisions(const float deltaTime)
 		for(const auto& entity : enemyRoom.getEntities()) checkBlockCollision(*enemy, entity, deltaTime);
 		for(const auto& door : enemyRoom.getDoors()) checkBlockCollision(*enemy, door, deltaTime);
 
-		if(&enemyRoom == &playerRoom) checkEnemyCollision(player_, *enemy);
+		if(&enemyRoom == &playerRoom) checkEnemyCollision(player_, *enemy, deltaTime);
 	}
 
 	checkBulletCollision();
@@ -261,6 +263,8 @@ bool Game::findTransportLocation(const Entity& entity,
 /* Sebastian Pietras */
 void Game::checkRoomChange(Entity& entity)
 {
+	if(!entity.isActive) return;
+
 	auto& currentRoom = loadedRooms_[entity.getCurrentRoomName()];
 
 	Resources::direction dir;
@@ -347,7 +351,9 @@ void Game::handleInput()
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) player_.run(true);
 	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) player_.run(false);
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) player_.jump();
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) player_.dash();
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) player_.jump(false);
 }
 
 /* Sebastian Pietras */
@@ -421,7 +427,15 @@ void Game::drawEntities()
 
 	for(const auto& key : getCurrentRoom().getKeys()) if(isInsideView(viewRect, key)) window_.draw(key.getBody());
 
-	for(auto& enemy : enemies_) if(isInsideView(viewRect, *enemy)) window_.draw(enemy->getBody());
+	for(auto& enemy : enemies_)
+	{
+		if(isInsideView(viewRect, *enemy))
+		{
+			window_.draw(enemy->getBody());
+			window_.draw(enemy->getHealthText());
+		}
+	}
+
 	for(auto& bullet : bullets_) if(isInsideView(viewRect, bullet)) window_.draw(bullet.getBody());
 
 	window_.draw(player_.getBody());
@@ -434,8 +448,9 @@ void Game::drawOverlay()
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Tab)) showMiniMap();
 
-	window_.setView(sf::View(sf::Vector2f(window_.getSize().x * 0.5f, window_.getSize().y * 0.5f),
+	window_.setView(sf::View(sf::Vector2f(window_.getSize()) * 0.5f,
 	                         sf::Vector2f(window_.getSize())));
+
 	playerHealthText_.setString(std::to_string(player_.getHp()));
 	window_.draw(playerHealthText_);
 }

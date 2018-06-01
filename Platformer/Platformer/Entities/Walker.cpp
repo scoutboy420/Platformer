@@ -13,6 +13,7 @@ void Walker::update(const float deltaTime,
                     const bool isPlayerVisible,
                     std::vector<Bullet>& bullets)
 {
+	if(!isActive) return;
 	if(onGround_) run(walkRight_);
 
 	MobileEntity::update(deltaTime, playerPos, isPlayerVisible, bullets);

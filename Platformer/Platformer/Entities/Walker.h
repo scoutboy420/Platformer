@@ -14,7 +14,7 @@ public:
 	       const std::string& roomName,
 	       const int id,
 	       const bool walkingRight)
-		: Enemy(texture, position, sf::Vector2f(speedX, 0.0f), gravity, friction, roomName, id, 10)
+		: Enemy(texture, position, sf::Vector2f(speedX, 800.0f), gravity, friction, roomName, id, 10)
 		, walkRight_(walkingRight) { }
 
 	void onCollision(const Entity& colliding, sf::Vector2f push) override;
