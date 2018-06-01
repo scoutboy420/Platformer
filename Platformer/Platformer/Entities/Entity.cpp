@@ -1,7 +1,9 @@
 #include "Entity.h"
+#include <utility>
 
 /* Sebastian Pietras */
-Entity::Entity(sf::Texture& texture, const sf::Vector2f position)
+Entity::Entity(sf::Texture& texture, const sf::Vector2f position, std::string roomName)
+	: currentRoomName_(std::move(roomName))
 {
 	body_.setTexture(texture, true);
 	body_.setPosition(position);

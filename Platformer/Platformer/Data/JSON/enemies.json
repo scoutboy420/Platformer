@@ -4,11 +4,237 @@
     "type": 1,
     "room": "room1",
     "positionX": 500.0,
-    "positionY": 350.0,
-    "speed": 500.0,
+    "positionY": 400.0,
+    "speed": 300.0,
     "friction": 35.0,
     "gravity": 4000.0,
-    "jumpSpeed": 1200.0,
-    "walkingRight": true  
+    "walkingRight": true
+  },
+  {
+    "id": 2,
+    "type": 1,
+    "room": "room10",
+    "positionX": 0.0,
+    "positionY": 400.0,
+    "speed": 300.0,
+    "friction": 35.0,
+    "gravity": 4000.0,
+    "walkingRight": true
+  },
+  {
+    "id": 3,
+    "type": 2,
+    "room": "room2",
+    "positionX": 200.0,
+    "positionY": 330.0,
+    "friction": 2.0
+  },
+  {
+    "id": 4,
+    "type": 2,
+    "room": "room2",
+    "positionX": 200.0,
+    "positionY": 660.0,
+    "friction": 2.0
+  },
+  {
+    "id": 5,
+    "type": 3,
+    "room": "room4",
+    "positionX": 500.0,
+    "positionY": 200.0,
+    "gravity": 4000.0
+  },
+  {
+    "id": 6,
+    "type": 3,
+    "room": "room12",
+    "positionX": 150.0,
+    "positionY": 750.0,
+    "gravity": 4000.0
+  },
+  {
+    "id": 7,
+    "type": 3,
+    "room": "room12",
+    "positionX": 400.0,
+    "positionY": 400.0,
+    "gravity": 4000.0
+  },
+  {
+    "id": 8,
+    "type": 3,
+    "room": "room12",
+    "positionX": 900.0,
+    "positionY": 250.0,
+    "gravity": 4000.0
+  },
+  {
+    "id": 9,
+    "type": 2,
+    "room": "room12",
+    "positionX": 400.0,
+    "positionY": 600.0,
+    "friction": 2.0
+  },
+  {
+    "id": 10,
+    "type": 1,
+    "room": "room12",
+    "positionX": 800.0,
+    "positionY": 900.0,
+    "speed": 300.0,
+    "friction": 35.0,
+    "gravity": 4000.0,
+    "walkingRight": true
+  },
+  {
+    "id": 11,
+    "type": 2,
+    "room": "room12",
+    "positionX": 500.0,
+    "positionY": 50.0,
+    "friction": 2.0
+  },
+  {
+    "id": 12,
+    "type": 1,
+    "room": "room3",
+    "positionX": 300.0,
+    "positionY": 150.0,
+    "speed": 300.0,
+    "friction": 35.0,
+    "gravity": 4000.0,
+    "walkingRight": true
+  },
+  {
+    "id": 13,
+    "type": 3,
+    "room": "room9",
+    "positionX": 300.0,
+    "positionY": 600.0,
+    "gravity": 4000.0
+  },
+  {
+    "id": 14,
+    "type": 1,
+    "room": "room7",
+    "positionX": 150.0,
+    "positionY": 200.0,
+    "speed": 300.0,
+    "friction": 35.0,
+    "gravity": 4000.0,
+    "walkingRight": true
+  },
+  {
+    "id": 15,
+    "type": 2,
+    "room": "room7",
+    "positionX": 500.0,
+    "positionY": 100.0,
+    "friction": 2.0
+  },
+  {
+    "id": 16,
+    "type": 1,
+    "room": "room6",
+    "positionX": 100.0,
+    "positionY": 500.0,
+    "speed": 300.0,
+    "friction": 35.0,
+    "gravity": 4000.0,
+    "walkingRight": true
+  },
+  {
+    "id": 17,
+    "type": 1,
+    "room": "room6",
+    "positionX": 450.0,
+    "positionY": 500.0,
+    "speed": 250.0,
+    "friction": 35.0,
+    "gravity": 4000.0,
+    "walkingRight": false
+  },
+  {
+    "id": 18,
+    "type": 1,
+    "room": "room6",
+    "positionX": 700.0,
+    "positionY": 500.0,
+    "speed": 350.0,
+    "friction": 35.0,
+    "gravity": 4000.0,
+    "walkingRight": true
+  },
+  {
+    "id": 19,
+    "type": 3,
+    "room": "room6",
+    "positionX": 600.0,
+    "positionY": 300.0,
+    "gravity": 4000.0
+  },
+  {
+    "id": 20,
+    "type": 3,
+    "room": "room6",
+    "positionX": 800.0,
+    "positionY": 250.0,
+    "gravity": 4000.0
+  },
+  {
+    "id": 21,
+    "type": 2,
+    "room": "room6",
+    "positionX": 50.0,
+    "positionY": 50.0,
+    "friction": 2.0
+  },
+  {
+    "id": 22,
+    "type": 2,
+    "room": "room6",
+    "positionX": 50.0,
+    "positionY": 50.0,
+    "friction": 2.0
+  },
+  {
+    "id": 23,
+    "type": 2,
+    "room": "room6",
+    "positionX": 50.0,
+    "positionY": 50.0,
+    "friction": 2.0
+  },
+  {
+    "id": 24,
+    "type": 1,
+    "room": "room5",
+    "positionX": 150.0,
+    "positionY": 650.0,
+    "speed": 300.0,
+    "friction": 35.0,
+    "gravity": 4000.0,
+    "walkingRight": true
+  },
+  {
+    "id": 25,
+    "type": 2,
+    "room": "room5",
+    "positionX": 50.0,
+    "positionY": 300.0,
+    "friction": 2.0
+  },
+  {
+    "id": 26,
+    "type": 1,
+    "room": "room8",
+    "positionX": 200.0,
+    "positionY": 500.0,
+    "speed": 300.0,
+    "friction": 35.0,
+    "gravity": 4000.0,
+    "walkingRight": false
   }
 ]

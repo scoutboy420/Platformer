@@ -2,6 +2,8 @@
 #include <fstream>
 #include "../Entities/Walker.h"
 #include "Room.h"
+#include "../Entities/Flier.h"
+#include "../Entities/Shooter.h"
 
 json Resources::rooms;
 json Resources::playerData;
@@ -32,6 +34,9 @@ void Resources::load()
 	textures["player"].loadFromFile("Data/Textures/player.png");
 	textures["block"].loadFromFile("Data/Textures/block.png");
 	textures["enemy1"].loadFromFile("Data/Textures/enemy1.png");
+	textures["enemy2"].loadFromFile("Data/Textures/enemy2.png");
+	textures["enemy3"].loadFromFile("Data/Textures/enemy3.png");
+	textures["bullet"].loadFromFile("Data/Textures/bullet.png");
 
 	/*textures: Bernard Lesiewicz*/
 	textures["door_rd"].loadFromFile("Data/Textures/door_rd.png");
@@ -111,19 +116,23 @@ void Resources::createWalls(const std::string& roomName,
 	for(auto i = 0; i < roomWidth; i++)
 	{
 		const auto posA = sf::Vector2f(i * 50.0f, 0.0f), posB = sf::Vector2f(i * 50.0f, (roomHeight - 1) * 50.0f);
-		if(std::find(emptyPositions.begin(), emptyPositions.end(), posA) == emptyPositions.end()) 
-			blocks.push_back(Entity(textures["block"], posA));
-		if(std::find(emptyPositions.begin(), emptyPositions.end(), posB) == emptyPositions.end()) 
-			blocks.push_back(Entity(textures["block"], posB));
+		if(std::find(emptyPositions.begin(), emptyPositions.end(), posA) == emptyPositions.end())
+			blocks.
+					push_back(Entity(textures["block"], posA, roomName));
+		if(std::find(emptyPositions.begin(), emptyPositions.end(), posB) == emptyPositions.end())
+			blocks.
+					push_back(Entity(textures["block"], posB, roomName));
 	}
 
 	for(auto i = 1; i < roomHeight - 1; i++)
 	{
 		const auto posA = sf::Vector2f(0.0f, i * 50.0f), posB = sf::Vector2f((roomWidth - 1) * 50.0f, i * 50.0f);
 		if(std::find(emptyPositions.begin(), emptyPositions.end(), posA) == emptyPositions.end())
-			blocks.push_back(Entity(textures["block"], posA));
+			blocks.
+					push_back(Entity(textures["block"], posA, roomName));
 		if(std::find(emptyPositions.begin(), emptyPositions.end(), posB) == emptyPositions.end())
-			blocks.push_back(Entity(textures["block"], posB));
+			blocks.
+					push_back(Entity(textures["block"], posB, roomName));
 	}
 }
 
@@ -144,7 +153,8 @@ void Resources::createInternalBlocks(const std::string& roomName,
 				const auto subPos = sf::Vector2f(position.x + i * 50.0f, position.y + j * 50.0f);
 
 				if(std::find(emptyPositions.begin(), emptyPositions.end(), subPos) == emptyPositions.end())
-					blocks.push_back(Entity(textures["block"], subPos));
+					blocks.
+							push_back(Entity(textures["block"], subPos, roomName));
 			}
 		}
 	}
@@ -175,7 +185,7 @@ std::vector<Door> Resources::createDoors(const std::string& roomName)
 		const auto id = door.at("id").get<int>();
 		const auto opened = door.at("opened").get<bool>();
 		const auto textureName = door.at("texture").get<std::string>();
-		doors.push_back(Door(textures[textureName], position, id, opened));
+		doors.push_back(Door(textures[textureName], position, id, opened, roomName));
 	}
 	return doors;
 }
@@ -191,7 +201,7 @@ std::vector<Key> Resources::createKeys(const std::string& roomName)
 		const auto textureName = key.at("texture").get<std::string>();
 		const auto doorId = key.at("doorId").get<int>();
 		const auto doorRoomName = key.at("doorRoomName").get<std::string>();
-		keys.push_back(Key(textures[textureName], position, doorId, doorRoomName, pickedUp));
+		keys.push_back(Key(textures[textureName], position, doorId, doorRoomName, pickedUp, roomName));
 	}
 	return keys;
 }
@@ -205,13 +215,23 @@ std::vector<std::unique_ptr<Enemy>> Resources::createEnemies()
 		const auto type = enemy.at("type").get<int>(), id = enemy.at("id").get<int>();
 		const auto room = enemy.at("room").get<std::string>();
 		const sf::Vector2f position(enemy.at("positionX").get<float>(), enemy.at("positionY").get<float>());
-		const sf::Vector2f speed(enemy.at("speed").get<float>(), enemy.at("jumpSpeed").get<float>());
-		const auto gravity = enemy.at("gravity").get<float>(), friction = enemy.at("friction").get<float>();
 
 		if(type == 1)
 		{
+			const auto speed = enemy.at("speed").get<float>();
+			const auto gravity = enemy.at("gravity").get<float>(), friction = enemy.at("friction").get<float>();
 			const auto walkingRight = enemy.at("walkingRight").get<bool>();
 			enemies.emplace_back(new Walker(textures["enemy1"], position, speed, gravity, friction, room, id, walkingRight));
+		}
+		else if(type == 2)
+		{
+			const auto friction = enemy.at("friction").get<float>();
+			enemies.emplace_back(new Flier(textures["enemy1"], position, friction, room, id));
+		}
+		else if(type == 3)
+		{
+			const auto gravity = enemy.at("gravity").get<float>();
+			enemies.emplace_back(new Shooter(textures["enemy3"], position, gravity, room, id));
 		}
 	}
 

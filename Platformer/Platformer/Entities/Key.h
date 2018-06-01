@@ -10,8 +10,13 @@ class Key : public Entity
 	std::string doorRoomName_;
 	Door* door_;
 public:
-	Key(sf::Texture& texture, const sf::Vector2f position, const int doorId, std::string doorRoomName, const bool pickedUp)
-		: Entity(texture, position)
+	Key(sf::Texture& texture,
+	    const sf::Vector2f position,
+	    const int doorId,
+	    std::string doorRoomName,
+	    const bool pickedUp,
+	    const std::string& roomName)
+		: Entity(texture, position, roomName)
 		, doorId_(doorId)
 		, doorRoomName_(std::move(doorRoomName))
 		, door_(nullptr) { isActive = !pickedUp; }

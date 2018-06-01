@@ -8,16 +8,16 @@ class Walker : public Enemy
 public:
 	Walker(sf::Texture& texture,
 	       const sf::Vector2f position,
-	       const sf::Vector2f speed,
+	       const float speedX,
 	       const float gravity,
 	       const float friction,
 	       const std::string& roomName,
 	       const int id,
 	       const bool walkingRight)
-		: Enemy(texture, position, speed, gravity, friction, roomName, id)
+		: Enemy(texture, position, sf::Vector2f(speedX, 0.0f), gravity, friction, roomName, id, 10)
 		, walkRight_(walkingRight) { }
 
 	void onCollision(const Entity& colliding, sf::Vector2f push) override;
 
-	void update(float deltaTime) override;
+	void update(float deltaTime, sf::Vector2f, bool, std::vector<Bullet>&) override;
 };

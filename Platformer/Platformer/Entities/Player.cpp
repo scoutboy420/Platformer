@@ -1,29 +1,14 @@
 #include "Player.h"
 #include "../Utilities/Resources.h"
 
-/* Sebastian Pietras */
-void Player::setHp(int hp)
+void Player::update(const float deltaTime,
+                    const sf::Vector2f playerPos,
+                    const bool isPlayerVisible,
+                    std::vector<Bullet>& bullets)
 {
-	if(hp > 100) hp = 100;
-	else if(hp < 0) hp = 0;
-
-	healthPoints_ = hp;
-}
-
-/* Sebastian Pietras */
-bool Player::hurt(int damage)
-{
-	if(damage < 0) damage = 0;
-
-	healthPoints_ -= damage;
-
-	if(healthPoints_ <= 0)
-	{
-		healthPoints_ = 0;
-		return true;
-	}
-
-	return false;
+	MobileEntity::update(deltaTime, playerPos, isPlayerVisible, bullets);
+	if(immunityClock_.getElapsedTime().asSeconds() >= 1.0f) immunity_ = false;
+	if(!immunity_) immunityClock_.restart();
 }
 
 /* Sebastian Pietras */

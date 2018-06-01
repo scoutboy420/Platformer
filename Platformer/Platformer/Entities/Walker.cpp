@@ -8,9 +8,12 @@ void Walker::onCollision(const Entity& colliding, const sf::Vector2f push)
 }
 
 /* Sebastian Pietras */
-void Walker::update(const float deltaTime)
+void Walker::update(const float deltaTime,
+                    const sf::Vector2f playerPos,
+                    const bool isPlayerVisible,
+                    std::vector<Bullet>& bullets)
 {
 	if(onGround_) run(walkRight_);
 
-	MobileEntity::update(deltaTime);
+	MobileEntity::update(deltaTime, playerPos, isPlayerVisible, bullets);
 }

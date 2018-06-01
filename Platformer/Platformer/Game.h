@@ -15,6 +15,7 @@ class Game
 {
 	Player player_;
 	std::vector<std::unique_ptr<Enemy>> enemies_;
+	std::vector<Bullet> bullets_;
 	std::unordered_map<std::string, Room> loadedRooms_;
 	sf::RenderWindow window_;
 	sf::View view_;
@@ -24,8 +25,8 @@ class Game
 	bool collides(const Entity& e1, const Entity& e2) const;
 	sf::Vector2f checkPush(const MobileEntity& e1, const Entity& e2, float deltaTime) const;
 	void checkCollisions(float deltaTime);
-	void checkRoomChange(MobileEntity& entity);
-	static void changeRoom(MobileEntity& entity, const std::string& roomName, int entranceId, sf::Vector2f offset);
+	void checkRoomChange(Entity& entity);
+	static void changeRoom(Entity& entity, const std::string& roomName, int entranceId, sf::Vector2f offset);
 	void checkCamera();
 	void scaleView();
 	void handleInput();
@@ -38,11 +39,13 @@ class Game
 	/* Helpers */
 	void checkBlockCollision(MobileEntity& mobile, const Entity& block, float deltaTime) const;
 	void checkKeyCollision(const Player& player, Key& key) const;
-	static bool isInsideView(const sf::FloatRect& viewRect, const Entity& entity);
+	void checkEnemyCollision(Player& player, Enemy& enemy) const;
+	void checkBulletCollision();
+	bool isInsideView(const sf::FloatRect& viewRect, const Entity& entity) const;
 	void drawEntities();
 	void drawOverlay();
 	void initializePlayer();
-	static bool findTransportLocation(const MobileEntity& entity,
+	static bool findTransportLocation(const Entity& entity,
 	                                  const Room& currentRoom,
 	                                  Resources::direction dir,
 	                                  const nlohmann::json& entrance,
@@ -58,6 +61,8 @@ class Game
 	                 sf::Vector2f mapCenter);
 	Room& getCurrentRoom();
 	void setKeys();
+	bool isRectangleInWay(const sf::FloatRect& rect, const sf::Vector2f& p1, const sf::Vector2f& p2) const;
+	bool areInLine(const MobileEntity& e1, const MobileEntity& e2);
 public:
 	Game(sf::VideoMode mode, const std::string& title);
 

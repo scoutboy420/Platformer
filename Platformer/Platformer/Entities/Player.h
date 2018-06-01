@@ -3,11 +3,8 @@
 
 class Player : public MobileEntity
 {
-	int healthPoints_;
-
 public:
-	Player()
-		: healthPoints_(0) {}
+	Player() = default;
 
 	Player(sf::Texture& texture,
 	       const sf::Vector2f position,
@@ -15,12 +12,9 @@ public:
 	       const float gravity,
 	       const float friction,
 	       const std::string& roomName)
-		: MobileEntity(texture, position, speed, gravity, friction, roomName)
-		, healthPoints_(100) { }
+		: MobileEntity(texture, position, speed, gravity, friction, roomName, 100) { }
 
-	int getHp() const { return healthPoints_; }
-	void setHp(int hp);
-	bool hurt(int damage);
 
+	void update(float deltaTime, sf::Vector2f, bool, std::vector<Bullet>&) override;
 	void onRoomChange(const std::string& roomName) override;
 };

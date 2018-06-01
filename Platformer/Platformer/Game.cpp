@@ -1,5 +1,71 @@
 #include "Game.h"
 
+bool Game::isRectangleInWay(const sf::FloatRect& rect, const sf::Vector2f& p1, const sf::Vector2f& p2) const
+{
+	// Find min and max X for the segment
+	auto minX = std::min(p1.x, p2.x);
+	auto maxX = std::max(p1.x, p2.x);
+
+	// Find the intersection of the segment's and rectangle's x-projections
+	if(maxX > rect.left + rect.width) maxX = rect.left + rect.width;
+
+	if(minX < rect.left) minX = rect.left;
+
+	// If Y-projections do not intersect then there's no intersection
+	if(minX > maxX) return false;
+
+	// Find corresponding min and max Y for min and max X we found before
+	auto minY = p1.y;
+	auto maxY = p2.y;
+
+	const auto dx = p2.x - p1.x;
+	if(std::abs(dx) > 0.0001f)
+	{
+		const auto k = (p2.y - p1.y) / dx;
+		const auto b = p1.y - k * p1.x;
+		minY = k * minX + b;
+		maxY = k * maxX + b;
+	}
+
+	if(minY > maxY) std::swap(minY, maxY);
+
+	// Find the intersection of the segment's and rectangle's y-projections
+	if(maxY > rect.top + rect.height) maxY = rect.top + rect.height;
+
+	if(minY < rect.top) minY = rect.top;
+
+	// If Y-projections do not intersect then there's no intersection
+	return minY <= maxY;
+}
+
+bool Game::areInLine(const MobileEntity& e1, const MobileEntity& e2)
+{
+	if(e1.getCurrentRoomName() != e2.getCurrentRoomName()) return false;
+
+	auto lined = true;
+
+	for(auto& block : loadedRooms_[e1.getCurrentRoomName()].getEntities())
+	{
+		if(!block.isActive) continue;
+		if(isRectangleInWay(block.getBody().getGlobalBounds(), e1.getCenter(), e2.getCenter()))
+		{
+			lined = false;
+			break;
+		}
+	}
+	for(auto& door : loadedRooms_[e1.getCurrentRoomName()].getDoors())
+	{
+		if(!door.isActive) continue;
+		if(isRectangleInWay(door.getBody().getGlobalBounds(), e1.getCenter(), e2.getCenter()))
+		{
+			lined = false;
+			break;
+		}
+	}
+
+	return lined;
+}
+
 /* Sebastian Pietras */
 bool Game::collides(const Entity& e1, const Entity& e2) const
 {
@@ -23,9 +89,9 @@ sf::Vector2f Game::checkPush(const MobileEntity& e1, const Entity& e2, const flo
 	const auto intersectX = std::fabs(deltaX) - (e2.getSize().x * 0.5f + e1.getSize().x * 0.5f);
 	const auto intersectY = std::fabs(deltaY) - (e2.getSize().y * 0.5f + e1.getSize().y * 0.5f);
 
-	if(intersectX < 0.0f && intersectY < 0.0f && 
-	   (intersectX <= -fabs(deltaTime * e1.getVelocity().x) - 0.001f ||
-	    intersectY <= -fabs(deltaTime * e1.getVelocity().y) - 0.001f))
+	if(intersectX < 0.0f && intersectY < 0.0f &&
+		(intersectX <= -fabs(deltaTime * e1.getVelocity().x) - 0.001f ||
+			intersectY <= -fabs(deltaTime * e1.getVelocity().y) - 0.001f))
 	{
 		if(intersectX > intersectY)
 		{
@@ -58,8 +124,55 @@ void Game::checkBlockCollision(MobileEntity& mobile, const Entity& block, const 
 /* Sebastian Pietras */
 void Game::checkKeyCollision(const Player& player, Key& key) const
 {
-	if(collides(player_, key)) { key.onCollision(player, sf::Vector2f(0, 0)); }
+	if(collides(player, key)) { key.onCollision(player, sf::Vector2f(0, 0)); }
 }
+
+/* Sebastian Pietras */
+void Game::checkEnemyCollision(Player& player, Enemy& enemy) const
+{
+	if(collides(player, enemy)) { enemy.onPlayerCollision(player, sf::Vector2f(0, 0)); }
+}
+
+void Game::checkBulletCollision()
+{
+	for(auto it = bullets_.begin(); it != bullets_.end();)
+	{
+		auto deleted = false;
+		for(auto& block : loadedRooms_[it->getCurrentRoomName()].getEntities())
+		{
+			if(collides(*it, block))
+			{
+				deleted = true;
+				break;
+			}
+		}
+		for(auto& door : loadedRooms_[it->getCurrentRoomName()].getDoors())
+		{
+			if(collides(*it, door))
+			{
+				deleted = true;
+				break;
+			}
+		}
+		if(deleted) it = bullets_.erase(it);
+		else ++it;
+	}
+
+	for(auto it = bullets_.begin(); it != bullets_.end();)
+	{
+		if(it->getCurrentRoomName() == player_.getCurrentRoomName())
+		{
+			if(collides(*it, player_))
+			{
+				it->onPlayerCollision(player_);
+				it = bullets_.erase(it);
+			}
+			else ++it;
+		}
+		else ++it;
+	}
+}
+
 
 /* Sebastian Pietras, Bernard Lesiewicz*/
 void Game::checkCollisions(const float deltaTime)
@@ -74,11 +187,15 @@ void Game::checkCollisions(const float deltaTime)
 		auto& enemyRoom = loadedRooms_[enemy->getCurrentRoomName()];
 		for(const auto& entity : enemyRoom.getEntities()) checkBlockCollision(*enemy, entity, deltaTime);
 		for(const auto& door : enemyRoom.getDoors()) checkBlockCollision(*enemy, door, deltaTime);
+
+		if(&enemyRoom == &playerRoom) checkEnemyCollision(player_, *enemy);
 	}
+
+	checkBulletCollision();
 }
 
 /* Sebastian Pietras */
-bool Game::findTransportLocation(const MobileEntity& entity,
+bool Game::findTransportLocation(const Entity& entity,
                                  const Room& currentRoom,
                                  const Resources::direction dir,
                                  const nlohmann::json& entrance,
@@ -142,7 +259,7 @@ bool Game::findTransportLocation(const MobileEntity& entity,
 }
 
 /* Sebastian Pietras */
-void Game::checkRoomChange(MobileEntity& entity)
+void Game::checkRoomChange(Entity& entity)
 {
 	auto& currentRoom = loadedRooms_[entity.getCurrentRoomName()];
 
@@ -169,7 +286,7 @@ void Game::checkRoomChange(MobileEntity& entity)
 }
 
 /* Sebastian Pietras */
-void Game::changeRoom(MobileEntity& entity,
+void Game::changeRoom(Entity& entity,
                       const std::string& roomName,
                       const int entranceId,
                       const sf::Vector2f offset)
@@ -198,13 +315,15 @@ void Game::checkCamera()
 	//Bound camera if it goes outside walls (assuming room is rectangular)
 	if(camX - view_.getSize().x * 0.5f < 0.0f) camX += view_.getSize().x * 0.5f - camX;
 
-	if(camX + view_.getSize().x * 0.5f > currentRoom.getSize().x) 
-		camX -= camX + view_.getSize().x * 0.5f - currentRoom.getSize().x;
+	if(camX + view_.getSize().x * 0.5f > currentRoom.getSize().x)
+		camX -= camX + view_.getSize().x * 0.5f - currentRoom
+		                                          .getSize().x;
 
 	if(camY - view_.getSize().y * 0.5f < 0.0f) camY += view_.getSize().y * 0.5f - camY;
 
-	if(camY + view_.getSize().y * 0.5f > currentRoom.getSize().y) 
-		camY -= camY + view_.getSize().y * 0.5f - currentRoom.getSize().y;
+	if(camY + view_.getSize().y * 0.5f > currentRoom.getSize().y)
+		camY -= camY + view_.getSize().y * 0.5f - currentRoom
+		                                          .getSize().y;
 
 	view_.setCenter(camX, camY);
 }
@@ -264,22 +383,24 @@ bool Game::handleWindowEvents()
 /* Sebastian Pietras */
 void Game::update(const float deltaTime)
 {
-	player_.update(deltaTime);
-	for(auto& enemy : enemies_) enemy->update(deltaTime);
+	player_.update(deltaTime, player_.getPosition(), true, bullets_);
+	for(auto& enemy : enemies_) enemy->update(deltaTime, player_.getCenter(), areInLine(player_, *enemy), bullets_);
+	for(auto& bullet : bullets_) bullet.update(deltaTime);
 
 	checkCollisions(deltaTime);
 
 	checkRoomChange(player_);
 	scaleView();
 	for(auto& enemy : enemies_) checkRoomChange(*enemy);
+	for(auto& bullet : bullets_) checkRoomChange(bullet);
 
 	checkCamera();
 }
 
 /* Sebastian Pietras */
-bool Game::isInsideView(const sf::FloatRect& viewRect, const Entity& entity)
+bool Game::isInsideView(const sf::FloatRect& viewRect, const Entity& entity) const
 {
-	if(!entity.isActive) return false;
+	if(!entity.isActive || entity.getCurrentRoomName() != player_.getCurrentRoomName()) return false;
 	const auto entityRect = entity.getBody().getGlobalBounds();
 	return viewRect.intersects(entityRect);
 }
@@ -291,19 +412,17 @@ void Game::drawEntities()
 	                                                                     view_.getSize().y * 0.5f),
 	                                    view_.getSize());
 
-	for(const auto& entity : getCurrentRoom().getEntities()) 
-		if(isInsideView(viewRect, entity)) window_.draw(entity.getBody());
+	for(const auto& entity : getCurrentRoom().getEntities())
+		if(isInsideView(viewRect, entity))
+			window_.
+					draw(entity.getBody());
 
-	for(const auto& door : getCurrentRoom().getDoors()) 
-		if(isInsideView(viewRect, door)) window_.draw(door.getBody());
+	for(const auto& door : getCurrentRoom().getDoors()) if(isInsideView(viewRect, door)) window_.draw(door.getBody());
 
-	for(const auto& key : getCurrentRoom().getKeys()) 
-		if(isInsideView(viewRect, key)) window_.draw(key.getBody());
+	for(const auto& key : getCurrentRoom().getKeys()) if(isInsideView(viewRect, key)) window_.draw(key.getBody());
 
-	for(auto& enemy : enemies_)
-	{
-		if(getCurrentRoom().getRoomName() == enemy->getCurrentRoomName()) window_.draw(enemy->getBody());
-	}
+	for(auto& enemy : enemies_) if(isInsideView(viewRect, *enemy)) window_.draw(enemy->getBody());
+	for(auto& bullet : bullets_) if(isInsideView(viewRect, bullet)) window_.draw(bullet.getBody());
 
 	window_.draw(player_.getBody());
 }
@@ -475,7 +594,6 @@ void Game::setKeys()
 		}
 	}
 }
-
 
 /* Sebastian Pietras, Bernard Lesiewicz */
 Game::Game(const sf::VideoMode mode, const std::string& title)
