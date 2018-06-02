@@ -434,6 +434,21 @@ void Game::save()
 	Resources::save();
 }
 
+void Game::restart()
+{
+	loadedRooms_ = Resources::createRooms(true);
+	setKeys();
+	enemies_ = Resources::createEnemies(true);
+
+	initializePlayer(true);
+
+	view_ = sf::View(player_.getCenter(), sf::Vector2f(window_.getSize()));
+
+	scaleView();
+
+	window_.setView(view_);
+}
+
 /* Sebastian Pietras */
 bool Game::handleWindowEvents()
 {
@@ -648,19 +663,21 @@ void Game::showMiniMap()
 }
 
 /* Sebastian Pietras */
-void Game::initializePlayer()
+void Game::initializePlayer(const bool def)
 {
-	const sf::Vector2f playerPosition(Resources::playerData.at("positionX").get<float>(),
-	                                  Resources::playerData.at("positionY").get<float>());
-	const sf::Vector2f playerSpeed(Resources::playerData.at("speed").get<float>(),
-	                               Resources::playerData.at("jumpSpeed").get<float>());
-	const auto gravity = Resources::playerData.at("gravity").get<float>(),
-	           friction = Resources::playerData.at("friction").get<float>(),
-	           dashSpeed = Resources::playerData.at("dashSpeed").get<float>(),
-	           mana = Resources::playerData.at("mana").get<float>();
-	const auto roomName = Resources::playerData.at("startingRoom").get<std::string>();
-	const auto hp = Resources::playerData.at("hp").get<int>(),
-	           dashDamage = Resources::playerData.at("dashDamage").get<int>();
+	auto& data = def ? Resources::defaultPlayerData : Resources::playerData;
+
+	const sf::Vector2f playerPosition(data.at("positionX").get<float>(),
+	                                  data.at("positionY").get<float>());
+	const sf::Vector2f playerSpeed(data.at("speed").get<float>(),
+	                               data.at("jumpSpeed").get<float>());
+	const auto gravity = data.at("gravity").get<float>(),
+	           friction = data.at("friction").get<float>(),
+	           dashSpeed = data.at("dashSpeed").get<float>(),
+	           mana = data.at("mana").get<float>();
+	const auto roomName = data.at("startingRoom").get<std::string>();
+	const auto hp = data.at("hp").get<int>(),
+	           dashDamage = data.at("dashDamage").get<int>();
 
 	player_ = Player(Resources::textures.at("player"),
 	                 playerPosition,
@@ -675,6 +692,7 @@ void Game::initializePlayer()
 
 	Resources::getRoomJson(roomName).at("visited") = true;
 }
+
 
 /* Sebastian Pietras */
 void Game::setKeys()
@@ -744,7 +762,9 @@ bool Game::play()
 	if(deltaTime > 1.0f / 60.0f) deltaTime = 1.0f / 60.0f; //limit deltaTime, so it can't be big
 
 	update(deltaTime); //update everything that is moving
-	draw();            //draw everything to the screen
+	if(player_.getHp() <= 0) restart();
+
+	draw(); //draw everything to the screen
 
 	return true;
 }

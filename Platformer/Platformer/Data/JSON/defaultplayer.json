@@ -1,0 +1,13 @@
+{
+    "friction": 35.0,
+    "gravity": 4000.0,
+    "jumpSpeed": 1200.0,
+    "positionX": 400,
+    "positionY": 350.0,
+    "speed": 500.0,
+    "startingRoom": "room1",
+    "hp": 100,
+    "mana": 100,
+    "dashSpeed": 2000.0,
+    "dashDamage": 25 
+}

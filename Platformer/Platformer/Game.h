@@ -37,6 +37,7 @@ class Game
 	void draw();
 	void showMiniMap();
 	void save();
+	void restart();
 
 	/* Helpers */
 	void checkBlockCollision(MobileEntity& mobile, const Entity& block, float deltaTime) const;
@@ -47,7 +48,7 @@ class Game
 	bool isInsideView(const sf::FloatRect& viewRect, const Entity& entity) const;
 	void drawEntities();
 	void drawOverlay();
-	void initializePlayer();
+	void initializePlayer(bool def = false);
 	static bool findTransportLocation(const Entity& entity,
 	                                  const Room& currentRoom,
 	                                  Resources::direction dir,
