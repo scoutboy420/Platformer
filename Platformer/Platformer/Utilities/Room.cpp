@@ -51,11 +51,15 @@ Room::Room(const std::string& roomName, const bool def)
 	                     Resources::getRoomJson(roomName, def).at("height").get<float>() * 50.0f);
 	addGradient();
 
-	const auto r = Resources::getRoomJson(roomName, def).at("colorR").get<int>();
-	const auto g = Resources::getRoomJson(roomName, def).at("colorG").get<int>();
-	const auto b = Resources::getRoomJson(roomName, def).at("colorB").get<int>();
+	try
+	{
+		const auto r = Resources::getRoomJson(roomName, def).at("colorR").get<int>();
+		const auto g = Resources::getRoomJson(roomName, def).at("colorG").get<int>();
+		const auto b = Resources::getRoomJson(roomName, def).at("colorB").get<int>();
 
-	backgroundColor_ = sf::Color(r, g, b);
+		backgroundColor_ = sf::Color(r, g, b);
+	}
+	catch(const std::exception&) { backgroundColor_ = sf::Color::White; }
 
 	background_ = sf::RectangleShape(size_);
 	background_.setFillColor(backgroundColor_);

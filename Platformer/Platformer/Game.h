@@ -19,6 +19,7 @@ class Game
 	std::vector<Bullet> playerBullets_;
 	std::unordered_map<std::string, Room> loadedRooms_;
 	sf::RenderWindow window_;
+	std::vector<sf::Window*> errorWindows_;
 	sf::View view_;
 	sf::Clock clock_; //to count time between frames
 	sf::Text playerHealthText_;
@@ -69,6 +70,8 @@ class Game
 	bool areInLine(const MobileEntity& e1, const MobileEntity& e2);
 	void savePlayer() const;
 	void saveEnemies();
+	void showErrorWindow(const std::string& title, const std::string& message);
+	void checkErrorWindows();
 public:
 	Game(sf::VideoMode mode, const std::string& title);
 

@@ -334,6 +334,10 @@ void Game::checkRoomChange(Entity& entity)
 		if(findTransportLocation(entity, currentRoom, dir, entrance, roomName, entranceId, offset)) break;
 	}
 
+	if(roomName.empty()) throw std::runtime_error("Target room not found.\nCurrent room: " + entity.getCurrentRoomName() +
+	                                              "\nEntity position: " + std::to_string(entity.getPosition().x) + "," +
+	                                              std::to_string(entity.getPosition().y));
+
 	changeRoom(entity, roomName, entranceId, offset);
 }
 
@@ -427,6 +431,47 @@ void Game::saveEnemies()
 }
 
 /* Sebastian Pietras */
+void Game::showErrorWindow(const std::string& title, const std::string& message)
+{
+	auto errorText = sf::Text(message, Resources::fonts["roboto"]);
+	errorText.setCharacterSize(22);
+	errorText.setFillColor(sf::Color::Black);
+
+	const auto width = unsigned(errorText.getGlobalBounds().width) * 2, height =
+			           unsigned(errorText.getGlobalBounds().height) * 4;
+	auto errorWindow = new sf::RenderWindow(sf::VideoMode(width, height), title, sf::Style::Close | sf::Style::Titlebar);
+
+	errorWindow->clear(sf::Color::White);
+
+	errorText.setPosition(0.25f * width, 3.0f / 8.0f * height);
+	errorWindow->draw(errorText);
+	errorWindow->display();
+
+	errorWindows_.push_back(errorWindow);
+}
+
+void Game::checkErrorWindows()
+{
+	sf::Event e{};
+	for(auto it = errorWindows_.begin(); it != errorWindows_.end();)
+	{
+		auto close = false;
+		while(!close && (*it)->pollEvent(e))
+		{
+			if(e.type == sf::Event::Closed)
+			{
+				(*it)->close();
+				delete *it;
+				it = errorWindows_.erase(it);
+				close = true;
+			}
+		}
+
+		if(!close) ++it;
+	}
+}
+
+/* Sebastian Pietras */
 void Game::save()
 {
 	savePlayer();
@@ -458,7 +503,12 @@ bool Game::handleWindowEvents()
 	{
 		switch(e.type)
 		{
-		case sf::Event::Closed: save();
+		case sf::Event::Closed: try { save(); }
+			catch(const std::exception& ex)
+			{
+				showErrorWindow("Error", "Can't save.\n" + std::string(ex.what()));
+				return true;
+			}
 			window_.close();
 			return false;
 		case sf::Event::Resized: scaleView();
@@ -479,11 +529,25 @@ void Game::update(const float deltaTime)
 
 	checkCollisions(deltaTime);
 
-	checkRoomChange(player_);
+	try { checkRoomChange(player_); }
+	catch(const std::exception& e)
+	{
+		showErrorWindow("Error", "Player can't change room.\n" + std::string(e.what()));
+		restart();
+	}
+
 	scaleView();
-	for(auto& enemy : enemies_) checkRoomChange(*enemy);
-	for(auto& bullet : bullets_) checkRoomChange(bullet);
-	for(auto& bullet : playerBullets_) checkRoomChange(bullet);
+	try
+	{
+		for(auto& enemy : enemies_) checkRoomChange(*enemy);
+		for(auto& bullet : bullets_) checkRoomChange(bullet);
+		for(auto& bullet : playerBullets_) checkRoomChange(bullet);
+	}
+	catch(const std::exception& e)
+	{
+		showErrorWindow("Error", "Entity can't change room.\n" + std::string(e.what()));
+		restart();
+	}
 
 	checkCamera();
 }
@@ -721,13 +785,16 @@ Game::Game(const sf::VideoMode mode, const std::string& title)
 	window_.setVisible(false);
 	window_.setMouseCursorVisible(false);
 
-	Resources::load();
+	try { Resources::load(); }
+	catch(const std::exception& e) { throw std::runtime_error("Can't load resources.\n" + std::string(e.what())); }
 
 	loadedRooms_ = Resources::createRooms();
 	setKeys();
-	enemies_ = Resources::createEnemies();
+	try { enemies_ = Resources::createEnemies(); }
+	catch(const std::exception& e) { throw std::runtime_error("Can't create enemies.\n" + std::string(e.what())); }
 
-	initializePlayer();
+	try { initializePlayer(); }
+	catch(const std::exception& e) { throw std::runtime_error("Can't initialize player.\n" + std::string(e.what())); }
 
 	playerHealthText_.setFont(Resources::fonts["vcr"]);
 	playerHealthText_.setFillColor(sf::Color::White);
@@ -765,6 +832,7 @@ bool Game::play()
 	if(player_.getHp() <= 0) restart();
 
 	draw(); //draw everything to the screen
+	checkErrorWindows();
 
 	return true;
 }
