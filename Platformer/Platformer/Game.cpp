@@ -821,18 +821,34 @@ Game::Game(const sf::VideoMode mode, const std::string& title)
 /* Sebastian Pietras */
 bool Game::play()
 {
-	if(!handleWindowEvents()) return false; //Check what happened with window
+	try
+	{
+		if(!handleWindowEvents()) return false; //Check what happened with window
 
-	handleInput(); //Check pressed keys
+		handleInput(); //Check pressed keys
 
-	auto deltaTime = clock_.restart().asSeconds();
-	if(deltaTime > 1.0f / 60.0f) deltaTime = 1.0f / 60.0f; //limit deltaTime, so it can't be big
+		auto deltaTime = clock_.restart().asSeconds();
+		if(deltaTime > 1.0f / 60.0f) deltaTime = 1.0f / 60.0f; //limit deltaTime, so it can't be big
 
-	update(deltaTime); //update everything that is moving
-	if(player_.getHp() <= 0) restart();
+		update(deltaTime); //update everything that is moving
+		if(player_.getHp() <= 0) restart();
 
-	draw(); //draw everything to the screen
-	checkErrorWindows();
+		draw(); //draw everything to the screen
+		checkErrorWindows();
 
-	return true;
+		return true;
+	}
+	catch(const std::exception& e1)
+	{
+		try
+		{
+			save();
+		}
+		catch(const std::exception& e2)
+		{
+			throw std::runtime_error("Runtime error.\n" + std::string(e1.what()) + "\nCouldn't save :(\n" + e2.what());
+		}
+
+		throw std::runtime_error("Runtime error.\n" + std::string(e1.what()) + "\nGame saved :)");
+	}
 }
