@@ -40,4 +40,7 @@ public:
 	static std::unordered_map<std::string, Room> createRooms();
 
 	static json& getRoomJson(const std::string& name);
+	static json& getEnemyJson(int id);
+	static json& getDoorJson(const std::string& roomName, int id);
+	static json& getKeyJson(const std::string& roomName, int doorId);
 };

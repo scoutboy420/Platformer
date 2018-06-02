@@ -26,9 +26,5 @@ public:
 	const Door* getDoorPtr() const { return door_; }
 	void setDoor(Door* door) { door_ = door; }
 
-	void onCollision(const Entity&, sf::Vector2f) override
-	{
-		isActive = false;
-		door_->open();
-	}
+	void onCollision(const Entity&, sf::Vector2f) override;
 };

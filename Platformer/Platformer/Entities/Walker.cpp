@@ -18,3 +18,9 @@ void Walker::update(const float deltaTime,
 
 	MobileEntity::update(deltaTime, playerPos, isPlayerVisible, bullets);
 }
+
+void Walker::saveData(json& enemyJson)
+{
+	Enemy::saveData(enemyJson);
+	enemyJson.at("walkingRight") = walkRight_;
+}

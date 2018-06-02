@@ -1,6 +1,7 @@
 #include "MobileEntity.h"
 #include "../Utilities/Resources.h"
 
+/* Sebastian Pietras */
 void MobileEntity::updateText()
 {
 	healthText_.setString(std::to_string(healthPoints_));
@@ -9,6 +10,7 @@ void MobileEntity::updateText()
 	healthText_.setPosition(xPos, yPos);
 }
 
+/* Sebastian Pietras */
 MobileEntity::MobileEntity(sf::Texture& texture,
                            const sf::Vector2f position,
                            const sf::Vector2f speed,
@@ -24,6 +26,7 @@ MobileEntity::MobileEntity(sf::Texture& texture,
 	, onGround_(false)
 	, healthPoints_(hp)
 {
+	if(healthPoints_ <= 0) isActive = false;
 	healthText_.setFont(Resources::fonts["vcr"]);
 	healthText_.setFillColor(sf::Color::White);
 	healthText_.setOutlineColor(sf::Color::Black);

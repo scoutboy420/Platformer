@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Enemy.h"
 
+/* Sebastian Pietras */
 Bullet::Bullet(sf::Texture& texture,
                const sf::Vector2f position,
                const sf::Vector2f target,
@@ -15,5 +16,7 @@ Bullet::Bullet(sf::Texture& texture,
 	velocity_ = 1000.0f / length * line;
 }
 
+/* Sebastian Pietras */
 void Bullet::onPlayerCollision(Player& player) const { player.hurt(damage_, player); }
+/* Sebastian Pietras */
 void Bullet::onEnemyCollision(Enemy& enemy, Player& player) const { enemy.hurt(damage_, player); }

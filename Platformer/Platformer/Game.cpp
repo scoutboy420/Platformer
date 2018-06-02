@@ -1,5 +1,6 @@
 #include "Game.h"
 
+/* Sebastian Pietras */
 bool Game::isRectangleInWay(const sf::FloatRect& rect, const sf::Vector2f& p1, const sf::Vector2f& p2) const
 {
 	// Find min and max X for the segment
@@ -38,6 +39,7 @@ bool Game::isRectangleInWay(const sf::FloatRect& rect, const sf::Vector2f& p1, c
 	return minY <= maxY;
 }
 
+/* Sebastian Pietras */
 bool Game::areInLine(const MobileEntity& e1, const MobileEntity& e2)
 {
 	if(e1.getCurrentRoomName() != e2.getCurrentRoomName()) return false;
@@ -135,6 +137,7 @@ void Game::checkEnemyCollision(Player& player, Enemy& enemy, const float deltaTi
 	if(collides(player, enemy)) { enemy.onPlayerCollision(player, checkPush(player, enemy, deltaTime)); }
 }
 
+/* Sebastian Pietras */
 void Game::checkBulletCollision()
 {
 	for(auto it = bullets_.begin(); it != bullets_.end();)
@@ -175,6 +178,7 @@ void Game::checkBulletCollision()
 	}
 }
 
+/* Sebastian Pietras */
 void Game::checkPlayerBulletCollision()
 {
 	for(auto it = playerBullets_.begin(); it != playerBullets_.end();)
@@ -403,13 +407,31 @@ void Game::handleInput()
 }
 
 /* Sebastian Pietras */
-void Game::save()
+void Game::savePlayer() const
 {
 	Resources::playerData.at("positionX") = player_.getPosition().x;
 	Resources::playerData.at("positionY") = player_.getPosition().y;
-	Resources::playerData.at("startingRoom") = getCurrentRoom().getRoomName();
-	//Resources::save();
-	//TODO: do this
+	Resources::playerData.at("startingRoom") = player_.getCurrentRoomName();
+	Resources::playerData.at("hp") = player_.getHp();
+	Resources::playerData.at("mana") = player_.getMana();
+}
+
+/* Sebastian Pietras */
+void Game::saveEnemies()
+{
+	for(auto& enemy : enemies_)
+	{
+		auto& enemyJson = Resources::getEnemyJson(enemy->getId());
+		enemy->saveData(enemyJson);
+	}
+}
+
+/* Sebastian Pietras */
+void Game::save()
+{
+	savePlayer();
+	saveEnemies();
+	Resources::save();
 }
 
 /* Sebastian Pietras */
@@ -632,11 +654,24 @@ void Game::initializePlayer()
 	                                  Resources::playerData.at("positionY").get<float>());
 	const sf::Vector2f playerSpeed(Resources::playerData.at("speed").get<float>(),
 	                               Resources::playerData.at("jumpSpeed").get<float>());
-	const auto gravity = Resources::playerData.at("gravity").get<float>();
-	const auto friction = Resources::playerData.at("friction").get<float>();
+	const auto gravity = Resources::playerData.at("gravity").get<float>(),
+	           friction = Resources::playerData.at("friction").get<float>(),
+	           dashSpeed = Resources::playerData.at("dashSpeed").get<float>(),
+	           mana = Resources::playerData.at("mana").get<float>();
 	const auto roomName = Resources::playerData.at("startingRoom").get<std::string>();
+	const auto hp = Resources::playerData.at("hp").get<int>(),
+	           dashDamage = Resources::playerData.at("dashDamage").get<int>();
 
-	player_ = Player(Resources::textures.at("player"), playerPosition, playerSpeed, gravity, friction, roomName);
+	player_ = Player(Resources::textures.at("player"),
+	                 playerPosition,
+	                 playerSpeed,
+	                 gravity,
+	                 friction,
+	                 roomName,
+	                 hp,
+	                 mana,
+	                 dashSpeed,
+	                 dashDamage);
 
 	Resources::getRoomJson(roomName).at("visited") = true;
 }

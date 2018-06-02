@@ -77,8 +77,8 @@ void Resources::save()
 	o.close();
 	o.clear();
 
-	o.open("Data/JSON/player.json", std::ofstream::out | std::ofstream::trunc);
-	o << std::setw(4) << playerData;
+	o.open("Data/JSON/enemies.json", std::ofstream::out | std::ofstream::trunc);
+	o << std::setw(4) << enemiesData;
 	o.close();
 	o.clear();
 }
@@ -212,7 +212,8 @@ std::vector<std::unique_ptr<Enemy>> Resources::createEnemies()
 	std::vector<std::unique_ptr<Enemy>> enemies;
 	for(auto enemy : enemiesData)
 	{
-		const auto type = enemy.at("type").get<int>(), id = enemy.at("id").get<int>();
+		const auto type = enemy.at("type").get<int>(), id = enemy.at("id").get<int>(),
+		           hp = enemy.at("hp").get<int>(), damage = enemy.at("damage").get<int>();
 		const auto room = enemy.at("room").get<std::string>();
 		const sf::Vector2f position(enemy.at("positionX").get<float>(), enemy.at("positionY").get<float>());
 
@@ -221,17 +222,26 @@ std::vector<std::unique_ptr<Enemy>> Resources::createEnemies()
 			const auto speed = enemy.at("speed").get<float>();
 			const auto gravity = enemy.at("gravity").get<float>(), friction = enemy.at("friction").get<float>();
 			const auto walkingRight = enemy.at("walkingRight").get<bool>();
-			enemies.emplace_back(new Walker(textures["enemy1"], position, speed, gravity, friction, room, id, walkingRight));
+			enemies.emplace_back(new Walker(textures["enemy1"],
+			                                position,
+			                                speed,
+			                                gravity,
+			                                friction,
+			                                room,
+			                                hp,
+			                                id,
+			                                damage,
+			                                walkingRight));
 		}
 		else if(type == 2)
 		{
 			const auto friction = enemy.at("friction").get<float>();
-			enemies.emplace_back(new Flier(textures["enemy1"], position, friction, room, id));
+			enemies.emplace_back(new Flier(textures["enemy1"], position, friction, room, hp, id, damage));
 		}
 		else if(type == 3)
 		{
 			const auto gravity = enemy.at("gravity").get<float>();
-			enemies.emplace_back(new Shooter(textures["enemy3"], position, gravity, room, id));
+			enemies.emplace_back(new Shooter(textures["enemy3"], position, gravity, room, hp, id, damage));
 		}
 	}
 
@@ -254,7 +264,35 @@ std::unordered_map<std::string, Room> Resources::createRooms()
 /* Sebastian Pietras */
 json& Resources::getRoomJson(const std::string& name)
 {
-	for(auto& room : rooms) { if(room.at("name").get<std::string>() == name) return room; }
+	for(auto& room : rooms) if(room.at("name").get<std::string>() == name) return room;
 
-	throw; //TODO: Improve this
+	throw std::out_of_range("Not found");
+}
+
+/* Sebastian Pietras */
+json& Resources::getEnemyJson(const int id)
+{
+	for(auto& enemy : enemiesData) if(enemy.at("id").get<int>() == id) return enemy;
+
+	throw std::out_of_range("Not found");
+}
+
+/* Sebastian Pietras */
+json& Resources::getDoorJson(const std::string& roomName, const int id)
+{
+	for(auto& room : rooms)
+		if(room.at("name").get<std::string>() == roomName)
+			for(auto& door : room.at("doors")) if(door.at("id").get<int>() == id) return door;
+
+	throw std::out_of_range("Not found");
+}
+
+/* Sebastian Pietras */
+json& Resources::getKeyJson(const std::string& roomName, const int doorId)
+{
+	for(auto& room : rooms)
+		if(room.at("name").get<std::string>() == roomName)
+			for(auto& key : room.at("keys")) if(key.at("doorId").get<int>() == doorId) return key;
+
+	throw std::out_of_range("Not found");
 }

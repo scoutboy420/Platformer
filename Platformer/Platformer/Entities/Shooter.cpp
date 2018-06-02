@@ -1,6 +1,7 @@
 #include "Shooter.h"
 #include "../Utilities/Resources.h"
 
+/* Sebastian Pietras */
 void Shooter::update(const float deltaTime,
                      const sf::Vector2f playerPos,
                      const bool isPlayerVisible,

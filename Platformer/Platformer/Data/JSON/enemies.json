@@ -8,7 +8,9 @@
     "speed": 300.0,
     "friction": 35.0,
     "gravity": 4000.0,
-    "walkingRight": true
+    "walkingRight": true,
+    "hp": 50,
+    "damage": 10 
   },
   {
     "id": 2,
@@ -19,7 +21,9 @@
     "speed": 300.0,
     "friction": 35.0,
     "gravity": 4000.0,
-    "walkingRight": true
+    "walkingRight": true,
+    "hp": 50,
+    "damage": 10
   },
   {
     "id": 3,
@@ -27,7 +31,9 @@
     "room": "room2",
     "positionX": 200.0,
     "positionY": 330.0,
-    "friction": 2.0
+    "friction": 2.0,
+    "hp": 50,
+    "damage": 15
   },
   {
     "id": 4,
@@ -35,7 +41,9 @@
     "room": "room2",
     "positionX": 200.0,
     "positionY": 660.0,
-    "friction": 2.0
+    "friction": 2.0,
+    "hp": 50,
+    "damage": 15
   },
   {
     "id": 5,
@@ -43,7 +51,9 @@
     "room": "room4",
     "positionX": 500.0,
     "positionY": 200.0,
-    "gravity": 4000.0
+    "gravity": 4000.0,
+    "hp": 50,
+    "damage": 5
   },
   {
     "id": 6,
@@ -51,7 +61,9 @@
     "room": "room12",
     "positionX": 150.0,
     "positionY": 750.0,
-    "gravity": 4000.0
+    "gravity": 4000.0,
+    "hp": 50,
+    "damage": 5
   },
   {
     "id": 7,
@@ -59,7 +71,9 @@
     "room": "room12",
     "positionX": 400.0,
     "positionY": 400.0,
-    "gravity": 4000.0
+    "gravity": 4000.0,
+    "hp": 50,
+    "damage": 5
   },
   {
     "id": 8,
@@ -67,7 +81,9 @@
     "room": "room12",
     "positionX": 900.0,
     "positionY": 250.0,
-    "gravity": 4000.0
+    "gravity": 4000.0,
+    "hp": 50,
+    "damage": 5
   },
   {
     "id": 9,
@@ -75,7 +91,9 @@
     "room": "room12",
     "positionX": 400.0,
     "positionY": 600.0,
-    "friction": 2.0
+    "friction": 2.0,
+    "hp": 50,
+    "damage": 15
   },
   {
     "id": 10,
@@ -86,7 +104,9 @@
     "speed": 300.0,
     "friction": 35.0,
     "gravity": 4000.0,
-    "walkingRight": true
+    "walkingRight": true,
+    "hp": 50,
+    "damage": 10
   },
   {
     "id": 11,
@@ -94,7 +114,9 @@
     "room": "room12",
     "positionX": 500.0,
     "positionY": 50.0,
-    "friction": 2.0
+    "friction": 2.0,
+    "hp": 50,
+    "damage": 15
   },
   {
     "id": 12,
@@ -105,7 +127,9 @@
     "speed": 300.0,
     "friction": 35.0,
     "gravity": 4000.0,
-    "walkingRight": true
+    "walkingRight": true,
+    "hp": 50,
+    "damage": 10
   },
   {
     "id": 13,
@@ -113,7 +137,9 @@
     "room": "room9",
     "positionX": 300.0,
     "positionY": 600.0,
-    "gravity": 4000.0
+    "gravity": 4000.0,
+    "hp": 50,
+    "damage": 5
   },
   {
     "id": 14,
@@ -124,7 +150,9 @@
     "speed": 300.0,
     "friction": 35.0,
     "gravity": 4000.0,
-    "walkingRight": true
+    "walkingRight": true,
+    "hp": 50,
+    "damage": 10
   },
   {
     "id": 15,
@@ -132,7 +160,9 @@
     "room": "room7",
     "positionX": 500.0,
     "positionY": 100.0,
-    "friction": 2.0
+    "friction": 2.0,
+    "hp": 50,
+    "damage": 15
   },
   {
     "id": 16,
@@ -143,7 +173,9 @@
     "speed": 300.0,
     "friction": 35.0,
     "gravity": 4000.0,
-    "walkingRight": true
+    "walkingRight": true,
+    "hp": 50,
+    "damage": 10
   },
   {
     "id": 17,
@@ -154,7 +186,9 @@
     "speed": 250.0,
     "friction": 35.0,
     "gravity": 4000.0,
-    "walkingRight": false
+    "walkingRight": false,
+    "hp": 50,
+    "damage": 10
   },
   {
     "id": 18,
@@ -165,7 +199,9 @@
     "speed": 350.0,
     "friction": 35.0,
     "gravity": 4000.0,
-    "walkingRight": true
+    "walkingRight": true,
+    "hp": 50,
+    "damage": 10
   },
   {
     "id": 19,
@@ -173,7 +209,9 @@
     "room": "room6",
     "positionX": 600.0,
     "positionY": 300.0,
-    "gravity": 4000.0
+    "gravity": 4000.0,
+    "hp": 50,
+    "damage": 5
   },
   {
     "id": 20,
@@ -181,7 +219,9 @@
     "room": "room6",
     "positionX": 800.0,
     "positionY": 250.0,
-    "gravity": 4000.0
+    "gravity": 4000.0,
+    "hp": 50,
+    "damage": 5
   },
   {
     "id": 21,
@@ -189,7 +229,9 @@
     "room": "room6",
     "positionX": 50.0,
     "positionY": 50.0,
-    "friction": 2.0
+    "friction": 2.0,
+    "hp": 50,
+    "damage": 15
   },
   {
     "id": 22,
@@ -197,7 +239,9 @@
     "room": "room6",
     "positionX": 50.0,
     "positionY": 50.0,
-    "friction": 2.0
+    "friction": 2.0,
+    "hp": 50,
+    "damage": 15
   },
   {
     "id": 23,
@@ -205,7 +249,9 @@
     "room": "room6",
     "positionX": 50.0,
     "positionY": 50.0,
-    "friction": 2.0
+    "friction": 2.0,
+    "hp": 50,
+    "damage": 15
   },
   {
     "id": 24,
@@ -216,7 +262,9 @@
     "speed": 300.0,
     "friction": 35.0,
     "gravity": 4000.0,
-    "walkingRight": true
+    "walkingRight": true,
+    "hp": 50,
+    "damage": 10
   },
   {
     "id": 25,
@@ -224,7 +272,9 @@
     "room": "room5",
     "positionX": 50.0,
     "positionY": 300.0,
-    "friction": 2.0
+    "friction": 2.0,
+    "hp": 50,
+    "damage": 15
   },
   {
     "id": 26,
@@ -235,6 +285,8 @@
     "speed": 300.0,
     "friction": 35.0,
     "gravity": 4000.0,
-    "walkingRight": false
+    "walkingRight": false,
+    "hp": 50,
+    "damage": 10
   }
 ]

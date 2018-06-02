@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "Player.h"
 
+/* Sebastian Pietras */
 bool Enemy::hurt(const int damage, Player& p)
 {
 	const auto dead = MobileEntity::hurt(damage, p);
@@ -12,6 +13,7 @@ bool Enemy::hurt(const int damage, Player& p)
 	return dead;
 }
 
+/* Sebastian Pietras */
 void Enemy::onPlayerCollision(Player& player, const sf::Vector2f push)
 {
 	if(push.y > 0 && player.getVelocity().y < 0.0f)
@@ -21,4 +23,13 @@ void Enemy::onPlayerCollision(Player& player, const sf::Vector2f push)
 	}
 	else player.hurt(damage_, player);
 	if(player.isDashing()) hurt(player.getDashDamage(), player);
+}
+
+/* Sebastian Pietras */
+void Enemy::saveData(json& enemyJson)
+{
+	enemyJson.at("positionX") = getPosition().x;
+	enemyJson.at("positionY") = getPosition().y;
+	enemyJson.at("room") = getCurrentRoomName();
+	enemyJson.at("hp") = getHp();
 }

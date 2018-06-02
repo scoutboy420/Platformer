@@ -23,12 +23,16 @@ public:
 	       const sf::Vector2f speed,
 	       const float gravity,
 	       const float friction,
-	       const std::string& roomName)
-		: MobileEntity(texture, position, speed, gravity, friction, roomName, 100)
-		, dashSpeed_(2000)
-		, dashDamage_(25)
+	       const std::string& roomName,
+	       const int hp,
+	       const float mana,
+	       const float dashSpeed,
+	       const int dashDamage)
+		: MobileEntity(texture, position, speed, gravity, friction, roomName, hp)
+		, dashSpeed_(dashSpeed)
+		, dashDamage_(dashDamage)
 		, movingRight_(true)
-		, mana_(100) { }
+		, mana_(mana) { }
 
 	void dash();
 	bool isDashing() const { return dashClock_.getElapsedTime().asSeconds() <= 0.125f; }

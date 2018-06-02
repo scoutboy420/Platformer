@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "../Utilities/Resources.h"
 
+/* Sebastian Pietras */
 void Player::dash()
 {
 	if(dashCooldown_.getElapsedTime().asSeconds() < 0.5f || mana_ < 10) return;
@@ -15,6 +16,7 @@ void Player::dash()
 	dashCooldown_.restart();
 }
 
+/* Sebastian Pietras */
 void Player::shoot(std::vector<Bullet>& bullets)
 {
 	if(shootClock_.getElapsedTime().asSeconds() < 0.25f || mana_ < 5) return;
@@ -31,6 +33,7 @@ void Player::shoot(std::vector<Bullet>& bullets)
 	shootClock_.restart();
 }
 
+/* Sebastian Pietras */
 bool Player::hurt(const int damage, Player& p)
 {
 	const auto d = MobileEntity::hurt(damage, p);
@@ -38,6 +41,7 @@ bool Player::hurt(const int damage, Player& p)
 	return d;
 }
 
+/* Sebastian Pietras */
 void Player::heal(const int amount)
 {
 	if(amount <= 0) return;
@@ -45,6 +49,7 @@ void Player::heal(const int amount)
 	if(healthPoints_ > 100) healthPoints_ = 100;
 }
 
+/* Sebastian Pietras */
 void Player::addMana(const float amount)
 {
 	if(amount <= 0.0f) return;
@@ -52,6 +57,7 @@ void Player::addMana(const float amount)
 	if(mana_ > 100.0f) mana_ = 100.0f;
 }
 
+/* Sebastian Pietras */
 void Player::run(const bool runRight)
 {
 	if(isDashing()) return;
@@ -61,6 +67,7 @@ void Player::run(const bool runRight)
 	else velocity_.x = speed_.x;
 }
 
+/* Sebastian Pietras */
 void Player::update(const float deltaTime,
                     const sf::Vector2f playerPos,
                     const bool isPlayerVisible,

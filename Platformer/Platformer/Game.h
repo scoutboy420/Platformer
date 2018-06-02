@@ -66,6 +66,8 @@ class Game
 	void setKeys();
 	bool isRectangleInWay(const sf::FloatRect& rect, const sf::Vector2f& p1, const sf::Vector2f& p2) const;
 	bool areInLine(const MobileEntity& e1, const MobileEntity& e2);
+	void savePlayer() const;
+	void saveEnemies();
 public:
 	Game(sf::VideoMode mode, const std::string& title);
 

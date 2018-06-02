@@ -1,5 +1,6 @@
 #pragma once
 #include "MobileEntity.h"
+#include "../Utilities/Resources.h"
 
 class Enemy : public MobileEntity
 {
@@ -18,9 +19,10 @@ public:
 	      const float gravity,
 	      const float friction,
 	      const std::string& roomName,
+	      const int hp,
 	      const int id,
 	      const int damage)
-		: MobileEntity(texture, position, speed, gravity, friction, roomName, 50)
+		: MobileEntity(texture, position, speed, gravity, friction, roomName, hp)
 		, id_(id)
 		, damage_(damage) { }
 
@@ -30,4 +32,6 @@ public:
 	bool isImmune() const override { return immunityClock_.getElapsedTime().asSeconds() <= 0.1f; }
 
 	virtual void onPlayerCollision(Player& player, sf::Vector2f push);
+
+	virtual void saveData(nlohmann::json& enemyJson);
 };
