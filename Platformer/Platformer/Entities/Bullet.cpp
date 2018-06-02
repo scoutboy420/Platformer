@@ -1,5 +1,6 @@
 #include "Bullet.h"
 #include "Player.h"
+#include "Enemy.h"
 
 Bullet::Bullet(sf::Texture& texture,
                const sf::Vector2f position,
@@ -11,7 +12,8 @@ Bullet::Bullet(sf::Texture& texture,
 {
 	const auto line = target - position;
 	const auto length = sqrtf(powf(line.x, 2) + powf(line.y, 2));
-	velocity_ = 500.0f / length * line;
+	velocity_ = 1000.0f / length * line;
 }
 
-void Bullet::onPlayerCollision(Player& player) const { player.hurt(damage_); }
+void Bullet::onPlayerCollision(Player& player) const { player.hurt(damage_, player); }
+void Bullet::onEnemyCollision(Enemy& enemy, Player& player) const { enemy.hurt(damage_, player); }

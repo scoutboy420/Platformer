@@ -79,7 +79,7 @@ void MobileEntity::setHp(int hp)
 }
 
 /* Sebastian Pietras */
-bool MobileEntity::hurt(int damage)
+bool MobileEntity::hurt(int damage, Player&)
 {
 	if(isImmune()) return false;
 

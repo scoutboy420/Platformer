@@ -175,6 +175,49 @@ void Game::checkBulletCollision()
 	}
 }
 
+void Game::checkPlayerBulletCollision()
+{
+	for(auto it = playerBullets_.begin(); it != playerBullets_.end();)
+	{
+		auto deleted = false;
+		for(auto& block : loadedRooms_[it->getCurrentRoomName()].getEntities())
+		{
+			if(collides(*it, block))
+			{
+				deleted = true;
+				break;
+			}
+		}
+		for(auto& door : loadedRooms_[it->getCurrentRoomName()].getDoors())
+		{
+			if(collides(*it, door))
+			{
+				deleted = true;
+				break;
+			}
+		}
+		if(deleted) it = playerBullets_.erase(it);
+		else ++it;
+	}
+
+	for(auto& enemy : enemies_)
+	{
+		for(auto it = playerBullets_.begin(); it != playerBullets_.end();)
+		{
+			if(it->getCurrentRoomName() == enemy->getCurrentRoomName())
+			{
+				if(collides(*it, *enemy))
+				{
+					it->onEnemyCollision(*enemy, player_);
+					it = playerBullets_.erase(it);
+				}
+				else ++it;
+			}
+			else ++it;
+		}
+	}
+}
+
 
 /* Sebastian Pietras, Bernard Lesiewicz*/
 void Game::checkCollisions(const float deltaTime)
@@ -194,6 +237,7 @@ void Game::checkCollisions(const float deltaTime)
 	}
 
 	checkBulletCollision();
+	checkPlayerBulletCollision();
 }
 
 /* Sebastian Pietras */
@@ -348,10 +392,12 @@ void Game::scaleView()
 /* Sebastian Pietras */
 void Game::handleInput()
 {
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) player_.run(true);
-	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) player_.run(false);
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) player_.run(true);
+	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)) player_.run(false);
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) player_.dash();
+	if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) player_.dash();
+
+	if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) player_.shoot(playerBullets_);
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) player_.jump(false);
 }
@@ -392,6 +438,7 @@ void Game::update(const float deltaTime)
 	player_.update(deltaTime, player_.getPosition(), true, bullets_);
 	for(auto& enemy : enemies_) enemy->update(deltaTime, player_.getCenter(), areInLine(player_, *enemy), bullets_);
 	for(auto& bullet : bullets_) bullet.update(deltaTime);
+	for(auto& bullet : playerBullets_) bullet.update(deltaTime);
 
 	checkCollisions(deltaTime);
 
@@ -399,6 +446,7 @@ void Game::update(const float deltaTime)
 	scaleView();
 	for(auto& enemy : enemies_) checkRoomChange(*enemy);
 	for(auto& bullet : bullets_) checkRoomChange(bullet);
+	for(auto& bullet : playerBullets_) checkRoomChange(bullet);
 
 	checkCamera();
 }
@@ -437,6 +485,7 @@ void Game::drawEntities()
 	}
 
 	for(auto& bullet : bullets_) if(isInsideView(viewRect, bullet)) window_.draw(bullet.getBody());
+	for(auto& bullet : playerBullets_) if(isInsideView(viewRect, bullet)) window_.draw(bullet.getBody());
 
 	window_.draw(player_.getBody());
 }
@@ -452,7 +501,9 @@ void Game::drawOverlay()
 	                         sf::Vector2f(window_.getSize())));
 
 	playerHealthText_.setString(std::to_string(player_.getHp()));
+	manaText_.setString(std::to_string(int(player_.getMana())));
 	window_.draw(playerHealthText_);
+	window_.draw(manaText_);
 }
 
 /* Sebastian Pietras, Bernard Lesiewicz */
@@ -615,6 +666,7 @@ Game::Game(const sf::VideoMode mode, const std::string& title)
 	: window_(mode, title)
 {
 	window_.setVisible(false);
+	window_.setMouseCursorVisible(false);
 
 	Resources::load();
 
@@ -630,6 +682,13 @@ Game::Game(const sf::VideoMode mode, const std::string& title)
 	playerHealthText_.setOutlineThickness(1.0f);
 	playerHealthText_.setPosition(10.0f, 10.0f);
 	playerHealthText_.setCharacterSize(20);
+
+	manaText_.setFont(Resources::fonts["vcr"]);
+	manaText_.setFillColor(sf::Color::White);
+	manaText_.setOutlineColor(sf::Color::Black);
+	manaText_.setOutlineThickness(1.0f);
+	manaText_.setPosition(100.0f, 10.0f);
+	manaText_.setCharacterSize(20);
 
 	view_ = sf::View(player_.getCenter(), sf::Vector2f(window_.getSize()));
 

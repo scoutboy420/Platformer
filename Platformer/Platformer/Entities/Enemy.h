@@ -26,7 +26,8 @@ public:
 
 	int getId() const { return id_; }
 
-	bool isImmune() const override { return immunityClock_.getElapsedTime().asSeconds() <= 0.25f; }
+	bool hurt(int damage, Player&) override;
+	bool isImmune() const override { return immunityClock_.getElapsedTime().asSeconds() <= 0.1f; }
 
 	virtual void onPlayerCollision(Player& player, sf::Vector2f push);
 };

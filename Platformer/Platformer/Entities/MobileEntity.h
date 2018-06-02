@@ -45,7 +45,7 @@ public:
 
 	int getHp() const { return healthPoints_; }
 	void setHp(int hp);
-	virtual bool hurt(int damage);
+	virtual bool hurt(int damage, Player&);
 	virtual bool isImmune() const { return immunityClock_.getElapsedTime().asSeconds() <= 1.0f; }
 
 	virtual void run(const bool runRight)
