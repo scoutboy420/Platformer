@@ -18,11 +18,14 @@ class Game
 	Player player_;
 	std::vector<std::unique_ptr<Enemy>> enemies_;
 	std::vector<Bullet> bullets_;
+	std::vector<Bullet> playerBullets_;
 	std::unordered_map<std::string, Room> loadedRooms_;
 	sf::RenderWindow window_;
+	std::vector<sf::Window*> errorWindows_;
 	sf::View view_;
 	sf::Clock clock_; //to count time between frames
 	sf::Text playerHealthText_;
+	sf::Text manaText_;
 
 	bool collides(const Entity& e1, const Entity& e2) const;
 	sf::Vector2f checkPush(const MobileEntity& e1, const Entity& e2, float deltaTime) const;
@@ -40,6 +43,7 @@ class Game
 	void draw();
 	void showMiniMap();
 	void save();
+	void restart();
 
 	/* Helpers */
 	void checkBlockCollision(MobileEntity& mobile, const Entity& block, float deltaTime) const;
@@ -49,10 +53,11 @@ class Game
 	void checkPlayerInPortals();
 	void checkEnemiesInPortals();
 	void checkBulletsInPortals();
+	void checkPlayerBulletCollision();
 	bool isInsideView(const sf::FloatRect& viewRect, const Entity& entity) const;
 	void drawEntities();
 	void drawOverlay();
-	void initializePlayer();
+	void initializePlayer(bool def = false);
 	static bool findTransportLocation(const Entity& entity,
 	                                  const Room& currentRoom,
 	                                  Resources::direction dir,
@@ -72,6 +77,10 @@ class Game
 	void setPortals();
 	bool isRectangleInWay(const sf::FloatRect& rect, const sf::Vector2f& p1, const sf::Vector2f& p2) const;
 	bool areInLine(const MobileEntity& e1, const MobileEntity& e2);
+	void savePlayer() const;
+	void saveEnemies();
+	void showErrorWindow(const std::string& title, const std::string& message);
+	void checkErrorWindows();
 public:
 	Game(sf::VideoMode mode, const std::string& title);
 

@@ -2,6 +2,7 @@
 #include "Entity.h"
 
 class Player;
+class Enemy;
 
 class Bullet : public Entity
 {
@@ -17,5 +18,6 @@ public:
 	void update(const float deltaTime) { body_.move(velocity_ * deltaTime); }
 
 	void onPlayerCollision(Player& player) const;
+	void onEnemyCollision(Enemy& enemy, Player& player) const;
 	void onRoomChange(const std::string& roomName) override { currentRoomName_ = roomName; }
 };

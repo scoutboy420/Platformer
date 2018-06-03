@@ -1,5 +1,6 @@
 #include "Game.h"
 
+/* Sebastian Pietras */
 bool Game::isRectangleInWay(const sf::FloatRect& rect, const sf::Vector2f& p1, const sf::Vector2f& p2) const
 {
 	// Find min and max X for the segment
@@ -38,6 +39,7 @@ bool Game::isRectangleInWay(const sf::FloatRect& rect, const sf::Vector2f& p1, c
 	return minY <= maxY;
 }
 
+/* Sebastian Pietras */
 bool Game::areInLine(const MobileEntity& e1, const MobileEntity& e2)
 {
 	if(e1.getCurrentRoomName() != e2.getCurrentRoomName()) return false;
@@ -135,6 +137,7 @@ void Game::checkEnemyCollision(Player& player, Enemy& enemy, const float deltaTi
 	if(collides(player, enemy)) { enemy.onPlayerCollision(player, checkPush(player, enemy, deltaTime)); }
 }
 
+/* Sebastian Pietras */
 void Game::checkBulletCollision()
 {
 	for(auto it = bullets_.begin(); it != bullets_.end();)
@@ -175,6 +178,50 @@ void Game::checkBulletCollision()
 	}
 }
 
+/* Sebastian Pietras */
+void Game::checkPlayerBulletCollision()
+{
+	for(auto it = playerBullets_.begin(); it != playerBullets_.end();)
+	{
+		auto deleted = false;
+		for(auto& block : loadedRooms_[it->getCurrentRoomName()].getEntities())
+		{
+			if(collides(*it, block))
+			{
+				deleted = true;
+				break;
+			}
+		}
+		for(auto& door : loadedRooms_[it->getCurrentRoomName()].getDoors())
+		{
+			if(collides(*it, door))
+			{
+				deleted = true;
+				break;
+			}
+		}
+		if(deleted) it = playerBullets_.erase(it);
+		else ++it;
+	}
+
+	for(auto& enemy : enemies_)
+	{
+		for(auto it = playerBullets_.begin(); it != playerBullets_.end();)
+		{
+			if(it->getCurrentRoomName() == enemy->getCurrentRoomName())
+			{
+				if(collides(*it, *enemy))
+				{
+					it->onEnemyCollision(*enemy, player_);
+					it = playerBullets_.erase(it);
+				}
+				else ++it;
+			}
+			else ++it;
+		}
+	}
+}
+
 
 /* Sebastian Pietras, Bernard Lesiewicz*/
 void Game::checkCollisions(const float deltaTime)
@@ -194,6 +241,7 @@ void Game::checkCollisions(const float deltaTime)
 	}
 
 	checkBulletCollision();
+	checkPlayerBulletCollision();
 }
 
 /* Bernard Lesiewicz */
@@ -364,6 +412,10 @@ void Game::checkRoomChange(Entity& entity)
 		if(findTransportLocation(entity, currentRoom, dir, entrance, roomName, entranceId, offset)) break;
 	}
 
+	if(roomName.empty()) throw std::runtime_error("Target room not found.\nCurrent room: " + entity.getCurrentRoomName() +
+	                                              "\nEntity position: " + std::to_string(entity.getPosition().x) + "," +
+	                                              std::to_string(entity.getPosition().y));
+
 	changeRoom(entity, roomName, entranceId, offset);
 }
 
@@ -427,22 +479,98 @@ void Game::scaleView()
 /* Sebastian Pietras */
 void Game::handleInput()
 {
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) player_.run(true);
-	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) player_.run(false);
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) player_.run(true);
+	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)) player_.run(false);
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) player_.dash();
+	if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) player_.dash();
+
+	if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) player_.shoot(playerBullets_);
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) player_.jump(false);
 }
 
 /* Sebastian Pietras */
-void Game::save()
+void Game::savePlayer() const
 {
 	Resources::playerData.at("positionX") = player_.getPosition().x;
 	Resources::playerData.at("positionY") = player_.getPosition().y;
-	Resources::playerData.at("startingRoom") = getCurrentRoom().getRoomName();
-	//Resources::save();
-	//TODO: do this
+	Resources::playerData.at("startingRoom") = player_.getCurrentRoomName();
+	Resources::playerData.at("hp") = player_.getHp();
+	Resources::playerData.at("mana") = player_.getMana();
+}
+
+/* Sebastian Pietras */
+void Game::saveEnemies()
+{
+	for(auto& enemy : enemies_)
+	{
+		auto& enemyJson = Resources::getEnemyJson(enemy->getId());
+		enemy->saveData(enemyJson);
+	}
+}
+
+/* Sebastian Pietras */
+void Game::showErrorWindow(const std::string& title, const std::string& message)
+{
+	auto errorText = sf::Text(message, Resources::fonts["roboto"]);
+	errorText.setCharacterSize(22);
+	errorText.setFillColor(sf::Color::Black);
+
+	const auto width = unsigned(errorText.getGlobalBounds().width) * 2, height =
+			           unsigned(errorText.getGlobalBounds().height) * 4;
+	auto errorWindow = new sf::RenderWindow(sf::VideoMode(width, height), title, sf::Style::Close | sf::Style::Titlebar);
+
+	errorWindow->clear(sf::Color::White);
+
+	errorText.setPosition(0.25f * width, 3.0f / 8.0f * height);
+	errorWindow->draw(errorText);
+	errorWindow->display();
+
+	errorWindows_.push_back(errorWindow);
+}
+
+void Game::checkErrorWindows()
+{
+	sf::Event e{};
+	for(auto it = errorWindows_.begin(); it != errorWindows_.end();)
+	{
+		auto close = false;
+		while(!close && (*it)->pollEvent(e))
+		{
+			if(e.type == sf::Event::Closed)
+			{
+				(*it)->close();
+				delete *it;
+				it = errorWindows_.erase(it);
+				close = true;
+			}
+		}
+
+		if(!close) ++it;
+	}
+}
+
+/* Sebastian Pietras */
+void Game::save()
+{
+	savePlayer();
+	saveEnemies();
+	Resources::save();
+}
+
+void Game::restart()
+{
+	loadedRooms_ = Resources::createRooms(true);
+	setKeys();
+	enemies_ = Resources::createEnemies(true);
+
+	initializePlayer(true);
+
+	view_ = sf::View(player_.getCenter(), sf::Vector2f(window_.getSize()));
+
+	scaleView();
+
+	window_.setView(view_);
 }
 
 /* Sebastian Pietras */
@@ -454,7 +582,12 @@ bool Game::handleWindowEvents()
 	{
 		switch(e.type)
 		{
-		case sf::Event::Closed: save();
+		case sf::Event::Closed: try { save(); }
+			catch(const std::exception& ex)
+			{
+				showErrorWindow("Error", "Can't save.\n" + std::string(ex.what()));
+				return true;
+			}
 			window_.close();
 			return false;
 		case sf::Event::Resized: scaleView();
@@ -471,14 +604,30 @@ void Game::update(const float deltaTime)
 	player_.update(deltaTime, player_.getPosition(), true, bullets_);
 	for(auto& enemy : enemies_) enemy->update(deltaTime, player_.getCenter(), areInLine(player_, *enemy), bullets_);
 	for(auto& bullet : bullets_) bullet.update(deltaTime);
+	for(auto& bullet : playerBullets_) bullet.update(deltaTime);
 
 	checkCollisions(deltaTime);
 	checkPortals();
 
-	checkRoomChange(player_);
+	try { checkRoomChange(player_); }
+	catch(const std::exception& e)
+	{
+		showErrorWindow("Error", "Player can't change room.\n" + std::string(e.what()));
+		restart();
+	}
+
 	scaleView();
-	for(auto& enemy : enemies_) checkRoomChange(*enemy);
-	for(auto& bullet : bullets_) checkRoomChange(bullet);
+	try
+	{
+		for(auto& enemy : enemies_) checkRoomChange(*enemy);
+		for(auto& bullet : bullets_) checkRoomChange(bullet);
+		for(auto& bullet : playerBullets_) checkRoomChange(bullet);
+	}
+	catch(const std::exception& e)
+	{
+		showErrorWindow("Error", "Entity can't change room.\n" + std::string(e.what()));
+		restart();
+	}
 
 	checkCamera();
 }
@@ -519,6 +668,7 @@ void Game::drawEntities()
 	}
 
 	for(auto& bullet : bullets_) if(isInsideView(viewRect, bullet)) window_.draw(bullet.getBody());
+	for(auto& bullet : playerBullets_) if(isInsideView(viewRect, bullet)) window_.draw(bullet.getBody());
 
 	window_.draw(player_.getBody());
 }
@@ -534,7 +684,9 @@ void Game::drawOverlay()
 	                         sf::Vector2f(window_.getSize())));
 
 	playerHealthText_.setString(std::to_string(player_.getHp()));
+	manaText_.setString(std::to_string(int(player_.getMana())));
 	window_.draw(playerHealthText_);
+	window_.draw(manaText_);
 }
 
 /* Sebastian Pietras, Bernard Lesiewicz */
@@ -657,20 +809,36 @@ void Game::showMiniMap()
 }
 
 /* Sebastian Pietras */
-void Game::initializePlayer()
+void Game::initializePlayer(const bool def)
 {
-	const sf::Vector2f playerPosition(Resources::playerData.at("positionX").get<float>(),
-	                                  Resources::playerData.at("positionY").get<float>());
-	const sf::Vector2f playerSpeed(Resources::playerData.at("speed").get<float>(),
-	                               Resources::playerData.at("jumpSpeed").get<float>());
-	const auto gravity = Resources::playerData.at("gravity").get<float>();
-	const auto friction = Resources::playerData.at("friction").get<float>();
-	const auto roomName = Resources::playerData.at("startingRoom").get<std::string>();
+	auto& data = def ? Resources::defaultPlayerData : Resources::playerData;
 
-	player_ = Player(Resources::textures.at("player"), playerPosition, playerSpeed, gravity, friction, roomName);
+	const sf::Vector2f playerPosition(data.at("positionX").get<float>(),
+	                                  data.at("positionY").get<float>());
+	const sf::Vector2f playerSpeed(data.at("speed").get<float>(),
+	                               data.at("jumpSpeed").get<float>());
+	const auto gravity = data.at("gravity").get<float>(),
+	           friction = data.at("friction").get<float>(),
+	           dashSpeed = data.at("dashSpeed").get<float>(),
+	           mana = data.at("mana").get<float>();
+	const auto roomName = data.at("startingRoom").get<std::string>();
+	const auto hp = data.at("hp").get<int>(),
+	           dashDamage = data.at("dashDamage").get<int>();
+
+	player_ = Player(Resources::textures.at("player"),
+	                 playerPosition,
+	                 playerSpeed,
+	                 gravity,
+	                 friction,
+	                 roomName,
+	                 hp,
+	                 mana,
+	                 dashSpeed,
+	                 dashDamage);
 
 	Resources::getRoomJson(roomName).at("visited") = true;
 }
+
 
 /* Sebastian Pietras */
 void Game::setKeys()
@@ -718,15 +886,21 @@ Game::Game(const sf::VideoMode mode, const std::string& title)
 	: window_(mode, title)
 {
 	window_.setVisible(false);
+	window_.setMouseCursorVisible(false);
 
-	Resources::load();
+	try { Resources::load(); }
+	catch(const std::exception& e) { throw std::runtime_error("Can't load resources.\n" + std::string(e.what())); }
 
 	loadedRooms_ = Resources::createRooms();
 	setKeys();
 	setPortals();
-	enemies_ = Resources::createEnemies();
 
-	initializePlayer();
+	try { enemies_ = Resources::createEnemies(); }
+	catch(const std::exception& e) { throw std::runtime_error("Can't create enemies.\n" + std::string(e.what())); }
+
+
+	try { initializePlayer(); }
+	catch(const std::exception& e) { throw std::runtime_error("Can't initialize player.\n" + std::string(e.what())); }
 
 	playerHealthText_.setFont(Resources::fonts["vcr"]);
 	playerHealthText_.setFillColor(sf::Color::White);
@@ -734,6 +908,13 @@ Game::Game(const sf::VideoMode mode, const std::string& title)
 	playerHealthText_.setOutlineThickness(1.0f);
 	playerHealthText_.setPosition(10.0f, 10.0f);
 	playerHealthText_.setCharacterSize(20);
+
+	manaText_.setFont(Resources::fonts["vcr"]);
+	manaText_.setFillColor(sf::Color::White);
+	manaText_.setOutlineColor(sf::Color::Black);
+	manaText_.setOutlineThickness(1.0f);
+	manaText_.setPosition(100.0f, 10.0f);
+	manaText_.setCharacterSize(20);
 
 	view_ = sf::View(player_.getCenter(), sf::Vector2f(window_.getSize()));
 
@@ -746,15 +927,34 @@ Game::Game(const sf::VideoMode mode, const std::string& title)
 /* Sebastian Pietras */
 bool Game::play()
 {
-	if(!handleWindowEvents()) return false; //Check what happened with window
+	try
+	{
+		if(!handleWindowEvents()) return false; //Check what happened with window
 
-	handleInput(); //Check pressed keys
+		handleInput(); //Check pressed keys
 
-	auto deltaTime = clock_.restart().asSeconds();
-	if(deltaTime > 1.0f / 60.0f) deltaTime = 1.0f / 60.0f; //limit deltaTime, so it can't be big
+		auto deltaTime = clock_.restart().asSeconds();
+		if(deltaTime > 1.0f / 60.0f) deltaTime = 1.0f / 60.0f; //limit deltaTime, so it can't be big
 
-	update(deltaTime); //update everything that is moving
-	draw();            //draw everything to the screen
+		update(deltaTime); //update everything that is moving
+		if(player_.getHp() <= 0) restart();
 
-	return true;
+		draw(); //draw everything to the screen
+		checkErrorWindows();
+
+		return true;
+	}
+	catch(const std::exception& e1)
+	{
+		try
+		{
+			save();
+		}
+		catch(const std::exception& e2)
+		{
+			throw std::runtime_error("Runtime error.\n" + std::string(e1.what()) + "\nCouldn't save :(\n" + e2.what());
+		}
+
+		throw std::runtime_error("Runtime error.\n" + std::string(e1.what()) + "\nGame saved :)");
+	}
 }

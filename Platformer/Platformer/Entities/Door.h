@@ -10,6 +10,6 @@ public:
 		: Entity(texture, position, roomName)
 		, id_(id) { isActive = !opened; }
 
-	void open() { isActive = false; }
+	void open();
 	int getId() const { return id_; }
 };

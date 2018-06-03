@@ -27,7 +27,7 @@ class Room
 	void addGradient();
 public:
 	Room() = default;
-	explicit Room(const std::string& roomName);
+	explicit Room(const std::string& roomName, bool def = false);
 
 	std::string getRoomName() const { return roomName_; }
 	sf::Vector2f getSize() const { return size_; }

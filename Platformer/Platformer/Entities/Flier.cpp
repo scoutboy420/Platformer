@@ -1,5 +1,6 @@
 #include "Flier.h"
 
+/* Sebastian Pietras */
 void Flier::update(const float deltaTime, sf::Vector2f, bool, std::vector<Bullet>&)
 {
 	if(!isActive) return;
