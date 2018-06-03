@@ -108,6 +108,11 @@ void Resources::load()
 			runtime_error("Can't load texture from Data/Textures/key_gy.png");
 	if(!textures["key_bk"].loadFromFile("Data/Textures/key_bk.png")) throw std::
 			runtime_error("Can't load texture from Data/Textures/key_bk.png");
+  
+  	if(!textures["portal_rd"].loadFromFile("Data/Textures/portal_rd.png")) throw std::
+			runtime_error("Can't load texture from Data/Textures/portal_rd.png");
+	if(!textures["portal_bl"].loadFromFile("Data/Textures/portal_bl.png")) throw std::
+			runtime_error("Can't load texture from Data/Textures/portal_bl.png");
 
 	if(!fonts["vcr"].loadFromFile("Data/Fonts/vcr.ttf")) throw std::
 			runtime_error("Can't load font from Data/Fonts/vcr.ttf");
@@ -315,6 +320,30 @@ std::vector<Key> Resources::createKeys(const std::string& roomName, const bool d
 		}
 	}
 	return keys;
+}
+
+/* Bernard Lesiewicz */
+std::vector<Portal> Resources::createPortals(const std::string& roomName, const bool def)
+{
+	std::vector<Portal> portals;
+	for(auto& portal : json(getRoomJson(roomName).at("portals")))
+	{
+		try
+		{
+			const sf::Vector2f position(portal.at("positionX").get<float>(), portal.at("positionY").get<float>());
+		  const auto id = portal.at("id").get<int>();
+		  const auto toId = portal.at("toId").get<int>();
+		  //const auto thisRoomName = portal.at("doorRoomName").get<std::string>();
+		  const auto toRoomName = portal.at("toRoom").get<std::string>();
+      const auto textureName = portal.at("texture").get<std::string>();
+		  portals.push_back(Portal(textures[textureName], position, roomName, id, toId, toRoomName));
+		}
+		catch(const std::exception& e)
+		{
+			throw std::runtime_error("Can't create portal in " + roomName + ".\n" + std::string(e.what()));
+    }
+	}
+	return portals;
 }
 
 /* Sebastian Pietras */

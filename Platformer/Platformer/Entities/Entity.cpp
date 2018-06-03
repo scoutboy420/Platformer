@@ -9,6 +9,7 @@ Entity::Entity(sf::Texture& texture, const sf::Vector2f position, std::string ro
 	body_.setPosition(position);
 	size_ = sf::Vector2f(body_.getTexture()->getSize());
 	isActive = true;
+	tpImmunity_ = false;
 }
 
 /* Sebastian Pietras */

@@ -244,6 +244,84 @@ void Game::checkCollisions(const float deltaTime)
 	checkPlayerBulletCollision();
 }
 
+/* Bernard Lesiewicz */
+void Game::checkPlayerInPortals()
+{
+    auto& playerRoom = getCurrentRoom();
+	for(auto& portal : playerRoom.getPortals())
+    {
+        if(isInside(player_, portal) && !player_.isTpImmune())  { teleport(player_, portal); } //if he entered the portal
+        else if(player_.isTpImmune() && !isInside(player_, portal) && collides(player_, portal)) { player_.setTpImmunity(false); } //if he isn't in the portal anymore
+
+        //checkPlayerInPortal(player_, portal);  //should check here if isInside and isTpImmune, then teleport
+    }
+    //player.onRoomChange(portal.getToRoomName());
+}
+
+/* Bernard Lesiewicz */
+void Game::checkEnemiesInPortals()
+{
+    for(auto& enemy : enemies_)
+	{
+		auto& enemyRoom = loadedRooms_[enemy->getCurrentRoomName()];
+		for(auto& portal : enemyRoom.getPortals()) //checkEnemyInPortal(*enemy, portal);
+        {
+            if(isInside(*enemy, portal) && !enemy->isTpImmune())  { teleport(*enemy, portal); }
+            else if(enemy->isTpImmune() && !isInside(*enemy, portal) && collides(*enemy, portal)) { enemy->setTpImmunity(false); }
+        }
+	}
+}
+
+/* Bernard Lesiewicz */
+void Game::checkBulletsInPortals()
+{
+    for(auto& bullet : bullets_)
+	{
+	    auto& bulletRoom = loadedRooms_[bullet.getCurrentRoomName()];
+		for(auto& portal : bulletRoom.getPortals()) //checkEnemyInPortal(*enemy, portal);
+        {
+            if(isInside(bullet, portal) && !bullet.isTpImmune())  { teleport(bullet, portal); }
+            else if(bullet.isTpImmune() && !isInside(bullet, portal) && collides(bullet, portal)) { bullet.setTpImmunity(false); }
+        }
+	}
+}
+
+/* Bernard Lesiewicz */
+void Game::checkPortals()
+{
+    checkPlayerInPortals();
+    checkEnemiesInPortals();
+    checkBulletsInPortals();
+}
+
+/*Bernard Lesiewicz*/
+bool Game::isInside(const Entity& e1, const Entity& e2) const
+{
+    //distances between the centers:
+	const auto deltaX = std::fabs(e1.getCenter().x - e2.getCenter().x);
+	const auto deltaY = std::fabs(e1.getCenter().y - e2.getCenter().y);
+    //is the 1st entity inside the 2nd entity:
+	const auto withinX = (e2.getSize().x * 0.5f - e1.getSize().x * 0.5f) - deltaX;
+	const auto withinY = (e2.getSize().y * 0.5f - e1.getSize().y * 0.5f) - deltaY;
+
+	return (withinX >= 0.0f && withinY >= 0.0f);
+
+}
+
+/* Bernard Lesiewicz */
+void Game::teleport(Entity& entity, Portal& portal)
+{   std::cout << "Teleporting from portal " << portal.getId() << " in " << portal.getCurrentRoomName()
+        << " to portal " << portal.getToId() << " in " << portal.getToRoomName() << std::endl;
+
+	/*entity.setPosition(sf::Vector2f(portal.getToPortal()->getCenter().x - entity.getSize().x * 0.5f,
+                                    portal.getToPortal()->getPosition().y + portal.getToPortal()->getSize().y - entity.getSize().y));*/
+    entity.setPosition(sf::Vector2f(portal.getToPortal()->getPosition().x + entity.getPosition().x - portal.getPosition().x,
+                                    portal.getToPortal()->getPosition().y + entity.getPosition().y - portal.getPosition().y));
+
+	entity.onRoomChange(portal.getToRoomName());
+	entity.setTpImmunity(true);
+}
+
 /* Sebastian Pietras */
 bool Game::findTransportLocation(const Entity& entity,
                                  const Room& currentRoom,
@@ -361,6 +439,7 @@ void Game::changeRoom(Entity& entity,
 	entity.setPosition(entrancePos + offset); //Apply offset so movement can be smooth
 	entity.onRoomChange(roomName);
 }
+
 
 /* Sebastian Pietras */
 void Game::checkCamera()
@@ -528,6 +607,7 @@ void Game::update(const float deltaTime)
 	for(auto& bullet : playerBullets_) bullet.update(deltaTime);
 
 	checkCollisions(deltaTime);
+	checkPortals();
 
 	try { checkRoomChange(player_); }
 	catch(const std::exception& e)
@@ -575,6 +655,8 @@ void Game::drawEntities()
 	for(const auto& door : getCurrentRoom().getDoors()) if(isInsideView(viewRect, door)) window_.draw(door.getBody());
 
 	for(const auto& key : getCurrentRoom().getKeys()) if(isInsideView(viewRect, key)) window_.draw(key.getBody());
+
+	for(const auto& portal : getCurrentRoom().getPortals()) if(isInsideView(viewRect, portal)) window_.draw(portal.getBody());
 
 	for(auto& enemy : enemies_)
 	{
@@ -778,6 +860,27 @@ void Game::setKeys()
 	}
 }
 
+/* Bernard Lesiewicz */
+void Game::setPortals()
+{   std::cout << "setPortals() start" << std::endl; //TEMPORARY
+	for(auto& room : loadedRooms_)
+	{
+		for(auto& portal : room.second.getPortals())
+		{   std::cout << "In: " << room.second.getRoomName() << " setPortals()" << std::endl; //TEMPORARY
+			auto& toRoom = loadedRooms_[portal.getToRoomName()];
+			for(auto& toPortal : toRoom.getPortals())
+			{
+				if(toPortal.getId() == portal.getToId())
+				{   //std::cout << "toRoom in setPortals(): " << toRoom.getRoomName() << std::endl; //TEMPORARY
+                    portal.setToPortal(&toPortal);
+					break;
+				}
+			}
+		}
+	}
+	std::cout << "setPortals() end" << std::endl; //TEMPORARY
+}
+
 /* Sebastian Pietras, Bernard Lesiewicz */
 Game::Game(const sf::VideoMode mode, const std::string& title)
 	: window_(mode, title)
@@ -790,8 +893,11 @@ Game::Game(const sf::VideoMode mode, const std::string& title)
 
 	loadedRooms_ = Resources::createRooms();
 	setKeys();
+	setPortals();
+
 	try { enemies_ = Resources::createEnemies(); }
 	catch(const std::exception& e) { throw std::runtime_error("Can't create enemies.\n" + std::string(e.what())); }
+
 
 	try { initializePlayer(); }
 	catch(const std::exception& e) { throw std::runtime_error("Can't initialize player.\n" + std::string(e.what())); }
