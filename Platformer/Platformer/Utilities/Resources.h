@@ -6,6 +6,7 @@
 #include "../Entities/Entity.h"
 #include "../Entities/Door.h"
 #include "../Entities/Key.h"
+#include "../Entities/Portal.h"
 #include "../Entities/Enemy.h"
 
 class Room;
@@ -36,6 +37,7 @@ public:
 	static std::vector<Entity> createBlocks(const std::string& roomName);
 	static std::vector<Door> createDoors(const std::string& roomName);
 	static std::vector<Key> createKeys(const std::string& roomName);
+	static std::vector<Portal> createPortals(const std::string& roomName);
 	static std::vector<std::unique_ptr<Enemy>> createEnemies();
 	static std::unordered_map<std::string, Room> createRooms();
 

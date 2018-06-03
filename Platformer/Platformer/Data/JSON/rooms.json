@@ -1,16 +1,42 @@
 [
   {
-    "name" : "room1", 
+    "name" : "room1",
     "colorB": 255,
     "colorG": 191,
     "colorR": 128,
+    "portals": [
+      {
+        "positionX": 100,
+        "positionY": 200,
+        "id": 1,
+        "toId": 2,
+        "toRoom": "room1",
+        "texture": "portal_rd"
+      },
+      {
+        "positionX": 100,
+        "positionY": 350,
+        "id": 3,
+        "toId": 1,
+        "toRoom": "room9",
+        "texture": "portal_bl"
+      },
+      {
+        "positionX": 650,
+        "positionY": 200,
+        "id": 2,
+        "toId": 1,
+        "toRoom": "room1",
+        "texture": "portal_rd"
+      }
+    ],
     "doors": [
       {
         "positionX": 850,
         "positionY": 350,
         "id": 1,
         "texture": "door_mg",
-        "opened": false 
+        "opened": false
       }
     ],
     "blocks": [
@@ -84,7 +110,7 @@
     "width": 18
   },
   {
-    "name" : "room10", 
+    "name" : "room10",
     "colorB": 128,
     "colorG": 255,
     "colorR": 191,
@@ -137,11 +163,12 @@
     "globalY": -600.0,
     "height": 10,
     "keys": [],
+    "portals": [],
     "visited": false,
     "width": 14
   },
   {
-    "name": "room11", 
+    "name": "room11",
     "colorB": 255,
     "colorG": 128,
     "colorR": 191,
@@ -170,14 +197,15 @@
         "doorRoomName": "room1",
         "doorId": 1,
         "texture": "key_mg",
-        "pickedUp": false 
+        "pickedUp": false
       }
     ],
+    "portals": [],
     "visited": false,
     "width": 7
   },
   {
-    "name": "room2", 
+    "name": "room2",
     "colorB": 255,
     "colorG": 128,
     "colorR": 191,
@@ -244,11 +272,12 @@
     "height": 20,
     "keys": [
     ],
+    "portals": [],
     "visited": false,
     "width": 8
   },
   {
-    "name": "room3", 
+    "name": "room3",
     "colorB": 255,
     "colorG": 255,
     "colorR": 128,
@@ -323,11 +352,12 @@
         "pickedUp": false
       }
     ],
+    "portals": [],
     "visited": false,
     "width": 12
   },
   {
-    "name": "room4", 
+    "name": "room4",
     "colorB": 128,
     "colorG": 255,
     "colorR": 255,
@@ -402,11 +432,12 @@
         "pickedUp": false
       }
     ],
+    "portals": [],
     "visited": false,
     "width": 12
   },
   {
-    "name": "room12", 
+    "name": "room12",
     "colorB": 255,
     "colorG": 128,
     "colorR": 128,
@@ -535,11 +566,12 @@
         "pickedUp": false
       }
     ],
+    "portals": [],
     "visited": false,
     "width": 20
   },
   {
-    "name": "room5", 
+    "name": "room5",
     "colorB": 128,
     "colorG": 191,
     "colorR": 255,
@@ -648,11 +680,12 @@
         "pickedUp": false
       }
     ],
+    "portals": [],
     "visited": false,
     "width": 12
   },
   {
-    "name": "room6", 
+    "name": "room6",
     "colorB": 128,
     "colorG": 128,
     "colorR": 255,
@@ -734,11 +767,12 @@
         "pickedUp": false
       }
     ],
+    "portals": [],
     "visited": false,
     "width": 20
   },
   {
-    "name": "room7", 
+    "name": "room7",
     "colorB": 255,
     "colorG": 191,
     "colorR": 128,
@@ -809,11 +843,12 @@
     "globalY": 550.0,
     "height": 6,
     "keys": [],
+    "portals": [],
     "visited": false,
     "width": 16
   },
   {
-    "name": "room8", 
+    "name": "room8",
     "colorB": 128,
     "colorG": 255,
     "colorR": 255,
@@ -883,11 +918,12 @@
         "pickedUp": false
       }
     ],
+    "portals": [],
     "visited": false,
     "width": 6
   },
   {
-    "name": "room9", 
+    "name": "room9",
     "colorB": 128,
     "colorG": 128,
     "colorR": 255,
@@ -1029,11 +1065,21 @@
         "pickedUp": false
       }
     ],
+    "portals": [
+      {
+        "positionX": 550,
+        "positionY": 550,
+        "id": 1,
+        "toId": 3,
+        "toRoom": "room1",
+        "texture": "portal_bl"
+      }
+    ],
     "visited": false,
     "width": 16
   },
   {
-    "name": "room13", 
+    "name": "room13",
     "colorB": 128,
     "colorG": 255,
     "colorR": 128,
@@ -1171,6 +1217,7 @@
     "globalY": 950.0,
     "height": 11,
     "keys": [],
+    "portals": [],
     "visited": false,
     "width": 19
   }

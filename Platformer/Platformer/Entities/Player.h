@@ -33,6 +33,7 @@ public:
 	bool isImmune() const override { return MobileEntity::isImmune() || isDashing(); }
 
 	void run(bool runRight) override;
+	//void changeRoom(const std::string& roomName) { currentRoomName_ = roomName;}
 
 	void update(float deltaTime, sf::Vector2f, bool, std::vector<Bullet>&) override;
 	void onRoomChange(const std::string& roomName) override;

@@ -59,6 +59,9 @@ void Resources::load()
 	textures["key_gy"].loadFromFile("Data/Textures/key_gy.png");
 	textures["key_bk"].loadFromFile("Data/Textures/key_bk.png");
 
+	textures["portal_rd"].loadFromFile("Data/Textures/portal_rd.png");
+	textures["portal_bl"].loadFromFile("Data/Textures/portal_bl.png");
+
 	fonts["vcr"].loadFromFile("Data/Fonts/vcr.ttf");
 }
 
@@ -204,6 +207,23 @@ std::vector<Key> Resources::createKeys(const std::string& roomName)
 		keys.push_back(Key(textures[textureName], position, doorId, doorRoomName, pickedUp, roomName));
 	}
 	return keys;
+}
+
+/* Bernard Lesiewicz */
+std::vector<Portal> Resources::createPortals(const std::string& roomName)
+{
+	std::vector<Portal> portals;
+	for(auto& portal : json(getRoomJson(roomName).at("portals")))
+	{
+		const sf::Vector2f position(portal.at("positionX").get<float>(), portal.at("positionY").get<float>());
+		const auto id = portal.at("id").get<int>();
+		const auto toId = portal.at("toId").get<int>();
+		//const auto thisRoomName = portal.at("doorRoomName").get<std::string>();
+		const auto toRoomName = portal.at("toRoom").get<std::string>();
+        const auto textureName = portal.at("texture").get<std::string>();
+		portals.push_back(Portal(textures[textureName], position, roomName, id, toId, toRoomName));
+	}
+	return portals;
 }
 
 /* Sebastian Pietras */

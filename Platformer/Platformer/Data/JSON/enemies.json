@@ -236,5 +236,13 @@
     "friction": 35.0,
     "gravity": 4000.0,
     "walkingRight": false
+  },
+  {
+    "id": 27,
+    "type": 3,
+    "room": "room1",
+    "positionX": 50.0,
+    "positionY": 250.0,
+    "gravity": 4000.0
   }
 ]
