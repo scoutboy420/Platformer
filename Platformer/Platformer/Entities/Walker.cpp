@@ -19,6 +19,7 @@ void Walker::update(const float deltaTime,
 	MobileEntity::update(deltaTime, playerPos, isPlayerVisible, bullets);
 }
 
+/* Sebastian Pietras */
 void Walker::saveData(json& enemyJson)
 {
 	Enemy::saveData(enemyJson);

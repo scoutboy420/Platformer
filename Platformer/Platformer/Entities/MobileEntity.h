@@ -35,7 +35,7 @@ public:
 
 	virtual void update(float deltaTime, sf::Vector2f, bool, std::vector<Bullet>&);
 
-	void jump(bool force);
+	virtual void jump(bool force);
 	void move(const sf::Vector2f transform) { body_.move(sf::Vector2f(transform.x, -transform.y)); }
 	void setVelocity(const sf::Vector2f velocity) { velocity_ = velocity; }
 	void stopX() { velocity_.x = 0.0f; }

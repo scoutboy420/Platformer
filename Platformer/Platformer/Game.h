@@ -7,11 +7,9 @@
 #include "Entities/Entity.h"
 #include "Entities/MobileEntity.h"
 #include "Entities/Key.h"
-//#include "Entities/Portal.h"
 #include "Utilities/Room.h"
 #include "Utilities/Resources.h"
 #include "Utilities/JSON/json.hpp"
-#include <iostream>
 
 class Game
 {
@@ -33,7 +31,7 @@ class Game
 	bool isInside(const Entity& e1, const Entity& e2) const;
 	void checkPortals();
 	void checkRoomChange(Entity& entity);
-	void teleport(Entity& entity, Portal& portal);
+	static void teleport(Entity& entity, Portal& portal);
 	static void changeRoom(Entity& entity, const std::string& roomName, int entranceId, sf::Vector2f offset);
 	void checkCamera();
 	void scaleView();

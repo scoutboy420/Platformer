@@ -57,67 +57,95 @@ void Resources::load()
 	i.clear();
 
 
-	if(!textures["player"].loadFromFile("Data/Textures/player.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/player.png");
-	if(!textures["block"].loadFromFile("Data/Textures/block.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/block.png");
-	if(!textures["enemy1"].loadFromFile("Data/Textures/enemy1.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/enemy1.png");
-	if(!textures["enemy2"].loadFromFile("Data/Textures/enemy2.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/enemy2.png");
-	if(!textures["enemy3"].loadFromFile("Data/Textures/enemy3.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/enemy3.png");
-	if(!textures["bullet"].loadFromFile("Data/Textures/bullet.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/bullet.png");
+	if(!textures["player"].loadFromFile("Data/Textures/player.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/player.png");
+	if(!textures["block"].loadFromFile("Data/Textures/block.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/block.png");
+	if(!textures["enemy1"].loadFromFile("Data/Textures/enemy1.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/enemy1.png");
+	if(!textures["enemy2"].loadFromFile("Data/Textures/enemy2.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/enemy2.png");
+	if(!textures["enemy3"].loadFromFile("Data/Textures/enemy3.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/enemy3.png");
+	if(!textures["bullet"].loadFromFile("Data/Textures/bullet.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/bullet.png");
 
 	/*textures: Bernard Lesiewicz*/
-	if(!textures["door_rd"].loadFromFile("Data/Textures/door_rd.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/door_rd.png");
-	if(!textures["door_gr"].loadFromFile("Data/Textures/door_gr.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/door_gr.png");
-	if(!textures["door_bl"].loadFromFile("Data/Textures/door_bl.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/door_bl.png");
-	if(!textures["door_or"].loadFromFile("Data/Textures/door_or.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/door_or.png");
-	if(!textures["door_mg"].loadFromFile("Data/Textures/door_mg.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/door_mg.png");
-	if(!textures["door_yl"].loadFromFile("Data/Textures/door_yl.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/door_yl.png");
-	if(!textures["door_wh"].loadFromFile("Data/Textures/door_wh.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/door_wh.png");
-	if(!textures["door_gy"].loadFromFile("Data/Textures/door_gy.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/door_gy.png");
-	if(!textures["door_bk"].loadFromFile("Data/Textures/door_bk.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/door_bk.png");
+	if(!textures["door_rd"].loadFromFile("Data/Textures/door_rd.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/door_rd.png");
+	if(!textures["door_gr"].loadFromFile("Data/Textures/door_gr.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/door_gr.png");
+	if(!textures["door_bl"].loadFromFile("Data/Textures/door_bl.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/door_bl.png");
+	if(!textures["door_or"].loadFromFile("Data/Textures/door_or.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/door_or.png");
+	if(!textures["door_mg"].loadFromFile("Data/Textures/door_mg.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/door_mg.png");
+	if(!textures["door_yl"].loadFromFile("Data/Textures/door_yl.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/door_yl.png");
+	if(!textures["door_wh"].loadFromFile("Data/Textures/door_wh.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/door_wh.png");
+	if(!textures["door_gy"].loadFromFile("Data/Textures/door_gy.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/door_gy.png");
+	if(!textures["door_bk"].loadFromFile("Data/Textures/door_bk.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/door_bk.png");
 
-	if(!textures["key_rd"].loadFromFile("Data/Textures/key_rd.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/key_rd.png");
-	if(!textures["key_gr"].loadFromFile("Data/Textures/key_gr.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/key_gr.png");
-	if(!textures["key_bl"].loadFromFile("Data/Textures/key_bl.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/key_bl.png");
-	if(!textures["key_or"].loadFromFile("Data/Textures/key_or.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/key_or.png");
-	if(!textures["key_mg"].loadFromFile("Data/Textures/key_mg.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/key_mg.png");
-	if(!textures["key_yl"].loadFromFile("Data/Textures/key_yl.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/key_yl.png");
-	if(!textures["key_wh"].loadFromFile("Data/Textures/key_wh.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/key_wh.png");
-	if(!textures["key_gy"].loadFromFile("Data/Textures/key_gy.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/key_gy.png");
-	if(!textures["key_bk"].loadFromFile("Data/Textures/key_bk.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/key_bk.png");
-  
-  	if(!textures["portal_rd"].loadFromFile("Data/Textures/portal_rd.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/portal_rd.png");
-	if(!textures["portal_bl"].loadFromFile("Data/Textures/portal_bl.png")) throw std::
-			runtime_error("Can't load texture from Data/Textures/portal_bl.png");
+	if(!textures["key_rd"].loadFromFile("Data/Textures/key_rd.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/key_rd.png");
+	if(!textures["key_gr"].loadFromFile("Data/Textures/key_gr.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/key_gr.png");
+	if(!textures["key_bl"].loadFromFile("Data/Textures/key_bl.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/key_bl.png");
+	if(!textures["key_or"].loadFromFile("Data/Textures/key_or.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/key_or.png");
+	if(!textures["key_mg"].loadFromFile("Data/Textures/key_mg.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/key_mg.png");
+	if(!textures["key_yl"].loadFromFile("Data/Textures/key_yl.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/key_yl.png");
+	if(!textures["key_wh"].loadFromFile("Data/Textures/key_wh.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/key_wh.png");
+	if(!textures["key_gy"].loadFromFile("Data/Textures/key_gy.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/key_gy.png");
+	if(!textures["key_bk"].loadFromFile("Data/Textures/key_bk.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/key_bk.png");
 
-	if(!fonts["vcr"].loadFromFile("Data/Fonts/vcr.ttf")) throw std::
-			runtime_error("Can't load font from Data/Fonts/vcr.ttf");
-	if(!fonts["roboto"].loadFromFile("Data/Fonts/roboto.ttf")) throw std::
-			runtime_error("Can't load font from Data/Fonts/roboto.ttf");
+	if(!textures["portal_rd"].loadFromFile("Data/Textures/portal_rd.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/portal_rd.png");
+	if(!textures["portal_bl"].loadFromFile("Data/Textures/portal_bl.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/portal_bl.png");
+
+	if(!fonts["vcr"].loadFromFile("Data/Fonts/vcr.ttf"))
+		throw std::
+				runtime_error("Can't load font from Data/Fonts/vcr.ttf");
+	if(!fonts["roboto"].loadFromFile("Data/Fonts/roboto.ttf"))
+		throw std::
+				runtime_error("Can't load font from Data/Fonts/roboto.ttf");
 }
 
 /* Sebastian Pietras */
@@ -186,7 +214,8 @@ void Resources::createWalls(const std::string& roomName,
 		}
 		catch(const std::exception& e)
 		{
-			throw std::runtime_error("Can't create wall block in " + roomName + " at position " + std::to_string(posA.x) + "," +
+			throw std::runtime_error("Can't create wall block in " + roomName + " at position " + std::to_string(posA.x)
+			                         + "," +
 			                         std::to_string(posA.y) + ".\n" + std::string(e.what()));
 		}
 		try
@@ -197,7 +226,8 @@ void Resources::createWalls(const std::string& roomName,
 		}
 		catch(const std::exception& e)
 		{
-			throw std::runtime_error("Can't create wall block in " + roomName + " at position " + std::to_string(posB.x) + "," +
+			throw std::runtime_error("Can't create wall block in " + roomName + " at position " + std::to_string(posB.x)
+			                         + "," +
 			                         std::to_string(posB.y) + ".\n" + std::string(e.what()));
 		}
 	}
@@ -213,7 +243,8 @@ void Resources::createWalls(const std::string& roomName,
 		}
 		catch(const std::exception& e)
 		{
-			throw std::runtime_error("Can't create wall block in " + roomName + " at position " + std::to_string(posA.x) + "," +
+			throw std::runtime_error("Can't create wall block in " + roomName + " at position " + std::to_string(posA.x)
+			                         + "," +
 			                         std::to_string(posA.y) + ".\n" + std::string(e.what()));
 		}
 		try
@@ -224,7 +255,8 @@ void Resources::createWalls(const std::string& roomName,
 		}
 		catch(const std::exception& e)
 		{
-			throw std::runtime_error("Can't create wall block in " + roomName + " at position " + std::to_string(posB.x) + "," +
+			throw std::runtime_error("Can't create wall block in " + roomName + " at position " + std::to_string(posB.x)
+			                         + "," +
 			                         std::to_string(posB.y) + ".\n" + std::string(e.what()));
 		}
 	}
@@ -326,22 +358,21 @@ std::vector<Key> Resources::createKeys(const std::string& roomName, const bool d
 std::vector<Portal> Resources::createPortals(const std::string& roomName, const bool def)
 {
 	std::vector<Portal> portals;
-	for(auto& portal : json(getRoomJson(roomName).at("portals")))
+	for(auto& portal : json(getRoomJson(roomName, def).at("portals")))
 	{
 		try
 		{
 			const sf::Vector2f position(portal.at("positionX").get<float>(), portal.at("positionY").get<float>());
-		  const auto id = portal.at("id").get<int>();
-		  const auto toId = portal.at("toId").get<int>();
-		  //const auto thisRoomName = portal.at("doorRoomName").get<std::string>();
-		  const auto toRoomName = portal.at("toRoom").get<std::string>();
-      const auto textureName = portal.at("texture").get<std::string>();
-		  portals.push_back(Portal(textures[textureName], position, roomName, id, toId, toRoomName));
+			const auto id = portal.at("id").get<int>();
+			const auto toId = portal.at("toId").get<int>();
+			const auto toRoomName = portal.at("toRoom").get<std::string>();
+			const auto textureName = portal.at("texture").get<std::string>();
+			portals.push_back(Portal(textures[textureName], position, roomName, id, toId, toRoomName));
 		}
 		catch(const std::exception& e)
 		{
 			throw std::runtime_error("Can't create portal in " + roomName + ".\n" + std::string(e.what()));
-    }
+		}
 	}
 	return portals;
 }

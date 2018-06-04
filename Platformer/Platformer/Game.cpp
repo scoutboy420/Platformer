@@ -247,76 +247,92 @@ void Game::checkCollisions(const float deltaTime)
 /* Bernard Lesiewicz */
 void Game::checkPlayerInPortals()
 {
-    auto& playerRoom = getCurrentRoom();
+	auto& playerRoom = getCurrentRoom();
 	for(auto& portal : playerRoom.getPortals())
-    {
-        if(isInside(player_, portal) && !player_.isTpImmune())  { teleport(player_, portal); } //if he entered the portal
-        else if(player_.isTpImmune() && !isInside(player_, portal) && collides(player_, portal)) { player_.setTpImmunity(false); } //if he isn't in the portal anymore
-
-        //checkPlayerInPortal(player_, portal);  //should check here if isInside and isTpImmune, then teleport
-    }
-    //player.onRoomChange(portal.getToRoomName());
+	{
+		if(isInside(player_, portal) && !player_.isTpImmune()) { teleport(player_, portal); } //if he entered the portal
+		else if(player_.isTpImmune() && !isInside(player_, portal) && collides(player_, portal))
+		{
+			player_.setTpImmunity(false);
+		} //if he isn't in the portal anymore
+	}
 }
 
 /* Bernard Lesiewicz */
 void Game::checkEnemiesInPortals()
 {
-    for(auto& enemy : enemies_)
+	for(auto& enemy : enemies_)
 	{
 		auto& enemyRoom = loadedRooms_[enemy->getCurrentRoomName()];
-		for(auto& portal : enemyRoom.getPortals()) //checkEnemyInPortal(*enemy, portal);
-        {
-            if(isInside(*enemy, portal) && !enemy->isTpImmune())  { teleport(*enemy, portal); }
-            else if(enemy->isTpImmune() && !isInside(*enemy, portal) && collides(*enemy, portal)) { enemy->setTpImmunity(false); }
-        }
+		for(auto& portal : enemyRoom.getPortals())
+		{
+			if(isInside(*enemy, portal) && !enemy->isTpImmune()) { teleport(*enemy, portal); }
+			else if(enemy->isTpImmune() && !isInside(*enemy, portal) && collides(*enemy, portal))
+			{
+				enemy->setTpImmunity(false);
+			}
+		}
 	}
 }
 
 /* Bernard Lesiewicz */
 void Game::checkBulletsInPortals()
 {
-    for(auto& bullet : bullets_)
+	for(auto& bullet : bullets_)
 	{
-	    auto& bulletRoom = loadedRooms_[bullet.getCurrentRoomName()];
-		for(auto& portal : bulletRoom.getPortals()) //checkEnemyInPortal(*enemy, portal);
-        {
-            if(isInside(bullet, portal) && !bullet.isTpImmune())  { teleport(bullet, portal); }
-            else if(bullet.isTpImmune() && !isInside(bullet, portal) && collides(bullet, portal)) { bullet.setTpImmunity(false); }
-        }
+		auto& bulletRoom = loadedRooms_[bullet.getCurrentRoomName()];
+		for(auto& portal : bulletRoom.getPortals())
+		{
+			if(isInside(bullet, portal) && !bullet.isTpImmune()) { teleport(bullet, portal); }
+			else if(bullet.isTpImmune() && !isInside(bullet, portal) && collides(bullet, portal))
+			{
+				bullet.setTpImmunity(false);
+			}
+		}
+	}
+
+	for(auto& bullet : playerBullets_)
+	{
+		auto& bulletRoom = loadedRooms_[bullet.getCurrentRoomName()];
+		for(auto& portal : bulletRoom.getPortals())
+		{
+			if(isInside(bullet, portal) && !bullet.isTpImmune()) { teleport(bullet, portal); }
+			else if(bullet.isTpImmune() && !isInside(bullet, portal) && collides(bullet, portal))
+			{
+				bullet.setTpImmunity(false);
+			}
+		}
 	}
 }
 
 /* Bernard Lesiewicz */
 void Game::checkPortals()
 {
-    checkPlayerInPortals();
-    checkEnemiesInPortals();
-    checkBulletsInPortals();
+	checkPlayerInPortals();
+	checkEnemiesInPortals();
+	checkBulletsInPortals();
 }
 
 /*Bernard Lesiewicz*/
 bool Game::isInside(const Entity& e1, const Entity& e2) const
 {
-    //distances between the centers:
+	//distances between the centers:
 	const auto deltaX = std::fabs(e1.getCenter().x - e2.getCenter().x);
 	const auto deltaY = std::fabs(e1.getCenter().y - e2.getCenter().y);
-    //is the 1st entity inside the 2nd entity:
-	const auto withinX = (e2.getSize().x * 0.5f - e1.getSize().x * 0.5f) - deltaX;
-	const auto withinY = (e2.getSize().y * 0.5f - e1.getSize().y * 0.5f) - deltaY;
+	//is the 1st entity inside the 2nd entity:
+	const auto withinX = e2.getSize().x * 0.5f - e1.getSize().x * 0.5f - deltaX;
+	const auto withinY = e2.getSize().y * 0.5f - e1.getSize().y * 0.5f - deltaY;
 
-	return (withinX >= 0.0f && withinY >= 0.0f);
-
+	return withinX >= 0.0f && withinY >= 0.0f;
 }
 
 /* Bernard Lesiewicz */
 void Game::teleport(Entity& entity, Portal& portal)
-{   std::cout << "Teleporting from portal " << portal.getId() << " in " << portal.getCurrentRoomName()
-        << " to portal " << portal.getToId() << " in " << portal.getToRoomName() << std::endl;
-
-	/*entity.setPosition(sf::Vector2f(portal.getToPortal()->getCenter().x - entity.getSize().x * 0.5f,
-                                    portal.getToPortal()->getPosition().y + portal.getToPortal()->getSize().y - entity.getSize().y));*/
-    entity.setPosition(sf::Vector2f(portal.getToPortal()->getPosition().x + entity.getPosition().x - portal.getPosition().x,
-                                    portal.getToPortal()->getPosition().y + entity.getPosition().y - portal.getPosition().y));
+{
+	entity.setPosition(sf::Vector2f(portal.getToPortal()->getPosition().x + entity.getPosition().x - portal
+	                                                                                                 .getPosition().x,
+	                                portal.getToPortal()->getPosition().y + entity.getPosition().y - portal
+	                                                                                                 .getPosition().y));
 
 	entity.onRoomChange(portal.getToRoomName());
 	entity.setTpImmunity(true);
@@ -340,7 +356,8 @@ bool Game::findTransportLocation(const Entity& entity,
 			{
 				roomName = entrance.at("to").at("roomName").get<std::string>();
 				entranceId = entrance.at("to").at("entranceID").get<int>();
-				offset = sf::Vector2f(-entity.getSize().x * 0.5f + 50.0f, entity.getPosition().y - entrance.at("y").get<float>());
+				offset = sf::Vector2f(-entity.getSize().x * 0.5f + 50.0f,
+				                      entity.getPosition().y - entrance.at("y").get<float>());
 				return true;
 			}
 		}
@@ -352,7 +369,8 @@ bool Game::findTransportLocation(const Entity& entity,
 			{
 				roomName = entrance.at("to").at("roomName").get<std::string>();
 				entranceId = entrance.at("to").at("entranceID").get<int>();
-				offset = sf::Vector2f(-entity.getSize().x * 0.5f, entity.getPosition().y - entrance.at("y").get<float>());
+				offset = sf::Vector2f(-entity.getSize().x * 0.5f,
+				                      entity.getPosition().y - entrance.at("y").get<float>());
 				return true;
 			}
 		}
@@ -364,7 +382,8 @@ bool Game::findTransportLocation(const Entity& entity,
 			{
 				roomName = entrance.at("to").at("roomName").get<std::string>();
 				entranceId = entrance.at("to").at("entranceID").get<int>();
-				offset = sf::Vector2f(entity.getPosition().x - entrance.at("x").get<float>(), -entity.getSize().y * 0.5f + 50.0f);
+				offset = sf::Vector2f(entity.getPosition().x - entrance.at("x").get<float>(),
+				                      -entity.getSize().y * 0.5f + 50.0f);
 				return true;
 			}
 		}
@@ -376,7 +395,8 @@ bool Game::findTransportLocation(const Entity& entity,
 			{
 				roomName = entrance.at("to").at("roomName").get<std::string>();
 				entranceId = entrance.at("to").at("entranceID").get<int>();
-				offset = sf::Vector2f(entity.getPosition().x - entrance.at("x").get<float>(), -entity.getSize().y * 0.5f);
+				offset = sf::Vector2f(entity.getPosition().x - entrance.at("x").get<float>(),
+				                      -entity.getSize().y * 0.5f);
 				return true;
 			}
 		}
@@ -412,9 +432,10 @@ void Game::checkRoomChange(Entity& entity)
 		if(findTransportLocation(entity, currentRoom, dir, entrance, roomName, entranceId, offset)) break;
 	}
 
-	if(roomName.empty()) throw std::runtime_error("Target room not found.\nCurrent room: " + entity.getCurrentRoomName() +
-	                                              "\nEntity position: " + std::to_string(entity.getPosition().x) + "," +
-	                                              std::to_string(entity.getPosition().y));
+	if(roomName.empty())
+		throw std::runtime_error("Target room not found.\nCurrent room: " + entity.getCurrentRoomName() +
+		                         "\nEntity position: " + std::to_string(entity.getPosition().x) + "," +
+		                         std::to_string(entity.getPosition().y));
 
 	changeRoom(entity, roomName, entranceId, offset);
 }
@@ -479,6 +500,8 @@ void Game::scaleView()
 /* Sebastian Pietras */
 void Game::handleInput()
 {
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) restart();
+
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) player_.run(true);
 	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)) player_.run(false);
 
@@ -518,7 +541,9 @@ void Game::showErrorWindow(const std::string& title, const std::string& message)
 
 	const auto width = unsigned(errorText.getGlobalBounds().width) * 2, height =
 			           unsigned(errorText.getGlobalBounds().height) * 4;
-	auto errorWindow = new sf::RenderWindow(sf::VideoMode(width, height), title, sf::Style::Close | sf::Style::Titlebar);
+	auto errorWindow = new sf::RenderWindow(sf::VideoMode(width, height),
+	                                        title,
+	                                        sf::Style::Close | sf::Style::Titlebar);
 
 	errorWindow->clear(sf::Color::White);
 
@@ -529,6 +554,7 @@ void Game::showErrorWindow(const std::string& title, const std::string& message)
 	errorWindows_.push_back(errorWindow);
 }
 
+/* Sebastian Pietras */
 void Game::checkErrorWindows()
 {
 	sf::Event e{};
@@ -558,10 +584,12 @@ void Game::save()
 	Resources::save();
 }
 
+/* Sebastian Pietras */
 void Game::restart()
 {
 	loadedRooms_ = Resources::createRooms(true);
 	setKeys();
+	setPortals();
 	enemies_ = Resources::createEnemies(true);
 
 	initializePlayer(true);
@@ -656,7 +684,10 @@ void Game::drawEntities()
 
 	for(const auto& key : getCurrentRoom().getKeys()) if(isInsideView(viewRect, key)) window_.draw(key.getBody());
 
-	for(const auto& portal : getCurrentRoom().getPortals()) if(isInsideView(viewRect, portal)) window_.draw(portal.getBody());
+	for(const auto& portal : getCurrentRoom().getPortals())
+		if(isInsideView(viewRect, portal))
+			window_.
+					draw(portal.getBody());
 
 	for(auto& enemy : enemies_)
 	{
@@ -790,8 +821,14 @@ void Game::showMiniMap()
 		//Bounds
 		if(shape.getPosition().x < upperLeft.x) upperLeft.x = shape.getPosition().x;
 		if(shape.getPosition().y < upperLeft.y) upperLeft.y = shape.getPosition().y;
-		if(shape.getPosition().x + shape.getSize().x > lowerRight.x) lowerRight.x = shape.getPosition().x + shape.getSize().x;
-		if(shape.getPosition().y + shape.getSize().y > lowerRight.y) lowerRight.y = shape.getPosition().y + shape.getSize().y;
+		if(shape.getPosition().x + shape.getSize().x > lowerRight.x)
+			lowerRight.x = shape.getPosition().x + shape
+			                                       .getSize().
+			                                       x;
+		if(shape.getPosition().y + shape.getSize().y > lowerRight.y)
+			lowerRight.y = shape.getPosition().y + shape
+			                                       .getSize().
+			                                       y;
 
 		if(room.at("name").get<std::string>() == getCurrentRoom().getRoomName()) //current room
 		{
@@ -862,23 +899,22 @@ void Game::setKeys()
 
 /* Bernard Lesiewicz */
 void Game::setPortals()
-{   std::cout << "setPortals() start" << std::endl; //TEMPORARY
+{
 	for(auto& room : loadedRooms_)
 	{
 		for(auto& portal : room.second.getPortals())
-		{   std::cout << "In: " << room.second.getRoomName() << " setPortals()" << std::endl; //TEMPORARY
+		{
 			auto& toRoom = loadedRooms_[portal.getToRoomName()];
 			for(auto& toPortal : toRoom.getPortals())
 			{
 				if(toPortal.getId() == portal.getToId())
-				{   //std::cout << "toRoom in setPortals(): " << toRoom.getRoomName() << std::endl; //TEMPORARY
-                    portal.setToPortal(&toPortal);
+				{
+					portal.setToPortal(&toPortal);
 					break;
 				}
 			}
 		}
 	}
-	std::cout << "setPortals() end" << std::endl; //TEMPORARY
 }
 
 /* Sebastian Pietras, Bernard Lesiewicz */
@@ -946,10 +982,7 @@ bool Game::play()
 	}
 	catch(const std::exception& e1)
 	{
-		try
-		{
-			save();
-		}
+		try { save(); }
 		catch(const std::exception& e2)
 		{
 			throw std::runtime_error("Runtime error.\n" + std::string(e1.what()) + "\nCouldn't save :(\n" + e2.what());

@@ -68,6 +68,16 @@ void Player::run(const bool runRight)
 }
 
 /* Sebastian Pietras */
+void Player::jump(const bool force)
+{
+	if(onGround_ && !isDashing() || force)
+	{
+		velocity_.y = speed_.y;
+		onGround_ = false;
+	}
+}
+
+/* Sebastian Pietras */
 void Player::update(const float deltaTime,
                     const sf::Vector2f playerPos,
                     const bool isPlayerVisible,

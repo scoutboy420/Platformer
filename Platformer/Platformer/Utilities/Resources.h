@@ -43,7 +43,7 @@ public:
 	static std::vector<Entity> createBlocks(const std::string& roomName, bool def = false);
 	static std::vector<Door> createDoors(const std::string&, bool def = false);
 	static std::vector<Key> createKeys(const std::string& roomName, bool def = false);
-  static std::vector<Portal> createPortals(const std::string& roomName, bool def = false);
+	static std::vector<Portal> createPortals(const std::string& roomName, bool def = false);
 	static std::vector<std::unique_ptr<Enemy>> createEnemies(bool def = false);
 	static std::unordered_map<std::string, Room> createRooms(bool def = false);
 
