@@ -3,10 +3,10 @@
 #include <vector>
 #include <unordered_map>
 #include "Entities/Player.h"
-#include "Entities/Enemy.h"
+#include "Entities/Enemies/Enemy.h"
 #include "Entities/Entity.h"
 #include "Entities/MobileEntity.h"
-#include "Entities/Key.h"
+#include "Entities/Misc/Key.h"
 #include "Utilities/Room.h"
 #include "Utilities/Resources.h"
 #include "Utilities/JSON/json.hpp"
@@ -47,6 +47,7 @@ class Game
 	void checkBlockCollision(MobileEntity& mobile, const Entity& block, float deltaTime) const;
 	void checkKeyCollision(const Player& player, Key& key) const;
 	void checkEnemyCollision(Player& player, Enemy& enemy, float deltaTime) const;
+	void checkObstaclesColllision();
 	void checkBulletCollision();
 	void checkPlayerInPortals();
 	void checkEnemiesInPortals();

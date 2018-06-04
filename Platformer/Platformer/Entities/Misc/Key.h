@@ -1,6 +1,6 @@
 #pragma once
 #include <utility>
-#include "Entity.h"
+#include "../Entity.h"
 #include "Door.h"
 
 /* Bernard Lesiewicz */

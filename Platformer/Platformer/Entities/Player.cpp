@@ -6,6 +6,8 @@ void Player::dash()
 {
 	if(dashCooldown_.getElapsedTime().asSeconds() < 0.5f || mana_ < 10) return;
 
+	startDashGuard_ = false;
+
 	if(movingRight_) velocity_.x = dashSpeed_;
 	else velocity_.x = -dashSpeed_;
 
@@ -34,14 +36,6 @@ void Player::shoot(std::vector<Bullet>& bullets)
 }
 
 /* Sebastian Pietras */
-bool Player::hurt(const int damage, Player& p)
-{
-	const auto d = MobileEntity::hurt(damage, p);
-	isActive = true;
-	return d;
-}
-
-/* Sebastian Pietras */
 void Player::heal(const int amount)
 {
 	if(amount <= 0) return;
@@ -62,9 +56,18 @@ void Player::run(const bool runRight)
 {
 	if(isDashing()) return;
 
-	movingRight_ = runRight;
-	if(!runRight) velocity_.x = -speed_.x;
-	else velocity_.x = speed_.x;
+	if(!isInverted())
+	{
+		movingRight_ = runRight;
+		if(!runRight) velocity_.x = -speed_.x;
+		else velocity_.x = speed_.x;
+	}
+	else
+	{
+		movingRight_ = !runRight;
+		if(runRight) velocity_.x = -speed_.x;
+		else velocity_.x = speed_.x;
+	}
 }
 
 /* Sebastian Pietras */
@@ -74,6 +77,15 @@ void Player::jump(const bool force)
 	{
 		velocity_.y = speed_.y;
 		onGround_ = false;
+	}
+}
+
+void Player::invert()
+{
+	if(!isInverted())
+	{
+		startInvertGuard_ = false;
+		invertClock_.restart();
 	}
 }
 

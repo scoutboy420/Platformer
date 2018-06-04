@@ -1,5 +1,5 @@
 #include "Shooter.h"
-#include "../Utilities/Resources.h"
+#include "../../Utilities/Resources.h"
 
 /* Sebastian Pietras */
 void Shooter::update(const float deltaTime,

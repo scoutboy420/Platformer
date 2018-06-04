@@ -1,6 +1,6 @@
 #pragma once
-#include "MobileEntity.h"
-#include "../Utilities/Resources.h"
+#include "../MobileEntity.h"
+#include "../../Utilities/Resources.h"
 
 class Enemy : public MobileEntity
 {

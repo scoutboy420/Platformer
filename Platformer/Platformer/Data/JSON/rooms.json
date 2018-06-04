@@ -1,9 +1,10 @@
 [
   {
-    "name" : "room1",
+    "name": "room1",
     "colorB": 255,
     "colorG": 191,
     "colorR": 128,
+    "obstacles": [],
     "portals": [
       {
         "positionX": 100,
@@ -110,7 +111,7 @@
     "width": 18
   },
   {
-    "name" : "room10",
+    "name": "room10",
     "colorB": 128,
     "colorG": 255,
     "colorR": 191,
@@ -163,6 +164,7 @@
     "globalY": -600.0,
     "height": 10,
     "keys": [],
+    "obstacles": [],
     "portals": [],
     "visited": false,
     "width": 14
@@ -200,6 +202,7 @@
         "pickedUp": false
       }
     ],
+    "obstacles": [],
     "portals": [],
     "visited": false,
     "width": 7
@@ -272,6 +275,7 @@
     "height": 20,
     "keys": [
     ],
+    "obstacles": [],
     "portals": [],
     "visited": false,
     "width": 8
@@ -352,6 +356,7 @@
         "pickedUp": false
       }
     ],
+    "obstacles": [],
     "portals": [],
     "visited": false,
     "width": 12
@@ -432,6 +437,7 @@
         "pickedUp": false
       }
     ],
+    "obstacles": [],
     "portals": [],
     "visited": false,
     "width": 12
@@ -566,6 +572,7 @@
         "pickedUp": false
       }
     ],
+    "obstacles": [],
     "portals": [],
     "visited": false,
     "width": 20
@@ -680,6 +687,7 @@
         "pickedUp": false
       }
     ],
+    "obstacles": [],
     "portals": [],
     "visited": false,
     "width": 12
@@ -767,6 +775,7 @@
         "pickedUp": false
       }
     ],
+    "obstacles": [],
     "portals": [],
     "visited": false,
     "width": 20
@@ -843,6 +852,7 @@
     "globalY": 550.0,
     "height": 6,
     "keys": [],
+    "obstacles": [],
     "portals": [],
     "visited": false,
     "width": 16
@@ -918,6 +928,7 @@
         "pickedUp": false
       }
     ],
+    "obstacles": [],
     "portals": [],
     "visited": false,
     "width": 6
@@ -1065,6 +1076,7 @@
         "pickedUp": false
       }
     ],
+    "obstacles": [],
     "portals": [
       {
         "positionX": 550,
@@ -1217,6 +1229,7 @@
     "globalY": 950.0,
     "height": 11,
     "keys": [],
+    "obstacles": [],
     "portals": [],
     "visited": false,
     "width": 19

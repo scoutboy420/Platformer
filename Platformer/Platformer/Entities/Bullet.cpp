@@ -1,6 +1,6 @@
 #include "Bullet.h"
 #include "Player.h"
-#include "Enemy.h"
+#include "Enemies/Enemy.h"
 
 /* Sebastian Pietras */
 Bullet::Bullet(sf::Texture& texture,

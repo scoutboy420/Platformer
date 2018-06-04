@@ -4,10 +4,11 @@
 #include <SFML/Graphics.hpp>
 #include "JSON/json.hpp"
 #include "../Entities/Entity.h"
-#include "../Entities/Door.h"
-#include "../Entities/Key.h"
-#include "../Entities/Portal.h"
-#include "../Entities/Enemy.h"
+#include "../Entities/Misc/Door.h"
+#include "../Entities/Misc/Key.h"
+#include "../Entities/Misc/Portal.h"
+#include "../Entities/Enemies/Enemy.h"
+#include "../Entities/Obstacles/Obstacle.h"
 
 class Room;
 
@@ -44,6 +45,7 @@ public:
 	static std::vector<Door> createDoors(const std::string&, bool def = false);
 	static std::vector<Key> createKeys(const std::string& roomName, bool def = false);
 	static std::vector<Portal> createPortals(const std::string& roomName, bool def = false);
+	static std::vector<std::unique_ptr<Obstacle>> createObstacles(const std::string& roomName, bool def = false);
 	static std::vector<std::unique_ptr<Enemy>> createEnemies(bool def = false);
 	static std::unordered_map<std::string, Room> createRooms(bool def = false);
 

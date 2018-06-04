@@ -1,5 +1,5 @@
 #include "Door.h"
-#include "../Utilities/Resources.h"
+#include "../../Utilities/Resources.h"
 
 /* Sebastian Pietras */
 void Door::open()

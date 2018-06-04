@@ -137,6 +137,17 @@ void Game::checkEnemyCollision(Player& player, Enemy& enemy, const float deltaTi
 	if(collides(player, enemy)) { enemy.onPlayerCollision(player, checkPush(player, enemy, deltaTime)); }
 }
 
+void Game::checkObstaclesColllision()
+{
+	for(auto& room : loadedRooms_)
+	{
+		for(auto& obstacle : room.second.getObstacles())
+		{
+			if(collides(player_, *obstacle)) { obstacle->onPlayerCollision(player_); }
+		}
+	}
+}
+
 /* Sebastian Pietras */
 void Game::checkBulletCollision()
 {
@@ -242,6 +253,8 @@ void Game::checkCollisions(const float deltaTime)
 
 	checkBulletCollision();
 	checkPlayerBulletCollision();
+
+	checkObstaclesColllision();
 }
 
 /* Bernard Lesiewicz */
@@ -633,6 +646,7 @@ void Game::update(const float deltaTime)
 	for(auto& enemy : enemies_) enemy->update(deltaTime, player_.getCenter(), areInLine(player_, *enemy), bullets_);
 	for(auto& bullet : bullets_) bullet.update(deltaTime);
 	for(auto& bullet : playerBullets_) bullet.update(deltaTime);
+	for(auto& room : loadedRooms_) room.second.update();
 
 	checkCollisions(deltaTime);
 	checkPortals();
@@ -683,6 +697,10 @@ void Game::drawEntities()
 	for(const auto& door : getCurrentRoom().getDoors()) if(isInsideView(viewRect, door)) window_.draw(door.getBody());
 
 	for(const auto& key : getCurrentRoom().getKeys()) if(isInsideView(viewRect, key)) window_.draw(key.getBody());
+
+	for(auto& room : loadedRooms_)
+		for(auto& obstacle : room.second.getObstacles()) if(isInsideView(viewRect, *obstacle)) window_.
+				draw(obstacle->getBody());
 
 	for(const auto& portal : getCurrentRoom().getPortals())
 		if(isInsideView(viewRect, portal))

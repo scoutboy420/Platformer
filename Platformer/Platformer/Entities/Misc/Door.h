@@ -1,5 +1,5 @@
 #pragma once
-#include "Entity.h"
+#include "../Entity.h"
 
 /* Bernard Lesiewicz */
 class Door : public Entity

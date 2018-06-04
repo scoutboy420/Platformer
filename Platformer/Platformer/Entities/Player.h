@@ -7,16 +7,21 @@ class Player : public MobileEntity
 	sf::Clock dashClock_;
 	sf::Clock shootClock_;
 	sf::Clock manaCooldown_;
+	sf::Clock invertClock_;
 	float dashSpeed_;
 	int dashDamage_;
 	bool movingRight_;
 	float mana_;
+	bool startInvertGuard_;
+	bool startDashGuard_;
 public:
 	Player()
 		: dashSpeed_(0)
 		, dashDamage_(0)
 		, movingRight_(true)
-		, mana_(0) {}
+		, mana_(0)
+		, startInvertGuard_(true)
+		, startDashGuard_(true) {}
 
 	Player(sf::Texture& texture,
 	       const sf::Vector2f position,
@@ -32,16 +37,18 @@ public:
 		, dashSpeed_(dashSpeed)
 		, dashDamage_(dashDamage)
 		, movingRight_(true)
-		, mana_(mana) { }
+		, mana_(mana)
+		, startInvertGuard_(true)
+		, startDashGuard_(true) { }
 
 	void dash();
-	bool isDashing() const { return dashClock_.getElapsedTime().asSeconds() <= 0.125f; }
+	bool isDashing() const { return dashClock_.getElapsedTime().asSeconds() <= 0.125f && !startDashGuard_; }
 	int getDashDamage() const { return dashDamage_; }
 
 	void shoot(std::vector<Bullet>& bullets);
 
-	bool hurt(int damage, Player&) override;
 	bool isImmune() const override { return MobileEntity::isImmune() || isDashing(); }
+	bool isInverted() const { return invertClock_.getElapsedTime().asSeconds() <= 3.0f && !startInvertGuard_; }
 
 	void heal(int amount);
 	void addMana(float amount);
@@ -49,6 +56,8 @@ public:
 
 	void run(bool runRight) override;
 	void jump(bool force) override;
+
+	void invert();
 
 	void update(float deltaTime, sf::Vector2f, bool, std::vector<Bullet>&) override;
 	void onRoomChange(const std::string& roomName) override;

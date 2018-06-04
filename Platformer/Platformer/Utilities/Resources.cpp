@@ -1,9 +1,12 @@
 #include "Resources.h"
 #include <fstream>
-#include "../Entities/Walker.h"
+#include "../Entities/Enemies/Walker.h"
 #include "Room.h"
-#include "../Entities/Flier.h"
-#include "../Entities/Shooter.h"
+#include "../Entities/Enemies/Flier.h"
+#include "../Entities/Enemies/Shooter.h"
+#include "../Entities/Obstacles/Spikes.h"
+#include "../Entities/Obstacles/Inverter.h"
+#include "../Entities/Obstacles/Laser.h"
 
 json Resources::rooms;
 json Resources::defaultRooms;
@@ -75,6 +78,15 @@ void Resources::load()
 	if(!textures["bullet"].loadFromFile("Data/Textures/bullet.png"))
 		throw std::
 				runtime_error("Can't load texture from Data/Textures/bullet.png");
+	if(!textures["spikes"].loadFromFile("Data/Textures/spikes.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/spikes.png");
+	if(!textures["laser"].loadFromFile("Data/Textures/laser.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/laser.png");
+	if(!textures["inverter"].loadFromFile("Data/Textures/inverter.png"))
+		throw std::
+				runtime_error("Can't load texture from Data/Textures/inverter.png");
 
 	/*textures: Bernard Lesiewicz*/
 	if(!textures["door_rd"].loadFromFile("Data/Textures/door_rd.png"))
@@ -375,6 +387,27 @@ std::vector<Portal> Resources::createPortals(const std::string& roomName, const 
 		}
 	}
 	return portals;
+}
+
+std::vector<std::unique_ptr<Obstacle>> Resources::createObstacles(const std::string& roomName, const bool def)
+{
+	std::vector<std::unique_ptr<Obstacle>> obstacles;
+	for(auto& obstacle : json(getRoomJson(roomName, def).at("obstacles")))
+	{
+		try
+		{
+			const sf::Vector2f position(obstacle.at("positionX").get<float>(), obstacle.at("positionY").get<float>());
+			const auto type = obstacle.at("type").get<int>();
+			if(type == 1) obstacles.emplace_back(new Spikes(textures["spikes"], position, roomName));
+			else if(type == 2) obstacles.emplace_back(new Laser(textures["laser"], position, roomName));
+			else if(type == 3) obstacles.emplace_back(new Inverter(textures["inverter"], position, roomName));
+		}
+		catch(const std::exception& e)
+		{
+			throw std::runtime_error("Can't create obstacle in " + roomName + ".\n" + std::string(e.what()));
+		}
+	}
+	return obstacles;
 }
 
 /* Sebastian Pietras */

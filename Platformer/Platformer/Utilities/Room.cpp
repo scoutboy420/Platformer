@@ -47,6 +47,7 @@ Room::Room(const std::string& roomName, const bool def)
 	doors_ = Resources::createDoors(roomName, def);
 	keys_ = Resources::createKeys(roomName, def);
 	portals_ = Resources::createPortals(roomName, def);
+	obstacles_ = Resources::createObstacles(roomName, def);
 
 	size_ = sf::Vector2f(Resources::getRoomJson(roomName, def).at("width").get<float>() * 50.0f,
 	                     Resources::getRoomJson(roomName, def).at("height").get<float>() * 50.0f);

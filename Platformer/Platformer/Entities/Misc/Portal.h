@@ -1,5 +1,5 @@
 #pragma once
-#include "Entity.h"
+#include "../Entity.h"
 #include <utility>
 
 /* Bernard Lesiewicz */

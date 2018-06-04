@@ -1,5 +1,5 @@
 #include "Enemy.h"
-#include "Player.h"
+#include "../Player.h"
 
 /* Sebastian Pietras */
 bool Enemy::hurt(const int damage, Player& p)
