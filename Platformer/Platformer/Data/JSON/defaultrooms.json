@@ -1,6 +1,7 @@
 [
   {
     "name" : "room1",
+    "layer": 1,
     "colorB": 255,
     "colorG": 191,
     "colorR": 128,
@@ -29,6 +30,14 @@
         "toId": 1,
         "toRoom": "room1",
         "texture": "portal_rd"
+      },
+      {
+        "positionX": 750,
+        "positionY": 350,
+        "id": 4,
+        "toId": 1,
+        "toRoom": "room14",
+        "texture": "portal_bl"
       }
     ],
     "doors": [
@@ -112,6 +121,7 @@
   },
   {
     "name": "room10",
+    "layer": 1,
     "colorB": 128,
     "colorG": 255,
     "colorR": 191,
@@ -171,6 +181,7 @@
   },
   {
     "name": "room11",
+    "layer": 1,
     "colorB": 255,
     "colorG": 128,
     "colorR": 191,
@@ -209,6 +220,7 @@
   },
   {
     "name": "room2",
+    "layer": 1,
     "colorB": 255,
     "colorG": 128,
     "colorR": 191,
@@ -282,6 +294,7 @@
   },
   {
     "name": "room3",
+    "layer": 1,
     "colorB": 255,
     "colorG": 255,
     "colorR": 128,
@@ -363,6 +376,7 @@
   },
   {
     "name": "room4",
+    "layer": 1,
     "colorB": 128,
     "colorG": 255,
     "colorR": 255,
@@ -444,6 +458,7 @@
   },
   {
     "name": "room12",
+    "layer": 1,
     "colorB": 255,
     "colorG": 128,
     "colorR": 128,
@@ -579,6 +594,7 @@
   },
   {
     "name": "room5",
+    "layer": 1,
     "colorB": 128,
     "colorG": 191,
     "colorR": 255,
@@ -694,6 +710,7 @@
   },
   {
     "name": "room6",
+    "layer": 1,
     "colorB": 128,
     "colorG": 128,
     "colorR": 255,
@@ -782,6 +799,7 @@
   },
   {
     "name": "room7",
+    "layer": 1,
     "colorB": 255,
     "colorG": 191,
     "colorR": 128,
@@ -859,6 +877,7 @@
   },
   {
     "name": "room8",
+    "layer": 1,
     "colorB": 128,
     "colorG": 255,
     "colorR": 255,
@@ -935,6 +954,7 @@
   },
   {
     "name": "room9",
+    "layer": 1,
     "colorB": 128,
     "colorG": 128,
     "colorR": 255,
@@ -1092,6 +1112,7 @@
   },
   {
     "name": "room13",
+    "layer": 1,
     "colorB": 128,
     "colorG": 255,
     "colorR": 128,
@@ -1233,5 +1254,36 @@
     "portals": [],
     "visited": false,
     "width": 19
+  },
+  {
+    "name": "room14",
+    "layer": 2,
+    "colorB": 128,
+    "colorG": 255,
+    "colorR": 255,
+    "doors": [
+    ],
+    "blocks": [
+    ],
+    "entrances": [
+    ],
+    "globalX": 0.0,
+    "globalY": 0.0,
+    "height": 12,
+    "keys": [
+    ],
+    "obstacles": [],
+    "portals": [
+      {
+        "positionX": 50,
+        "positionY": 300,
+        "id": 1,
+        "toId": 4,
+        "toRoom": "room1",
+        "texture": "portal_bl"
+      }
+    ],
+    "visited": false,
+    "width": 12
   }
 ]

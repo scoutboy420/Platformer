@@ -463,7 +463,8 @@ std::unordered_map<std::string, Room> Resources::createRooms(const bool def)
 		try
 		{
 			const auto roomName = room.at("name").get<std::string>();
-			roomMap[roomName] = Room(roomName, def);
+			const auto layerId = room.at("layer").get<int>();
+			roomMap[roomName] = Room(roomName, layerId, def);
 		}
 		catch(const std::exception& e) { throw std::runtime_error("Can't create room.\n" + std::string(e.what())); }
 	}

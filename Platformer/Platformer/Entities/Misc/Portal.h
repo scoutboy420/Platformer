@@ -1,6 +1,7 @@
 #pragma once
 #include "../Entity.h"
 #include <utility>
+#include <iostream>
 
 /* Bernard Lesiewicz */
 class Portal : public Entity
@@ -24,7 +25,9 @@ public:
 		, toRoomName_(std::move(toRoomName))
 		, toPortal_(nullptr) {}
 
-	void setToPortal(Portal* toPortal) { toPortal_ = toPortal; }
+	void setToPortal(Portal* toPortal) { toPortal_ = toPortal;
+	std::cout << "Portal " << id_ << " in " << getCurrentRoomName() << " setToPortal " << toId_ << " in " << toRoomName_
+        << ", Ptr: " << toPortal_->getId() << " in " << toPortal->getCurrentRoomName() << std::endl; /*TEMPORARY*/}
 
 	std::string getToRoomName() const { return toRoomName_; }
 	int getId() const { return id_; }

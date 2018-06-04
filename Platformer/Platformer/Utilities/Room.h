@@ -12,6 +12,7 @@
 class Room
 {
 	std::string roomName_;
+	int layerId_;
 	std::vector<Entity> blocks_;
 	std::vector<Key> keys_;
 	std::vector<Door> doors_;
@@ -26,9 +27,10 @@ class Room
 	void addGradient();
 public:
 	Room() = default;
-	explicit Room(const std::string& roomName, bool def = false);
+	explicit Room(const std::string& roomName, const int layerId, bool def = false);
 
 	std::string getRoomName() const { return roomName_; }
+	int getLayerId() const { return layerId_; }
 	sf::Vector2f getSize() const { return size_; }
 	const std::vector<Entity>& getEntities() const { return blocks_; }
 	std::vector<Key>& getKeys() { return keys_; }

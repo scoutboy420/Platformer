@@ -39,9 +39,10 @@ void Room::addGradient()
 }
 
 /* Sebastian Pietras, Bernard Lesiewicz */
-Room::Room(const std::string& roomName, const bool def)
+Room::Room(const std::string& roomName, int layerId, const bool def)
 {
 	roomName_ = roomName;
+	layerId_ = layerId;
 
 	blocks_ = Resources::createBlocks(roomName, def);
 	doors_ = Resources::createDoors(roomName, def);

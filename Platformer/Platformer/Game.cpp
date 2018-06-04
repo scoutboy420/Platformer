@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <iostream>
 
 /* Sebastian Pietras */
 bool Game::isRectangleInWay(const sf::FloatRect& rect, const sf::Vector2f& p1, const sf::Vector2f& p2) const
@@ -600,6 +601,9 @@ void Game::save()
 /* Sebastian Pietras */
 void Game::restart()
 {
+    Resources::rooms = Resources::defaultRooms;
+	Resources::playerData = Resources::defaultPlayerData;
+	Resources::enemiesData = Resources::defaultEnemiesData;
 	loadedRooms_ = Resources::createRooms(true);
 	setKeys();
 	setPortals();
@@ -830,7 +834,8 @@ void Game::showMiniMap()
 	const auto scale = std::min(float(window_.getSize().x), float(window_.getSize().y)) / 50.0f;
 
 	for(auto room : Resources::rooms)
-	{
+	{   std::cout << "Showing map for layer " << getCurrentRoom().getLayerId() << std::endl;
+	    if(room.at("layer").get<int>() != getCurrentRoom().getLayerId()) continue;
 		if(!room.at("visited").get<bool>()) continue;
 
 		//Shape of room

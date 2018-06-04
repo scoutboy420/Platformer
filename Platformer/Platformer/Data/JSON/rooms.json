@@ -1,1237 +1,1280 @@
 [
-  {
-    "name": "room1",
-    "colorB": 255,
-    "colorG": 191,
-    "colorR": 128,
-    "obstacles": [],
-    "portals": [
-      {
-        "positionX": 100,
-        "positionY": 200,
-        "id": 1,
-        "toId": 2,
-        "toRoom": "room1",
-        "texture": "portal_rd"
-      },
-      {
-        "positionX": 100,
-        "positionY": 350,
-        "id": 3,
-        "toId": 1,
-        "toRoom": "room9",
-        "texture": "portal_bl"
-      },
-      {
-        "positionX": 650,
-        "positionY": 200,
-        "id": 2,
-        "toId": 1,
-        "toRoom": "room1",
-        "texture": "portal_rd"
-      }
-    ],
-    "doors": [
-      {
-        "positionX": 850,
-        "positionY": 350,
-        "id": 1,
-        "texture": "door_mg",
-        "opened": false
-      }
-    ],
-    "blocks": [
-      {
-        "height": 3,
-        "positionX": 700.0,
-        "positionY": 300.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 650.0,
-        "positionY": 300.0,
-        "width": 1
-      },
-      {
-        "height": 4,
-        "positionX": 600.0,
-        "positionY": 150.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 400.0,
-        "positionY": 300.0,
-        "width": 2
-      },
-      {
-        "height": 1,
-        "positionX": 250.0,
-        "positionY": 150.0,
-        "width": 2
-      },
-      {
-        "height": 1,
-        "positionX": 50.0,
-        "positionY": 300.0,
-        "width": 3
-      }
-    ],
-    "entrances": [
-      {
-        "height": 2,
-        "id": 1,
-        "to": {
-          "entranceID": 1,
-          "roomName": "room2"
-        },
-        "width": 1,
-        "x": 850.0,
-        "y": 350.0
-      },
-      {
-        "height": 2,
-        "id": 2,
-        "to": {
-          "entranceID": 2,
-          "roomName": "room9"
-        },
-        "width": 1,
-        "x": 0.0,
-        "y": 150.0
-      }
-    ],
-    "globalX": 0.0,
-    "globalY": 0.0,
-    "height": 10,
-    "keys": [
-    ],
-    "visited": false,
-    "width": 18
-  },
-  {
-    "name": "room10",
-    "colorB": 128,
-    "colorG": 255,
-    "colorR": 191,
-    "doors": [],
-    "blocks": [
-      {
-        "height": 1,
-        "positionX": 50.0,
-        "positionY": 300.0,
-        "width": 11
-      },
-      {
-        "height": 1,
-        "positionX": 100.0,
-        "positionY": 200.0,
-        "width": 11
-      },
-      {
-        "height": 1,
-        "positionX": 50.0,
-        "positionY": 100.0,
-        "width": 11
-      }
-    ],
-    "entrances": [
-      {
-        "height": 2,
-        "id": 1,
-        "to": {
-          "entranceID": 3,
-          "roomName": "room9"
-        },
-        "width": 1,
-        "x": 0.0,
-        "y": 350.0
-      },
-      {
-        "height": 1,
-        "id": 2,
-        "to": {
-          "entranceID": 1,
-          "roomName": "room11"
-        },
-        "width": 1,
-        "x": 50.0,
-        "y": 0.0
-      }
-    ],
-    "globalX": 0.0,
-    "globalY": -600.0,
-    "height": 10,
-    "keys": [],
-    "obstacles": [],
-    "portals": [],
-    "visited": false,
-    "width": 14
-  },
-  {
-    "name": "room11",
-    "colorB": 255,
-    "colorG": 128,
-    "colorR": 191,
-    "doors": [],
-    "blocks": [],
-    "entrances": [
-      {
-        "height": 1,
-        "id": 1,
-        "to": {
-          "entranceID": 2,
-          "roomName": "room10"
-        },
-        "width": 1,
-        "x": 50.0,
-        "y": 300.0
-      }
-    ],
-    "globalX": 0.0,
-    "globalY": -950.0,
-    "height": 7,
-    "keys": [
-      {
-        "positionX": 150,
-        "positionY": 150,
-        "doorRoomName": "room1",
-        "doorId": 1,
-        "texture": "key_mg",
-        "pickedUp": false
-      }
-    ],
-    "obstacles": [],
-    "portals": [],
-    "visited": false,
-    "width": 7
-  },
-  {
-    "name": "room2",
-    "colorB": 255,
-    "colorG": 128,
-    "colorR": 191,
-    "doors": [
-    ],
-    "blocks": [
-      {
-        "height": 1,
-        "positionX": 300.0,
-        "positionY": 800.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 150.0,
-        "positionY": 550.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 300.0,
-        "positionY": 650.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 50.0,
-        "positionY": 400.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 300.0,
-        "positionY": 250.0,
-        "width": 1
-      }
-    ],
-    "entrances": [
-      {
-        "height": 2,
-        "id": 1,
-        "to": {
-          "entranceID": 1,
-          "roomName": "room1"
-        },
-        "width": 1,
-        "x": 0.0,
-        "y": 850.0
-      },
-      {
-        "height": 2,
-        "id": 2,
-        "to": {
-          "entranceID": 1,
-          "roomName": "room3"
-        },
-        "width": 1,
-        "x": 350.0,
-        "y": 50.0
-      }
-    ],
-    "globalX": 900.0,
-    "globalY": -500.0,
-    "height": 20,
-    "keys": [
-    ],
-    "obstacles": [],
-    "portals": [],
-    "visited": false,
-    "width": 8
-  },
-  {
-    "name": "room3",
-    "colorB": 255,
-    "colorG": 255,
-    "colorR": 128,
-    "doors": [
-      {
-        "positionX": 250,
-        "positionY": 100,
-        "id": 1,
-        "texture": "door_bl",
-        "opened": false
-      }
-    ],
-    "blocks": [
-      {
-        "height": 1,
-        "positionX": 250.0,
-        "positionY": 200.0,
-        "width": 6
-      },
-      {
-        "height": 1,
-        "positionX": 250.0,
-        "positionY": 50.0,
-        "width": 6
-      }
-    ],
-    "entrances": [
-      {
-        "height": 2,
-        "id": 1,
-        "to": {
-          "entranceID": 2,
-          "roomName": "room2"
-        },
-        "width": 1,
-        "x": 0.0,
-        "y": 100.0
-      },
-      {
-        "height": 1,
-        "id": 2,
-        "to": {
-          "entranceID": 1,
-          "roomName": "room4"
-        },
-        "width": 2,
-        "x": 100.0,
-        "y": 250.0
-      },
-      {
-        "height": 2,
-        "id": 3,
-        "to": {
-          "entranceID": 2,
-          "roomName": "room12"
-        },
-        "width": 1,
-        "x": 550.0,
-        "y": 100.0
-      }
-    ],
-    "globalX": 1300.0,
-    "globalY": -550.0,
-    "height": 6,
-    "keys": [
-      {
-        "positionX": 350,
-        "positionY": 150,
-        "doorRoomName": "room9",
-        "doorId": 2,
-        "texture": "key_yl",
-        "pickedUp": false
-      }
-    ],
-    "obstacles": [],
-    "portals": [],
-    "visited": false,
-    "width": 12
-  },
-  {
-    "name": "room4",
-    "colorB": 128,
-    "colorG": 255,
-    "colorR": 255,
-    "doors": [
-      {
-        "positionX": 200,
-        "positionY": 300,
-        "id": 1,
-        "texture": "door_or",
-        "opened": false
-      }
-    ],
-    "blocks": [
-      {
-        "height": 2,
-        "positionX": 200.0,
-        "positionY": 50.0,
+    {
+        "blocks": [
+            {
+                "height": 3,
+                "positionX": 700.0,
+                "positionY": 300.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 650.0,
+                "positionY": 300.0,
+                "width": 1
+            },
+            {
+                "height": 4,
+                "positionX": 600.0,
+                "positionY": 150.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 400.0,
+                "positionY": 300.0,
+                "width": 2
+            },
+            {
+                "height": 1,
+                "positionX": 250.0,
+                "positionY": 150.0,
+                "width": 2
+            },
+            {
+                "height": 1,
+                "positionX": 50.0,
+                "positionY": 300.0,
+                "width": 3
+            }
+        ],
+        "colorB": 255,
+        "colorG": 191,
+        "colorR": 128,
+        "doors": [
+            {
+                "id": 1,
+                "opened": true,
+                "positionX": 850,
+                "positionY": 350,
+                "texture": "door_mg"
+            }
+        ],
+        "entrances": [
+            {
+                "height": 2,
+                "id": 1,
+                "to": {
+                    "entranceID": 1,
+                    "roomName": "room2"
+                },
+                "width": 1,
+                "x": 850.0,
+                "y": 350.0
+            },
+            {
+                "height": 2,
+                "id": 2,
+                "to": {
+                    "entranceID": 2,
+                    "roomName": "room9"
+                },
+                "width": 1,
+                "x": 0.0,
+                "y": 150.0
+            }
+        ],
+        "globalX": 0.0,
+        "globalY": 0.0,
+        "height": 10,
+        "keys": [],
+        "layer": 1,
+        "name": "room1",
+        "obstacles": [],
+        "portals": [
+            {
+                "id": 1,
+                "positionX": 100,
+                "positionY": 200,
+                "texture": "portal_rd",
+                "toId": 2,
+                "toRoom": "room1"
+            },
+            {
+                "id": 3,
+                "positionX": 100,
+                "positionY": 350,
+                "texture": "portal_bl",
+                "toId": 1,
+                "toRoom": "room9"
+            },
+            {
+                "id": 2,
+                "positionX": 650,
+                "positionY": 200,
+                "texture": "portal_rd",
+                "toId": 1,
+                "toRoom": "room1"
+            },
+            {
+                "id": 4,
+                "positionX": 750,
+                "positionY": 350,
+                "texture": "portal_bl",
+                "toId": 1,
+                "toRoom": "room14"
+            }
+        ],
+        "visited": true,
+        "width": 18
+    },
+    {
+        "blocks": [
+            {
+                "height": 1,
+                "positionX": 50.0,
+                "positionY": 300.0,
+                "width": 11
+            },
+            {
+                "height": 1,
+                "positionX": 100.0,
+                "positionY": 200.0,
+                "width": 11
+            },
+            {
+                "height": 1,
+                "positionX": 50.0,
+                "positionY": 100.0,
+                "width": 11
+            }
+        ],
+        "colorB": 128,
+        "colorG": 255,
+        "colorR": 191,
+        "doors": [],
+        "entrances": [
+            {
+                "height": 2,
+                "id": 1,
+                "to": {
+                    "entranceID": 3,
+                    "roomName": "room9"
+                },
+                "width": 1,
+                "x": 0.0,
+                "y": 350.0
+            },
+            {
+                "height": 1,
+                "id": 2,
+                "to": {
+                    "entranceID": 1,
+                    "roomName": "room11"
+                },
+                "width": 1,
+                "x": 50.0,
+                "y": 0.0
+            }
+        ],
+        "globalX": 0.0,
+        "globalY": -600.0,
+        "height": 10,
+        "keys": [],
+        "layer": 1,
+        "name": "room10",
+        "obstacles": [],
+        "portals": [],
+        "visited": true,
+        "width": 14
+    },
+    {
+        "blocks": [],
+        "colorB": 255,
+        "colorG": 128,
+        "colorR": 191,
+        "doors": [],
+        "entrances": [
+            {
+                "height": 1,
+                "id": 1,
+                "to": {
+                    "entranceID": 2,
+                    "roomName": "room10"
+                },
+                "width": 1,
+                "x": 50.0,
+                "y": 300.0
+            }
+        ],
+        "globalX": 0.0,
+        "globalY": -950.0,
+        "height": 7,
+        "keys": [
+            {
+                "doorId": 1,
+                "doorRoomName": "room1",
+                "pickedUp": true,
+                "positionX": 150,
+                "positionY": 150,
+                "texture": "key_mg"
+            }
+        ],
+        "layer": 1,
+        "name": "room11",
+        "obstacles": [],
+        "portals": [],
+        "visited": true,
         "width": 7
-      },
-      {
-        "height": 1,
-        "positionX": 200.0,
-        "positionY": 250.0,
-        "width": 7
-      }
-    ],
-    "entrances": [
-      {
-        "height": 1,
-        "id": 1,
-        "to": {
-          "entranceID": 2,
-          "roomName": "room3"
-        },
-        "width": 2,
-        "x": 100.0,
-        "y": 0.0
-      },
-      {
-        "height": 1,
-        "id": 2,
-        "to": {
-          "entranceID": 1,
-          "roomName": "room5"
-        },
-        "width": 2,
-        "x": 450.0,
-        "y": 400.0
-      },
-      {
-        "height": 2,
-        "id": 3,
-        "to": {
-          "entranceID": 1,
-          "roomName": "room12"
-        },
-        "width": 1,
-        "x": 550.0,
-        "y": 150.0
-      }
-    ],
-    "globalX": 1300.0,
-    "globalY": -250.0,
-    "height": 9,
-    "keys": [
-      {
-        "positionX": 400,
-        "positionY": 350,
-        "doorRoomName": "room5",
-        "doorId": 1,
-        "texture": "key_gr",
-        "pickedUp": false
-      }
-    ],
-    "obstacles": [],
-    "portals": [],
-    "visited": false,
-    "width": 12
-  },
-  {
-    "name": "room12",
-    "colorB": 255,
-    "colorG": 128,
-    "colorR": 128,
-    "doors": [
-    ],
-    "blocks": [
-      {
-        "height": 1,
-        "positionX": 150.0,
-        "positionY": 150.0,
-        "width": 12
-      },
-      {
-        "height": 1,
-        "positionX": 50.0,
-        "positionY": 600.0,
-        "width": 5
-      },
-      {
-        "height": 8,
-        "positionX": 150.0,
-        "positionY": 200.0,
-        "width": 1
-      },
-      {
-        "height": 6,
-        "positionX": 700.0,
-        "positionY": 200.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 750.0,
-        "positionY": 450.0,
-        "width": 2
-      },
-      {
-        "height": 1,
-        "positionX": 850.0,
-        "positionY": 300.0,
-        "width": 2
-      },
-      {
-        "height": 1,
-        "positionX": 900.0,
-        "positionY": 550.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 850.0,
-        "positionY": 800.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 750.0,
-        "positionY": 700.0,
-        "width": 1
-      },
-      {
-        "height": 13,
-        "positionX": 600.0,
-        "positionY": 300.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 550.0,
-        "positionY": 300.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 400.0,
-        "positionY": 450.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 400.0,
-        "positionY": 700.0,
-        "width": 2
-      },
-      {
-        "height": 1,
-        "positionX": 150.0,
-        "positionY": 800.0,
-        "width": 3
-      }
-    ],
-    "entrances": [
-      {
-        "height": 2,
-        "id": 1,
-        "to": {
-          "entranceID": 3,
-          "roomName": "room4"
-        },
-        "width": 1,
-        "x": 0.0,
-        "y": 850.0
-      },
-      {
-        "height": 2,
-        "id": 2,
-        "to": {
-          "entranceID": 3,
-          "roomName": "room3"
-        },
-        "width": 1,
-        "x": 0.0,
-        "y": 500.0
-      }
-    ],
-    "globalX": 1900.0,
-    "globalY": -1000.0,
-    "height": 20,
-    "keys": [
-      {
-        "positionX": 150,
-        "positionY": 100,
-        "doorRoomName": "room3",
-        "doorId": 1,
-        "texture": "key_bl",
-        "pickedUp": false
-      }
-    ],
-    "obstacles": [],
-    "portals": [],
-    "visited": false,
-    "width": 20
-  },
-  {
-    "name": "room5",
-    "colorB": 128,
-    "colorG": 191,
-    "colorR": 255,
-    "doors": [
-      {
-        "positionX": 350,
-        "positionY": 200,
-        "id": 1,
-        "texture": "door_gr",
-        "opened": false
-      },
-      {
-        "positionX": 400,
-        "positionY": 200,
-        "id": 2,
-        "texture": "door_wh",
-        "opened": false
-      }
-    ],
-    "blocks": [
-      {
-        "height": 1,
-        "positionX": 150.0,
-        "positionY": 150.0,
+    },
+    {
+        "blocks": [
+            {
+                "height": 1,
+                "positionX": 300.0,
+                "positionY": 800.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 150.0,
+                "positionY": 550.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 300.0,
+                "positionY": 650.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 50.0,
+                "positionY": 400.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 300.0,
+                "positionY": 250.0,
+                "width": 1
+            }
+        ],
+        "colorB": 255,
+        "colorG": 128,
+        "colorR": 191,
+        "doors": [],
+        "entrances": [
+            {
+                "height": 2,
+                "id": 1,
+                "to": {
+                    "entranceID": 1,
+                    "roomName": "room1"
+                },
+                "width": 1,
+                "x": 0.0,
+                "y": 850.0
+            },
+            {
+                "height": 2,
+                "id": 2,
+                "to": {
+                    "entranceID": 1,
+                    "roomName": "room3"
+                },
+                "width": 1,
+                "x": 350.0,
+                "y": 50.0
+            }
+        ],
+        "globalX": 900.0,
+        "globalY": -500.0,
+        "height": 20,
+        "keys": [],
+        "layer": 1,
+        "name": "room2",
+        "obstacles": [],
+        "portals": [],
+        "visited": false,
         "width": 8
-      },
-      {
-        "height": 1,
-        "positionX": 300.0,
-        "positionY": 300.0,
-        "width": 2
-      },
-      {
-        "height": 8,
-        "positionX": 400.0,
-        "positionY": 300.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 50.0,
-        "positionY": 450.0,
-        "width": 2
-      },
-      {
-        "height": 1,
-        "positionX": 250.0,
-        "positionY": 550.0,
-        "width": 1
-      }
-
-    ],
-    "entrances": [
-      {
-        "height": 1,
-        "id": 1,
-        "to": {
-          "entranceID": 2,
-          "roomName": "room4"
-        },
-        "width": 2,
-        "x": 450.0,
-        "y": 0.0
-      },
-      {
-        "height": 2,
-        "id": 2,
-        "to": {
-          "entranceID": 1,
-          "roomName": "room6"
-        },
-        "width": 1,
-        "x": 0.0,
-        "y": 350.0
-      },
-      {
-        "height": 1,
-        "id": 3,
-        "to": {
-          "entranceID": 1,
-          "roomName": "room13"
-        },
-        "width": 2,
-        "x": 450.0,
-        "y": 700.0
-      }
-    ],
-    "globalX": 1300.0,
-    "globalY": 200.0,
-    "height": 15,
-    "keys": [
-      {
-        "positionX": 50,
-        "positionY": 650,
-        "doorRoomName": "room6",
-        "doorId": 1,
-        "texture": "key_gy",
-        "pickedUp": false
-      },
-      {
-        "positionX": 300,
-        "positionY": 250,
-        "doorRoomName": "room8",
-        "doorId": 1,
-        "texture": "key_bk",
-        "pickedUp": false
-      }
-    ],
-    "obstacles": [],
-    "portals": [],
-    "visited": false,
-    "width": 12
-  },
-  {
-    "name": "room6",
-    "colorB": 128,
-    "colorG": 128,
-    "colorR": 255,
-    "doors": [
-      {
-        "positionX": 150,
-        "positionY": 50,
-        "id": 1,
-        "texture": "door_gy",
-        "opened": false
-      }
-    ],
-    "blocks": [
-      {
-        "height": 1,
-        "positionX": 50.0,
-        "positionY": 400.0,
-        "width": 2
-      },
-      {
-        "height": 1,
-        "positionX": 200.0,
-        "positionY": 300.0,
-        "width": 2
-      },
-      {
-        "height": 1,
-        "positionX": 550.0,
-        "positionY": 350.0,
-        "width": 2
-      },
-      {
-        "height": 1,
-        "positionX": 750.0,
-        "positionY": 300.0,
-        "width": 2
-      },
-      {
-        "height": 1,
-        "positionX": 50.0,
-        "positionY": 150.0,
-        "width": 3
-      }
-    ],
-    "entrances": [
-      {
-        "height": 2,
-        "id": 1,
-        "to": {
-          "entranceID": 2,
-          "roomName": "room5"
-        },
-        "width": 1,
-        "x": 950.0,
-        "y": 50.0
-      },
-      {
-        "height": 2,
-        "id": 2,
-        "to": {
-          "entranceID": 1,
-          "roomName": "room7"
-        },
-        "width": 1,
-        "x": 0.0,
-        "y": 200.0
-      }
-    ],
-    "globalX": 300.0,
-    "globalY": 500.0,
-    "height": 12,
-    "keys": [
-      {
-        "positionX": 50,
-        "positionY": 100,
-        "doorRoomName": "room5",
-        "doorId": 2,
-        "texture": "key_wh",
-        "pickedUp": false
-      }
-    ],
-    "obstacles": [],
-    "portals": [],
-    "visited": false,
-    "width": 20
-  },
-  {
-    "name": "room7",
-    "colorB": 255,
-    "colorG": 191,
-    "colorR": 128,
-    "doors": [],
-    "blocks": [
-      {
-        "height": 3,
-        "positionX": 150.0,
-        "positionY": 50.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 300.0,
-        "positionY": 50.0,
-        "width": 1
-      },
-      {
-        "height": 2,
-        "positionX": 300.0,
-        "positionY": 150.0,
-        "width": 1
-      },
-      {
-        "height": 3,
-        "positionX": 450.0,
-        "positionY": 100.0,
-        "width": 1
-      },
-      {
-        "height": 2,
-        "positionX": 600.0,
-        "positionY": 50.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 600.0,
-        "positionY": 200.0,
-        "width": 1
-      }
-    ],
-    "entrances": [
-      {
-        "height": 2,
-        "id": 1,
-        "to": {
-          "entranceID": 2,
-          "roomName": "room6"
-        },
-        "width": 1,
-        "x": 750.0,
-        "y": 150.0
-      },
-      {
-        "height": 2,
-        "id": 2,
-        "to": {
-          "entranceID": 1,
-          "roomName": "room8"
-        },
-        "width": 1,
-        "x": 0.0,
-        "y": 50.0
-      }
-    ],
-    "globalX": -500.0,
-    "globalY": 550.0,
-    "height": 6,
-    "keys": [],
-    "obstacles": [],
-    "portals": [],
-    "visited": false,
-    "width": 16
-  },
-  {
-    "name": "room8",
-    "colorB": 128,
-    "colorG": 255,
-    "colorR": 255,
-    "doors": [
-      {
-        "positionX": 100,
-        "positionY": 450,
-        "id": 1,
-        "texture": "door_bk",
-        "opened": false
-      }
-    ],
-    "blocks": [
-      {
-        "height": 1,
-        "positionX": 50.0,
-        "positionY": 100.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 150.0,
-        "positionY": 250.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 100.0,
-        "positionY": 400.0,
-        "width": 3
-      }
-    ],
-    "entrances": [
-      {
-        "height": 2,
-        "id": 1,
-        "to": {
-          "entranceID": 2,
-          "roomName": "room7"
-        },
-        "width": 1,
-        "x": 250.0,
-        "y": 300.0
-      },
-      {
-        "height": 1,
-        "id": 2,
-        "to": {
-          "entranceID": 1,
-          "roomName": "room9"
-        },
-        "width": 4,
-        "x": 50.0,
-        "y": 0.0
-      }
-    ],
-    "globalX": -800.0,
-    "globalY": 300.0,
-    "height": 12,
-    "keys": [
-      {
-        "positionX": 200,
-        "positionY": 500,
-        "doorRoomName": "room4",
-        "doorId": 1,
-        "texture": "key_or",
-        "pickedUp": false
-      }
-    ],
-    "obstacles": [],
-    "portals": [],
-    "visited": false,
-    "width": 6
-  },
-  {
-    "name": "room9",
-    "colorB": 128,
-    "colorG": 128,
-    "colorR": 255,
-    "doors": [
-      {
-        "positionX": 750,
-        "positionY": 150,
-        "id": 1,
-        "texture": "door_rd",
-        "opened": false
-      },
-      {
-        "positionX": 450,
-        "positionY": 550,
-        "id": 2,
-        "texture": "door_yl",
-        "opened": false
-      }
-    ],
-    "blocks": [
-      {
-        "height": 1,
-        "positionX": 50.0,
-        "positionY": 250.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 150.0,
-        "positionY": 150.0,
-        "width": 1
-      },
-      {
-        "height": 4,
-        "positionX": 200.0,
-        "positionY": 150.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 150.0,
-        "positionY": 350.0,
-        "width": 5
-      },
-      {
-        "height": 2,
-        "positionX": 350.0,
-        "positionY": 250.0,
-        "width": 1
-      },
-      {
-        "height": 2,
-        "positionX": 350.0,
-        "positionY": 50.0,
-        "width": 1
-      },
-      {
-        "height": 2,
-        "positionX": 600.0,
-        "positionY": 150.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 600.0,
-        "positionY": 250.0,
-        "width": 3
-      },
-      {
-        "height": 1,
-        "positionX": 450.0,
-        "positionY": 450.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 50.0,
-        "positionY": 500.0,
-        "width": 9
-      },
-      {
-        "height": 1,
-        "positionX": 700.0,
-        "positionY": 500.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 400.0,
-        "positionY": 250.0,
-        "width": 1
-      }
-    ],
-    "entrances": [
-      {
-        "height": 1,
-        "id": 1,
-        "to": {
-          "entranceID": 2,
-          "roomName": "room8"
-        },
-        "width": 4,
-        "x": 50.0,
-        "y": 650.0
-      },
-      {
-        "height": 2,
-        "id": 2,
-        "to": {
-          "entranceID": 2,
-          "roomName": "room1"
-        },
-        "width": 1,
-        "x": 750.0,
-        "y": 550.0
-      },
-      {
-        "height": 2,
-        "id": 3,
-        "to": {
-          "entranceID": 1,
-          "roomName": "room10"
-        },
-        "width": 1,
-        "x": 750.0,
-        "y": 150.0
-      }
-    ],
-    "globalX": -800.0,
-    "globalY": -400.0,
-    "height": 14,
-    "keys": [
-      {
-        "positionX": 250,
-        "positionY": 300,
-        "doorRoomName": "room9",
-        "doorId": 1,
-        "texture": "key_rd",
-        "pickedUp": false
-      }
-    ],
-    "obstacles": [],
-    "portals": [
-      {
-        "positionX": 550,
-        "positionY": 550,
-        "id": 1,
-        "toId": 3,
-        "toRoom": "room1",
-        "texture": "portal_bl"
-      }
-    ],
-    "visited": false,
-    "width": 16
-  },
-  {
-    "name": "room13",
-    "colorB": 128,
-    "colorG": 255,
-    "colorR": 128,
-    "doors": [],
-    "blocks": [
-      {
-        "height": 2,
-        "positionX": 200.0,
-        "positionY": 100.0,
-        "width": 1
-      },
-      {
-        "height": 2,
-        "positionX": 250.0,
-        "positionY": 150.0,
-        "width": 1
-      },
-      {
-        "height": 2,
-        "positionX": 300.0,
-        "positionY": 100.0,
-        "width": 1
-      },
-      {
-        "height": 3,
-        "positionX": 400.0,
-        "positionY": 100.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 450.0,
-        "positionY": 100.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 450.0,
-        "positionY": 200.0,
-        "width": 1
-      },
-      {
-        "height": 3,
-        "positionX": 500.0,
-        "positionY": 100.0,
-        "width": 1
-      },
-      {
-        "height": 3,
-        "positionX": 600.0,
-        "positionY": 100.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 650.0,
-        "positionY": 200.0,
-        "width": 1
-      },
-      {
-        "height": 3,
-        "positionX": 700.0,
-        "positionY": 100.0,
-        "width": 1
-      },
-      {
-        "height": 3,
-        "positionX": 200.0,
-        "positionY": 300.0,
-        "width": 1
-      },
-      {
-        "height": 2,
-        "positionX": 250.0,
-        "positionY": 350.0,
-        "width": 1
-      },
-      {
-        "height": 3,
-        "positionX": 300.0,
-        "positionY": 300.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 400.0,
-        "positionY": 300.0,
-        "width": 3
-      },
-      {
-        "height": 1,
-        "positionX": 450.0,
-        "positionY": 350.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 400.0,
-        "positionY": 400.0,
-        "width": 3
-      },
-      {
-        "height": 3,
-        "positionX": 600.0,
-        "positionY": 300.0,
-        "width": 1
-      },
-      {
-        "height": 1,
-        "positionX": 650.0,
-        "positionY": 300.0,
-        "width": 1
-      },
-      {
-        "height": 3,
-        "positionX": 700.0,
-        "positionY": 300.0,
-        "width": 1
-      }
-    ],
-    "entrances": [
-      {
-        "height": 1,
-        "id": 1,
-        "to": {
-          "entranceID": 3,
-          "roomName": "room5"
-        },
-        "width": 2,
-        "x": 50.0,
-        "y": 0.0
-      }
-    ],
-    "globalX": 1700.0,
-    "globalY": 950.0,
-    "height": 11,
-    "keys": [],
-    "obstacles": [],
-    "portals": [],
-    "visited": false,
-    "width": 19
-  }
+    },
+    {
+        "blocks": [
+            {
+                "height": 1,
+                "positionX": 250.0,
+                "positionY": 200.0,
+                "width": 6
+            },
+            {
+                "height": 1,
+                "positionX": 250.0,
+                "positionY": 50.0,
+                "width": 6
+            }
+        ],
+        "colorB": 255,
+        "colorG": 255,
+        "colorR": 128,
+        "doors": [
+            {
+                "id": 1,
+                "opened": false,
+                "positionX": 250,
+                "positionY": 100,
+                "texture": "door_bl"
+            }
+        ],
+        "entrances": [
+            {
+                "height": 2,
+                "id": 1,
+                "to": {
+                    "entranceID": 2,
+                    "roomName": "room2"
+                },
+                "width": 1,
+                "x": 0.0,
+                "y": 100.0
+            },
+            {
+                "height": 1,
+                "id": 2,
+                "to": {
+                    "entranceID": 1,
+                    "roomName": "room4"
+                },
+                "width": 2,
+                "x": 100.0,
+                "y": 250.0
+            },
+            {
+                "height": 2,
+                "id": 3,
+                "to": {
+                    "entranceID": 2,
+                    "roomName": "room12"
+                },
+                "width": 1,
+                "x": 550.0,
+                "y": 100.0
+            }
+        ],
+        "globalX": 1300.0,
+        "globalY": -550.0,
+        "height": 6,
+        "keys": [
+            {
+                "doorId": 2,
+                "doorRoomName": "room9",
+                "pickedUp": false,
+                "positionX": 350,
+                "positionY": 150,
+                "texture": "key_yl"
+            }
+        ],
+        "layer": 1,
+        "name": "room3",
+        "obstacles": [],
+        "portals": [],
+        "visited": false,
+        "width": 12
+    },
+    {
+        "blocks": [
+            {
+                "height": 2,
+                "positionX": 200.0,
+                "positionY": 50.0,
+                "width": 7
+            },
+            {
+                "height": 1,
+                "positionX": 200.0,
+                "positionY": 250.0,
+                "width": 7
+            }
+        ],
+        "colorB": 128,
+        "colorG": 255,
+        "colorR": 255,
+        "doors": [
+            {
+                "id": 1,
+                "opened": false,
+                "positionX": 200,
+                "positionY": 300,
+                "texture": "door_or"
+            }
+        ],
+        "entrances": [
+            {
+                "height": 1,
+                "id": 1,
+                "to": {
+                    "entranceID": 2,
+                    "roomName": "room3"
+                },
+                "width": 2,
+                "x": 100.0,
+                "y": 0.0
+            },
+            {
+                "height": 1,
+                "id": 2,
+                "to": {
+                    "entranceID": 1,
+                    "roomName": "room5"
+                },
+                "width": 2,
+                "x": 450.0,
+                "y": 400.0
+            },
+            {
+                "height": 2,
+                "id": 3,
+                "to": {
+                    "entranceID": 1,
+                    "roomName": "room12"
+                },
+                "width": 1,
+                "x": 550.0,
+                "y": 150.0
+            }
+        ],
+        "globalX": 1300.0,
+        "globalY": -250.0,
+        "height": 9,
+        "keys": [
+            {
+                "doorId": 1,
+                "doorRoomName": "room5",
+                "pickedUp": false,
+                "positionX": 400,
+                "positionY": 350,
+                "texture": "key_gr"
+            }
+        ],
+        "layer": 1,
+        "name": "room4",
+        "obstacles": [],
+        "portals": [],
+        "visited": false,
+        "width": 12
+    },
+    {
+        "blocks": [
+            {
+                "height": 1,
+                "positionX": 150.0,
+                "positionY": 150.0,
+                "width": 12
+            },
+            {
+                "height": 1,
+                "positionX": 50.0,
+                "positionY": 600.0,
+                "width": 5
+            },
+            {
+                "height": 8,
+                "positionX": 150.0,
+                "positionY": 200.0,
+                "width": 1
+            },
+            {
+                "height": 6,
+                "positionX": 700.0,
+                "positionY": 200.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 750.0,
+                "positionY": 450.0,
+                "width": 2
+            },
+            {
+                "height": 1,
+                "positionX": 850.0,
+                "positionY": 300.0,
+                "width": 2
+            },
+            {
+                "height": 1,
+                "positionX": 900.0,
+                "positionY": 550.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 850.0,
+                "positionY": 800.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 750.0,
+                "positionY": 700.0,
+                "width": 1
+            },
+            {
+                "height": 13,
+                "positionX": 600.0,
+                "positionY": 300.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 550.0,
+                "positionY": 300.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 400.0,
+                "positionY": 450.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 400.0,
+                "positionY": 700.0,
+                "width": 2
+            },
+            {
+                "height": 1,
+                "positionX": 150.0,
+                "positionY": 800.0,
+                "width": 3
+            }
+        ],
+        "colorB": 255,
+        "colorG": 128,
+        "colorR": 128,
+        "doors": [],
+        "entrances": [
+            {
+                "height": 2,
+                "id": 1,
+                "to": {
+                    "entranceID": 3,
+                    "roomName": "room4"
+                },
+                "width": 1,
+                "x": 0.0,
+                "y": 850.0
+            },
+            {
+                "height": 2,
+                "id": 2,
+                "to": {
+                    "entranceID": 3,
+                    "roomName": "room3"
+                },
+                "width": 1,
+                "x": 0.0,
+                "y": 500.0
+            }
+        ],
+        "globalX": 1900.0,
+        "globalY": -1000.0,
+        "height": 20,
+        "keys": [
+            {
+                "doorId": 1,
+                "doorRoomName": "room3",
+                "pickedUp": false,
+                "positionX": 150,
+                "positionY": 100,
+                "texture": "key_bl"
+            }
+        ],
+        "layer": 1,
+        "name": "room12",
+        "obstacles": [],
+        "portals": [],
+        "visited": false,
+        "width": 20
+    },
+    {
+        "blocks": [
+            {
+                "height": 1,
+                "positionX": 150.0,
+                "positionY": 150.0,
+                "width": 8
+            },
+            {
+                "height": 1,
+                "positionX": 300.0,
+                "positionY": 300.0,
+                "width": 2
+            },
+            {
+                "height": 8,
+                "positionX": 400.0,
+                "positionY": 300.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 50.0,
+                "positionY": 450.0,
+                "width": 2
+            },
+            {
+                "height": 1,
+                "positionX": 250.0,
+                "positionY": 550.0,
+                "width": 1
+            }
+        ],
+        "colorB": 128,
+        "colorG": 191,
+        "colorR": 255,
+        "doors": [
+            {
+                "id": 1,
+                "opened": false,
+                "positionX": 350,
+                "positionY": 200,
+                "texture": "door_gr"
+            },
+            {
+                "id": 2,
+                "opened": false,
+                "positionX": 400,
+                "positionY": 200,
+                "texture": "door_wh"
+            }
+        ],
+        "entrances": [
+            {
+                "height": 1,
+                "id": 1,
+                "to": {
+                    "entranceID": 2,
+                    "roomName": "room4"
+                },
+                "width": 2,
+                "x": 450.0,
+                "y": 0.0
+            },
+            {
+                "height": 2,
+                "id": 2,
+                "to": {
+                    "entranceID": 1,
+                    "roomName": "room6"
+                },
+                "width": 1,
+                "x": 0.0,
+                "y": 350.0
+            },
+            {
+                "height": 1,
+                "id": 3,
+                "to": {
+                    "entranceID": 1,
+                    "roomName": "room13"
+                },
+                "width": 2,
+                "x": 450.0,
+                "y": 700.0
+            }
+        ],
+        "globalX": 1300.0,
+        "globalY": 200.0,
+        "height": 15,
+        "keys": [
+            {
+                "doorId": 1,
+                "doorRoomName": "room6",
+                "pickedUp": false,
+                "positionX": 50,
+                "positionY": 650,
+                "texture": "key_gy"
+            },
+            {
+                "doorId": 1,
+                "doorRoomName": "room8",
+                "pickedUp": false,
+                "positionX": 300,
+                "positionY": 250,
+                "texture": "key_bk"
+            }
+        ],
+        "layer": 1,
+        "name": "room5",
+        "obstacles": [],
+        "portals": [],
+        "visited": false,
+        "width": 12
+    },
+    {
+        "blocks": [
+            {
+                "height": 1,
+                "positionX": 50.0,
+                "positionY": 400.0,
+                "width": 2
+            },
+            {
+                "height": 1,
+                "positionX": 200.0,
+                "positionY": 300.0,
+                "width": 2
+            },
+            {
+                "height": 1,
+                "positionX": 550.0,
+                "positionY": 350.0,
+                "width": 2
+            },
+            {
+                "height": 1,
+                "positionX": 750.0,
+                "positionY": 300.0,
+                "width": 2
+            },
+            {
+                "height": 1,
+                "positionX": 50.0,
+                "positionY": 150.0,
+                "width": 3
+            }
+        ],
+        "colorB": 128,
+        "colorG": 128,
+        "colorR": 255,
+        "doors": [
+            {
+                "id": 1,
+                "opened": false,
+                "positionX": 150,
+                "positionY": 50,
+                "texture": "door_gy"
+            }
+        ],
+        "entrances": [
+            {
+                "height": 2,
+                "id": 1,
+                "to": {
+                    "entranceID": 2,
+                    "roomName": "room5"
+                },
+                "width": 1,
+                "x": 950.0,
+                "y": 50.0
+            },
+            {
+                "height": 2,
+                "id": 2,
+                "to": {
+                    "entranceID": 1,
+                    "roomName": "room7"
+                },
+                "width": 1,
+                "x": 0.0,
+                "y": 200.0
+            }
+        ],
+        "globalX": 300.0,
+        "globalY": 500.0,
+        "height": 12,
+        "keys": [
+            {
+                "doorId": 2,
+                "doorRoomName": "room5",
+                "pickedUp": false,
+                "positionX": 50,
+                "positionY": 100,
+                "texture": "key_wh"
+            }
+        ],
+        "layer": 1,
+        "name": "room6",
+        "obstacles": [],
+        "portals": [],
+        "visited": false,
+        "width": 20
+    },
+    {
+        "blocks": [
+            {
+                "height": 3,
+                "positionX": 150.0,
+                "positionY": 50.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 300.0,
+                "positionY": 50.0,
+                "width": 1
+            },
+            {
+                "height": 2,
+                "positionX": 300.0,
+                "positionY": 150.0,
+                "width": 1
+            },
+            {
+                "height": 3,
+                "positionX": 450.0,
+                "positionY": 100.0,
+                "width": 1
+            },
+            {
+                "height": 2,
+                "positionX": 600.0,
+                "positionY": 50.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 600.0,
+                "positionY": 200.0,
+                "width": 1
+            }
+        ],
+        "colorB": 255,
+        "colorG": 191,
+        "colorR": 128,
+        "doors": [],
+        "entrances": [
+            {
+                "height": 2,
+                "id": 1,
+                "to": {
+                    "entranceID": 2,
+                    "roomName": "room6"
+                },
+                "width": 1,
+                "x": 750.0,
+                "y": 150.0
+            },
+            {
+                "height": 2,
+                "id": 2,
+                "to": {
+                    "entranceID": 1,
+                    "roomName": "room8"
+                },
+                "width": 1,
+                "x": 0.0,
+                "y": 50.0
+            }
+        ],
+        "globalX": -500.0,
+        "globalY": 550.0,
+        "height": 6,
+        "keys": [],
+        "layer": 1,
+        "name": "room7",
+        "obstacles": [],
+        "portals": [],
+        "visited": false,
+        "width": 16
+    },
+    {
+        "blocks": [
+            {
+                "height": 1,
+                "positionX": 50.0,
+                "positionY": 100.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 150.0,
+                "positionY": 250.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 100.0,
+                "positionY": 400.0,
+                "width": 3
+            }
+        ],
+        "colorB": 128,
+        "colorG": 255,
+        "colorR": 255,
+        "doors": [
+            {
+                "id": 1,
+                "opened": false,
+                "positionX": 100,
+                "positionY": 450,
+                "texture": "door_bk"
+            }
+        ],
+        "entrances": [
+            {
+                "height": 2,
+                "id": 1,
+                "to": {
+                    "entranceID": 2,
+                    "roomName": "room7"
+                },
+                "width": 1,
+                "x": 250.0,
+                "y": 300.0
+            },
+            {
+                "height": 1,
+                "id": 2,
+                "to": {
+                    "entranceID": 1,
+                    "roomName": "room9"
+                },
+                "width": 4,
+                "x": 50.0,
+                "y": 0.0
+            }
+        ],
+        "globalX": -800.0,
+        "globalY": 300.0,
+        "height": 12,
+        "keys": [
+            {
+                "doorId": 1,
+                "doorRoomName": "room4",
+                "pickedUp": false,
+                "positionX": 200,
+                "positionY": 500,
+                "texture": "key_or"
+            }
+        ],
+        "layer": 1,
+        "name": "room8",
+        "obstacles": [],
+        "portals": [],
+        "visited": false,
+        "width": 6
+    },
+    {
+        "blocks": [
+            {
+                "height": 1,
+                "positionX": 50.0,
+                "positionY": 250.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 150.0,
+                "positionY": 150.0,
+                "width": 1
+            },
+            {
+                "height": 4,
+                "positionX": 200.0,
+                "positionY": 150.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 150.0,
+                "positionY": 350.0,
+                "width": 5
+            },
+            {
+                "height": 2,
+                "positionX": 350.0,
+                "positionY": 250.0,
+                "width": 1
+            },
+            {
+                "height": 2,
+                "positionX": 350.0,
+                "positionY": 50.0,
+                "width": 1
+            },
+            {
+                "height": 2,
+                "positionX": 600.0,
+                "positionY": 150.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 600.0,
+                "positionY": 250.0,
+                "width": 3
+            },
+            {
+                "height": 1,
+                "positionX": 450.0,
+                "positionY": 450.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 50.0,
+                "positionY": 500.0,
+                "width": 9
+            },
+            {
+                "height": 1,
+                "positionX": 700.0,
+                "positionY": 500.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 400.0,
+                "positionY": 250.0,
+                "width": 1
+            }
+        ],
+        "colorB": 128,
+        "colorG": 128,
+        "colorR": 255,
+        "doors": [
+            {
+                "id": 1,
+                "opened": true,
+                "positionX": 750,
+                "positionY": 150,
+                "texture": "door_rd"
+            },
+            {
+                "id": 2,
+                "opened": false,
+                "positionX": 450,
+                "positionY": 550,
+                "texture": "door_yl"
+            }
+        ],
+        "entrances": [
+            {
+                "height": 1,
+                "id": 1,
+                "to": {
+                    "entranceID": 2,
+                    "roomName": "room8"
+                },
+                "width": 4,
+                "x": 50.0,
+                "y": 650.0
+            },
+            {
+                "height": 2,
+                "id": 2,
+                "to": {
+                    "entranceID": 2,
+                    "roomName": "room1"
+                },
+                "width": 1,
+                "x": 750.0,
+                "y": 550.0
+            },
+            {
+                "height": 2,
+                "id": 3,
+                "to": {
+                    "entranceID": 1,
+                    "roomName": "room10"
+                },
+                "width": 1,
+                "x": 750.0,
+                "y": 150.0
+            }
+        ],
+        "globalX": -800.0,
+        "globalY": -400.0,
+        "height": 14,
+        "keys": [
+            {
+                "doorId": 1,
+                "doorRoomName": "room9",
+                "pickedUp": true,
+                "positionX": 250,
+                "positionY": 300,
+                "texture": "key_rd"
+            }
+        ],
+        "layer": 1,
+        "name": "room9",
+        "obstacles": [],
+        "portals": [
+            {
+                "id": 1,
+                "positionX": 550,
+                "positionY": 550,
+                "texture": "portal_bl",
+                "toId": 3,
+                "toRoom": "room1"
+            }
+        ],
+        "visited": true,
+        "width": 16
+    },
+    {
+        "blocks": [
+            {
+                "height": 2,
+                "positionX": 200.0,
+                "positionY": 100.0,
+                "width": 1
+            },
+            {
+                "height": 2,
+                "positionX": 250.0,
+                "positionY": 150.0,
+                "width": 1
+            },
+            {
+                "height": 2,
+                "positionX": 300.0,
+                "positionY": 100.0,
+                "width": 1
+            },
+            {
+                "height": 3,
+                "positionX": 400.0,
+                "positionY": 100.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 450.0,
+                "positionY": 100.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 450.0,
+                "positionY": 200.0,
+                "width": 1
+            },
+            {
+                "height": 3,
+                "positionX": 500.0,
+                "positionY": 100.0,
+                "width": 1
+            },
+            {
+                "height": 3,
+                "positionX": 600.0,
+                "positionY": 100.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 650.0,
+                "positionY": 200.0,
+                "width": 1
+            },
+            {
+                "height": 3,
+                "positionX": 700.0,
+                "positionY": 100.0,
+                "width": 1
+            },
+            {
+                "height": 3,
+                "positionX": 200.0,
+                "positionY": 300.0,
+                "width": 1
+            },
+            {
+                "height": 2,
+                "positionX": 250.0,
+                "positionY": 350.0,
+                "width": 1
+            },
+            {
+                "height": 3,
+                "positionX": 300.0,
+                "positionY": 300.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 400.0,
+                "positionY": 300.0,
+                "width": 3
+            },
+            {
+                "height": 1,
+                "positionX": 450.0,
+                "positionY": 350.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 400.0,
+                "positionY": 400.0,
+                "width": 3
+            },
+            {
+                "height": 3,
+                "positionX": 600.0,
+                "positionY": 300.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 650.0,
+                "positionY": 300.0,
+                "width": 1
+            },
+            {
+                "height": 3,
+                "positionX": 700.0,
+                "positionY": 300.0,
+                "width": 1
+            }
+        ],
+        "colorB": 128,
+        "colorG": 255,
+        "colorR": 128,
+        "doors": [],
+        "entrances": [
+            {
+                "height": 1,
+                "id": 1,
+                "to": {
+                    "entranceID": 3,
+                    "roomName": "room5"
+                },
+                "width": 2,
+                "x": 50.0,
+                "y": 0.0
+            }
+        ],
+        "globalX": 1700.0,
+        "globalY": 950.0,
+        "height": 11,
+        "keys": [],
+        "layer": 1,
+        "name": "room13",
+        "obstacles": [],
+        "portals": [],
+        "visited": false,
+        "width": 19
+    },
+    {
+        "blocks": [],
+        "colorB": 128,
+        "colorG": 255,
+        "colorR": 255,
+        "doors": [],
+        "entrances": [],
+        "globalX": 0.0,
+        "globalY": 0.0,
+        "height": 12,
+        "keys": [],
+        "layer": 2,
+        "name": "room14",
+        "obstacles": [],
+        "portals": [
+            {
+                "id": 1,
+                "positionX": 50,
+                "positionY": 300,
+                "texture": "portal_bl",
+                "toId": 4,
+                "toRoom": "room1"
+            }
+        ],
+        "visited": true,
+        "width": 12
+    }
 ]
