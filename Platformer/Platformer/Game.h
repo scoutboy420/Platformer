@@ -25,14 +25,18 @@ class Game
 	sf::Text playerHealthText_;
 	sf::Text manaText_;
 
+	//Checks if two given entities collide
 	bool collides(const Entity& e1, const Entity& e2) const;
+	//Returns transformation vector to move MobileEntity, so it doesn't collide
 	sf::Vector2f checkPush(const MobileEntity& e1, const Entity& e2, float deltaTime) const;
 	void checkCollisions(float deltaTime);
+	//Checks if e1 is fully inside in e2
 	bool isInside(const Entity& e1, const Entity& e2) const;
 	void checkPortals();
 	void checkRoomChange(Entity& entity);
 	static void teleport(Entity& entity, Portal& portal);
 	static void changeRoom(Entity& entity, const std::string& roomName, int entranceId, sf::Vector2f offset);
+	//Checks if camera is not beyond current rooms and scales it accordingly if it if
 	void checkCamera();
 	void scaleView();
 	void handleInput();

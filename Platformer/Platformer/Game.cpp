@@ -140,12 +140,9 @@ void Game::checkEnemyCollision(Player& player, Enemy& enemy, const float deltaTi
 
 void Game::checkObstaclesColllision()
 {
-	for(auto& room : loadedRooms_)
+	for(auto& obstacle : getCurrentRoom().getObstacles())
 	{
-		for(auto& obstacle : room.second.getObstacles())
-		{
-			if(collides(player_, *obstacle)) { obstacle->onPlayerCollision(player_); }
-		}
+		if(collides(player_, *obstacle)) { obstacle->onPlayerCollision(player_); }
 	}
 }
 
@@ -662,6 +659,7 @@ void Game::update(const float deltaTime)
 		restart();
 	}
 
+
 	scaleView();
 	try
 	{
@@ -834,7 +832,7 @@ void Game::showMiniMap()
 	const auto scale = std::min(float(window_.getSize().x), float(window_.getSize().y)) / 50.0f;
 
 	for(auto room : Resources::rooms)
-	{   std::cout << "Showing map for layer " << getCurrentRoom().getLayerId() << std::endl;
+	{
 	    if(room.at("layer").get<int>() != getCurrentRoom().getLayerId()) continue;
 		if(!room.at("visited").get<bool>()) continue;
 
