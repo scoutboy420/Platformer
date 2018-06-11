@@ -91,14 +91,6 @@
                 "toRoom": "room1"
             },
             {
-                "id": 3,
-                "positionX": 100,
-                "positionY": 350,
-                "texture": "portal_bl",
-                "toId": 1,
-                "toRoom": "room9"
-            },
-            {
                 "id": 2,
                 "positionX": 650,
                 "positionY": 200,
@@ -284,9 +276,15 @@
         "keys": [],
         "layer": 1,
         "name": "room2",
-        "obstacles": [],
+        "obstacles": [
+            {
+                "positionX": 300,
+                "positionY": 700,
+                "type": 3
+            }
+        ],
         "portals": [],
-        "visited": false,
+        "visited": true,
         "width": 8
     },
     {
@@ -981,7 +979,7 @@
             },
             {
                 "height": 2,
-                "positionX": 350.0,
+                "positionX": 400.0,
                 "positionY": 50.0,
                 "width": 1
             },
@@ -1091,17 +1089,24 @@
         ],
         "layer": 1,
         "name": "room9",
-        "obstacles": [],
-        "portals": [
+        "obstacles": [
             {
-                "id": 1,
-                "positionX": 550,
-                "positionY": 550,
-                "texture": "portal_bl",
-                "toId": 3,
-                "toRoom": "room1"
+                "positionX": 300,
+                "positionY": 300,
+                "type": 1
+            },
+            {
+                "positionX": 620,
+                "positionY": 50,
+                "type": 2
+            },
+            {
+                "positionX": 620,
+                "positionY": 100,
+                "type": 2
             }
         ],
+        "portals": [],
         "visited": true,
         "width": 16
     },
@@ -1274,7 +1279,7 @@
                 "toRoom": "room1"
             }
         ],
-        "visited": true,
+        "visited": false,
         "width": 12
     }
 ]

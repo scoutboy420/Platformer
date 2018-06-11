@@ -3,11 +3,11 @@
     "dashSpeed": 2000.0,
     "friction": 35.0,
     "gravity": 4000.0,
-    "hp": 70,
+    "hp": 60,
     "jumpSpeed": 1200.0,
-    "mana": 99.56743621826172,
-    "positionX": 89.46195220947266,
-    "positionY": 500.0,
+    "mana": 100.0,
+    "positionX": 300.0,
+    "positionY": 200.0,
     "speed": 500.0,
-    "startingRoom": "room14"
+    "startingRoom": "room2"
 }

@@ -48,7 +48,7 @@ public:
 	void shoot(std::vector<Bullet>& bullets);
 
 	bool isImmune() const override { return MobileEntity::isImmune() || isDashing(); }
-	bool isInverted() const { return invertClock_.getElapsedTime().asSeconds() <= 3.0f && !startInvertGuard_; }
+	bool isInverted() const { return invertClock_.getElapsedTime().asSeconds() <= 5.0f && !startInvertGuard_; }
 
 	void heal(int amount);
 	void addMana(float amount);
