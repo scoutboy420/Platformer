@@ -127,24 +127,12 @@ void Game::checkBlockCollision(MobileEntity& mobile, const Entity& block, const 
 }
 
 /* Sebastian Pietras */
-void Game::checkKeyCollision(const Player& player, Key& key) const
-{
-	if(collides(player, key)) { key.onCollision(player, sf::Vector2f(0, 0)); }
-}
+void Game::checkKeyCollision(const Player& player, Key& key) const { if(collides(player, key)) { key.onCollision(player, sf::Vector2f(0, 0)); } }
 
 /* Sebastian Pietras */
-void Game::checkEnemyCollision(Player& player, Enemy& enemy, const float deltaTime) const
-{
-	if(collides(player, enemy)) { enemy.onPlayerCollision(player, checkPush(player, enemy, deltaTime)); }
-}
+void Game::checkEnemyCollision(Player& player, Enemy& enemy, const float deltaTime) const { if(collides(player, enemy)) { enemy.onPlayerCollision(player, checkPush(player, enemy, deltaTime)); } }
 
-void Game::checkObstaclesColllision()
-{
-	for(auto& obstacle : getCurrentRoom().getObstacles())
-	{
-		if(collides(player_, *obstacle)) { obstacle->onPlayerCollision(player_); }
-	}
-}
+void Game::checkObstaclesColllision() { for(auto& obstacle : getCurrentRoom().getObstacles()) { if(collides(player_, *obstacle)) { obstacle->onPlayerCollision(player_); } } }
 
 /* Sebastian Pietras */
 void Game::checkBulletCollision()
@@ -261,11 +249,8 @@ void Game::checkPlayerInPortals()
 	auto& playerRoom = getCurrentRoom();
 	for(auto& portal : playerRoom.getPortals())
 	{
-		if(isInside(player_, portal) && !player_.isTpImmune()) { teleport(player_, portal); } //if he entered the portal
-		else if(player_.isTpImmune() && !isInside(player_, portal) && collides(player_, portal))
-		{
-			player_.setTpImmunity(false);
-		} //if he isn't in the portal anymore
+		if(isInside(player_, portal) && !player_.isTpImmune()) { teleport(player_, portal); }                                      //if he entered the portal
+		else if(player_.isTpImmune() && !isInside(player_, portal) && collides(player_, portal)) { player_.setTpImmunity(false); } //if he isn't in the portal anymore
 	}
 }
 
@@ -278,10 +263,7 @@ void Game::checkEnemiesInPortals()
 		for(auto& portal : enemyRoom.getPortals())
 		{
 			if(isInside(*enemy, portal) && !enemy->isTpImmune()) { teleport(*enemy, portal); }
-			else if(enemy->isTpImmune() && !isInside(*enemy, portal) && collides(*enemy, portal))
-			{
-				enemy->setTpImmunity(false);
-			}
+			else if(enemy->isTpImmune() && !isInside(*enemy, portal) && collides(*enemy, portal)) { enemy->setTpImmunity(false); }
 		}
 	}
 }
@@ -295,10 +277,7 @@ void Game::checkBulletsInPortals()
 		for(auto& portal : bulletRoom.getPortals())
 		{
 			if(isInside(bullet, portal) && !bullet.isTpImmune()) { teleport(bullet, portal); }
-			else if(bullet.isTpImmune() && !isInside(bullet, portal) && collides(bullet, portal))
-			{
-				bullet.setTpImmunity(false);
-			}
+			else if(bullet.isTpImmune() && !isInside(bullet, portal) && collides(bullet, portal)) { bullet.setTpImmunity(false); }
 		}
 	}
 
@@ -308,10 +287,7 @@ void Game::checkBulletsInPortals()
 		for(auto& portal : bulletRoom.getPortals())
 		{
 			if(isInside(bullet, portal) && !bullet.isTpImmune()) { teleport(bullet, portal); }
-			else if(bullet.isTpImmune() && !isInside(bullet, portal) && collides(bullet, portal))
-			{
-				bullet.setTpImmunity(false);
-			}
+			else if(bullet.isTpImmune() && !isInside(bullet, portal) && collides(bullet, portal)) { bullet.setTpImmunity(false); }
 		}
 	}
 }
@@ -598,13 +574,13 @@ void Game::save()
 /* Sebastian Pietras */
 void Game::restart()
 {
-    Resources::rooms = Resources::defaultRooms;
+	Resources::rooms = Resources::defaultRooms;
 	Resources::playerData = Resources::defaultPlayerData;
 	Resources::enemiesData = Resources::defaultEnemiesData;
-	loadedRooms_ = Resources::createRooms(true);
+	loadedRooms_ = Resources::createRooms();
 	setKeys();
 	setPortals();
-	enemies_ = Resources::createEnemies(true);
+	enemies_ = Resources::createEnemies();
 
 	initializePlayer(true);
 
@@ -701,8 +677,10 @@ void Game::drawEntities()
 	for(const auto& key : getCurrentRoom().getKeys()) if(isInsideView(viewRect, key)) window_.draw(key.getBody());
 
 	for(auto& room : loadedRooms_)
-		for(auto& obstacle : room.second.getObstacles()) if(isInsideView(viewRect, *obstacle)) window_.
-				draw(obstacle->getBody());
+		for(auto& obstacle : room.second.getObstacles())
+			if(isInsideView(viewRect, *obstacle))
+				window_.
+						draw(obstacle->getBody());
 
 	for(const auto& portal : getCurrentRoom().getPortals())
 		if(isInsideView(viewRect, portal))
@@ -833,7 +811,7 @@ void Game::showMiniMap()
 
 	for(auto room : Resources::rooms)
 	{
-	    if(room.at("layer").get<int>() != getCurrentRoom().getLayerId()) continue;
+		if(room.at("layer").get<int>() != getCurrentRoom().getLayerId()) continue;
 		if(!room.at("visited").get<bool>()) continue;
 
 		//Shape of room
@@ -1004,10 +982,7 @@ bool Game::play()
 	catch(const std::exception& e1)
 	{
 		try { save(); }
-		catch(const std::exception& e2)
-		{
-			throw std::runtime_error("Runtime error.\n" + std::string(e1.what()) + "\nCouldn't save :(\n" + e2.what());
-		}
+		catch(const std::exception& e2) { throw std::runtime_error("Runtime error.\n" + std::string(e1.what()) + "\nCouldn't save :(\n" + e2.what()); }
 
 		throw std::runtime_error("Runtime error.\n" + std::string(e1.what()) + "\nGame saved :)");
 	}

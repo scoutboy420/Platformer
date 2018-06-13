@@ -1,11 +1,12 @@
 [
   {
-    "name" : "room1",
+    "name": "room1",
     "layer": 1,
     "colorB": 255,
     "colorG": 191,
     "colorR": 128,
-    "obstacles": [],
+    "obstacles": [
+    ],
     "portals": [
       {
         "positionX": 100,
@@ -283,7 +284,7 @@
     {
       "type": 3,
       "positionX": 300,
-      "positionY": 700
+      "positionY": 750
     }
     ],
     "portals": [],
@@ -1102,13 +1103,8 @@
       },
       {
         "type": 2,
-        "positionX": 620,
+        "positionX": 600,
         "positionY": 50
-      },
-      {
-        "type": 2,
-        "positionX": 620,
-        "positionY": 100
       }
     ],
     "portals": [],

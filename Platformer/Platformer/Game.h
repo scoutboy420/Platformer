@@ -1,7 +1,16 @@
 #pragma once
+
+/**
+* @file
+* @brief Main game class. Responsible for managing the whole game
+*/
+
+/** @cond */
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <unordered_map>
+#include "Utilities/JSON/json.hpp"
+/** @endcond */
 #include "Entities/Player.h"
 #include "Entities/Enemies/Enemy.h"
 #include "Entities/Entity.h"
@@ -9,7 +18,6 @@
 #include "Entities/Misc/Key.h"
 #include "Utilities/Room.h"
 #include "Utilities/Resources.h"
-#include "Utilities/JSON/json.hpp"
 
 class Game
 {
@@ -25,19 +33,20 @@ class Game
 	sf::Text playerHealthText_;
 	sf::Text manaText_;
 
-	//Checks if two given entities collide
-	bool collides(const Entity& e1, const Entity& e2) const;
-	//Returns transformation vector to move MobileEntity, so it doesn't collide
-	sf::Vector2f checkPush(const MobileEntity& e1, const Entity& e2, float deltaTime) const;
 	void checkCollisions(float deltaTime);
-	//Checks if e1 is fully inside in e2
-	bool isInside(const Entity& e1, const Entity& e2) const;
+	/**
+	 * \brief Checks if entity should change rooms and changes it if necessary
+	 */
 	void checkPortals();
 	void checkRoomChange(Entity& entity);
-	static void teleport(Entity& entity, Portal& portal);
 	static void changeRoom(Entity& entity, const std::string& roomName, int entranceId, sf::Vector2f offset);
-	//Checks if camera is not beyond current rooms and scales it accordingly if it if
+	/**
+	 * \brief Bounds camera to room walls
+	 */
 	void checkCamera();
+	/**
+	 * \brief Scales view if it is larger than current room
+	 */
 	void scaleView();
 	void handleInput();
 	bool handleWindowEvents();
@@ -47,16 +56,38 @@ class Game
 	void save();
 	void restart();
 
+
 	/* Helpers */
+
+
+	/**
+	* \brief Checks if e1 and e2 collides
+	* \return True if they do
+	* \return False if they don't
+	*/
+	bool collides(const Entity& e1, const Entity& e2) const;
+	/**
+	* \brief Checks how much e1 should be pushed if it collides with e2
+	* \param e1 Mobile Entity that can be moved
+	* \param e2 Any other entity to check with
+	* \param deltaTime Time difference between frames
+	* \return Transformation vector to move MobileEntity
+	*/
+	sf::Vector2f checkPush(const MobileEntity& e1, const Entity& e2, float deltaTime) const;
 	void checkBlockCollision(MobileEntity& mobile, const Entity& block, float deltaTime) const;
 	void checkKeyCollision(const Player& player, Key& key) const;
 	void checkEnemyCollision(Player& player, Enemy& enemy, float deltaTime) const;
 	void checkObstaclesColllision();
 	void checkBulletCollision();
+	void checkPlayerBulletCollision();
+	/**
+	* \brief Checks if e1 is fully inside in e2
+	*/
+	bool isInside(const Entity& e1, const Entity& e2) const;
 	void checkPlayerInPortals();
 	void checkEnemiesInPortals();
 	void checkBulletsInPortals();
-	void checkPlayerBulletCollision();
+	static void teleport(Entity& entity, Portal& portal);
 	bool isInsideView(const sf::FloatRect& viewRect, const Entity& entity) const;
 	void drawEntities();
 	void drawOverlay();
@@ -85,7 +116,17 @@ class Game
 	void showErrorWindow(const std::string& title, const std::string& message);
 	void checkErrorWindows();
 public:
+	/**
+	 * \brief Game constructor
+	 * \param mode VideoMode in which game will be displayed
+	 * \param title Title of the game
+	 */
 	Game(sf::VideoMode mode, const std::string& title);
 
+	/**
+	 * \brief Main game loop
+	 * \return If game is still playing
+	 * \return False if game is closing
+	 */
 	bool play();
 };

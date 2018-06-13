@@ -1,7 +1,15 @@
 #pragma once
+
+/**
+* @file
+* @brief Room class
+*/
+
+/** @cond */
 #include <string>
 #include <vector>
 #include <SFML/Graphics.hpp>
+/** @endcond */
 #include "../Entities/Entity.h"
 #include "../Entities/Misc/Key.h"
 #include "../Entities/Misc/Door.h"
@@ -26,8 +34,14 @@ class Room
 
 	void addGradient();
 public:
-	Room() = default;
-	explicit Room(const std::string& roomName, const int layerId, bool def = false);
+	Room()
+		: layerId_(0) {}
+
+	/**
+	 * \brief Constructs a room with given name. It will look up every data in Resources
+	 * \param roomName Name of the room
+	 */
+	explicit Room(const std::string& roomName);
 
 	std::string getRoomName() const { return roomName_; }
 	int getLayerId() const { return layerId_; }

@@ -60,87 +60,49 @@ void Resources::load()
 	i.clear();
 
 
-	if(!textures["player"].loadFromFile("Data/Textures/player.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/player.png");
-	if(!textures["block"].loadFromFile("Data/Textures/block.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/block.png");
-	if(!textures["walker"].loadFromFile("Data/Textures/elektro.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/elektro.png");
-	if(!textures["flier"].loadFromFile("Data/Textures/mini.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/mini.png");
-	if(!textures["shooter"].loadFromFile("Data/Textures/simr.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/simr.png");
-	if(!textures["bullet"].loadFromFile("Data/Textures/bullet.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/bullet.png");
-	if(!textures["spikes"].loadFromFile("Data/Textures/mechatro.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/mechatro.png");
-	if(!textures["laser"].loadFromFile("Data/Textures/laser.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/laser.png");
-	if(!textures["inverter"].loadFromFile("Data/Textures/mel.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/mel.png");
+	if(!textures["player"].loadFromFile("Data/Textures/player.png")) throw std::runtime_error("Can't load texture from Data/Textures/player.png");
+	if(!textures["block"].loadFromFile("Data/Textures/block.png")) throw std::runtime_error("Can't load texture from Data/Textures/block.png");
+	if(!textures["walker"].loadFromFile("Data/Textures/simr.png")) throw std::runtime_error("Can't load texture from Data/Textures/simr.png");
+	if(!textures["flier"].loadFromFile("Data/Textures/elektro.png")) throw std::runtime_error("Can't load texture from Data/Textures/elektro.png");
+	if(!textures["shooter"].loadFromFile("Data/Textures/mini.png")) throw std::runtime_error("Can't load texture from Data/Textures/mini.png");
+	if(!textures["bullet"].loadFromFile("Data/Textures/bullet.png")) throw std::runtime_error("Can't load texture from Data/Textures/bullet.png");
+	if(!textures["spikes"].loadFromFile("Data/Textures/mechatro.png")) throw std::runtime_error("Can't load texture from Data/Textures/mechatro.png");
+	if(!textures["laser"].loadFromFile("Data/Textures/mel.png")) throw std::runtime_error("Can't load texture from Data/Textures/mel.png");
+	if(!textures["inverter"].loadFromFile("Data/Textures/fizyka.png")) throw std::runtime_error("Can't load texture from Data/Textures/fizyka.png");
 
 	/*textures: Bernard Lesiewicz*/
-	if(!textures["door_rd"].loadFromFile("Data/Textures/door_rd.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/door_rd.png");
-	if(!textures["door_gr"].loadFromFile("Data/Textures/door_gr.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/door_gr.png");
-	if(!textures["door_bl"].loadFromFile("Data/Textures/door_bl.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/door_bl.png");
-	if(!textures["door_or"].loadFromFile("Data/Textures/door_or.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/door_or.png");
-	if(!textures["door_mg"].loadFromFile("Data/Textures/door_mg.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/door_mg.png");
-	if(!textures["door_yl"].loadFromFile("Data/Textures/door_yl.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/door_yl.png");
-	if(!textures["door_wh"].loadFromFile("Data/Textures/door_wh.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/door_wh.png");
-	if(!textures["door_gy"].loadFromFile("Data/Textures/door_gy.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/door_gy.png");
-	if(!textures["door_bk"].loadFromFile("Data/Textures/door_bk.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/door_bk.png");
+	if(!textures["door_rd"].loadFromFile("Data/Textures/door_rd.png")) throw std::runtime_error("Can't load texture from Data/Textures/door_rd.png");
+	if(!textures["door_gr"].loadFromFile("Data/Textures/door_gr.png")) throw std::runtime_error("Can't load texture from Data/Textures/door_gr.png");
+	if(!textures["door_bl"].loadFromFile("Data/Textures/door_bl.png")) throw std::runtime_error("Can't load texture from Data/Textures/door_bl.png");
+	if(!textures["door_or"].loadFromFile("Data/Textures/door_or.png")) throw std::runtime_error("Can't load texture from Data/Textures/door_or.png");
+	if(!textures["door_mg"].loadFromFile("Data/Textures/door_mg.png")) throw std::runtime_error("Can't load texture from Data/Textures/door_mg.png");
+	if(!textures["door_yl"].loadFromFile("Data/Textures/door_yl.png")) throw std::runtime_error("Can't load texture from Data/Textures/door_yl.png");
+	if(!textures["door_wh"].loadFromFile("Data/Textures/door_wh.png")) throw std::runtime_error("Can't load texture from Data/Textures/door_wh.png");
+	if(!textures["door_gy"].loadFromFile("Data/Textures/door_gy.png")) throw std::runtime_error("Can't load texture from Data/Textures/door_gy.png");
+	if(!textures["door_bk"].loadFromFile("Data/Textures/door_bk.png")) throw std::runtime_error("Can't load texture from Data/Textures/door_bk.png");
 
-	if(!textures["key_rd"].loadFromFile("Data/Textures/key_rd.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/key_rd.png");
-	if(!textures["key_gr"].loadFromFile("Data/Textures/key_gr.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/key_gr.png");
-	if(!textures["key_bl"].loadFromFile("Data/Textures/key_bl.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/key_bl.png");
-	if(!textures["key_or"].loadFromFile("Data/Textures/key_or.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/key_or.png");
-	if(!textures["key_mg"].loadFromFile("Data/Textures/key_mg.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/key_mg.png");
-	if(!textures["key_yl"].loadFromFile("Data/Textures/key_yl.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/key_yl.png");
-	if(!textures["key_wh"].loadFromFile("Data/Textures/key_wh.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/key_wh.png");
-	if(!textures["key_gy"].loadFromFile("Data/Textures/key_gy.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/key_gy.png");
-	if(!textures["key_bk"].loadFromFile("Data/Textures/key_bk.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/key_bk.png");
+	if(!textures["key_rd"].loadFromFile("Data/Textures/key_rd.png")) throw std::runtime_error("Can't load texture from Data/Textures/key_rd.png");
+	if(!textures["key_gr"].loadFromFile("Data/Textures/key_gr.png")) throw std::runtime_error("Can't load texture from Data/Textures/key_gr.png");
+	if(!textures["key_bl"].loadFromFile("Data/Textures/key_bl.png")) throw std::runtime_error("Can't load texture from Data/Textures/key_bl.png");
+	if(!textures["key_or"].loadFromFile("Data/Textures/key_or.png")) throw std::runtime_error("Can't load texture from Data/Textures/key_or.png");
+	if(!textures["key_mg"].loadFromFile("Data/Textures/key_mg.png")) throw std::runtime_error("Can't load texture from Data/Textures/key_mg.png");
+	if(!textures["key_yl"].loadFromFile("Data/Textures/key_yl.png")) throw std::runtime_error("Can't load texture from Data/Textures/key_yl.png");
+	if(!textures["key_wh"].loadFromFile("Data/Textures/key_wh.png")) throw std::runtime_error("Can't load texture from Data/Textures/key_wh.png");
+	if(!textures["key_gy"].loadFromFile("Data/Textures/key_gy.png")) throw std::runtime_error("Can't load texture from Data/Textures/key_gy.png");
+	if(!textures["key_bk"].loadFromFile("Data/Textures/key_bk.png")) throw std::runtime_error("Can't load texture from Data/Textures/key_bk.png");
 
-	if(!textures["portal_rd"].loadFromFile("Data/Textures/portal_rd.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/portal_rd.png");
-	if(!textures["portal_gr"].loadFromFile("Data/Textures/portal_gr.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/portal_gr.png");
-	if(!textures["portal_bl"].loadFromFile("Data/Textures/portal_bl.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/portal_bl.png");
-	if(!textures["portal_or"].loadFromFile("Data/Textures/portal_or.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/portal_or.png");
-	if(!textures["portal_mg"].loadFromFile("Data/Textures/portal_mg.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/portal_mg.png");
-	if(!textures["portal_yl"].loadFromFile("Data/Textures/portal_yl.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/portal_yl.png");
-	if(!textures["portal_wh"].loadFromFile("Data/Textures/portal_wh.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/portal_wh.png");
-	if(!textures["portal_gy"].loadFromFile("Data/Textures/portal_gy.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/portal_gy.png");
-	if(!textures["portal_bk"].loadFromFile("Data/Textures/portal_bk.png"))
-		throw std::runtime_error("Can't load texture from Data/Textures/portal_bk.png");
+	if(!textures["portal_rd"].loadFromFile("Data/Textures/portal_rd.png")) throw std::runtime_error("Can't load texture from Data/Textures/portal_rd.png");
+	if(!textures["portal_gr"].loadFromFile("Data/Textures/portal_gr.png")) throw std::runtime_error("Can't load texture from Data/Textures/portal_gr.png");
+	if(!textures["portal_bl"].loadFromFile("Data/Textures/portal_bl.png")) throw std::runtime_error("Can't load texture from Data/Textures/portal_bl.png");
+	if(!textures["portal_or"].loadFromFile("Data/Textures/portal_or.png")) throw std::runtime_error("Can't load texture from Data/Textures/portal_or.png");
+	if(!textures["portal_mg"].loadFromFile("Data/Textures/portal_mg.png")) throw std::runtime_error("Can't load texture from Data/Textures/portal_mg.png");
+	if(!textures["portal_yl"].loadFromFile("Data/Textures/portal_yl.png")) throw std::runtime_error("Can't load texture from Data/Textures/portal_yl.png");
+	if(!textures["portal_wh"].loadFromFile("Data/Textures/portal_wh.png")) throw std::runtime_error("Can't load texture from Data/Textures/portal_wh.png");
+	if(!textures["portal_gy"].loadFromFile("Data/Textures/portal_gy.png")) throw std::runtime_error("Can't load texture from Data/Textures/portal_gy.png");
+	if(!textures["portal_bk"].loadFromFile("Data/Textures/portal_bk.png")) throw std::runtime_error("Can't load texture from Data/Textures/portal_bk.png");
 
-	if(!fonts["vcr"].loadFromFile("Data/Fonts/vcr.ttf"))
-		throw std::runtime_error("Can't load font from Data/Fonts/vcr.ttf");
-	if(!fonts["roboto"].loadFromFile("Data/Fonts/roboto.ttf"))
-		throw std::runtime_error("Can't load font from Data/Fonts/roboto.ttf");
+	if(!fonts["vcr"].loadFromFile("Data/Fonts/vcr.ttf")) throw std::runtime_error("Can't load font from Data/Fonts/vcr.ttf");
+	if(!fonts["roboto"].loadFromFile("Data/Fonts/roboto.ttf")) throw std::runtime_error("Can't load font from Data/Fonts/roboto.ttf");
 }
 
 /* Sebastian Pietras */
@@ -177,13 +139,7 @@ std::vector<sf::Vector2f> Resources::getEmptyPositions(const std::string& roomNa
 		const auto entranceWidth = entrances.at("width").get<int>(), entranceHeight = entrances.at("height").get<int>();
 		const auto entrancePos = sf::Vector2f(entrances.at("x").get<float>(), entrances.at("y").get<float>());
 
-		for(auto i = 0; i < entranceWidth; i++)
-		{
-			for(auto j = 0; j < entranceHeight; j++)
-			{
-				emptyPos.push_back(sf::Vector2f(entrancePos.x + i * 50.0f, entrancePos.y + j * 50.0f));
-			}
-		}
+		for(auto i = 0; i < entranceWidth; i++) { for(auto j = 0; j < entranceHeight; j++) { emptyPos.push_back(sf::Vector2f(entrancePos.x + i * 50.0f, entrancePos.y + j * 50.0f)); } }
 	}
 
 	return emptyPos;
@@ -192,11 +148,10 @@ std::vector<sf::Vector2f> Resources::getEmptyPositions(const std::string& roomNa
 /* Sebastian Pietras */
 void Resources::createWalls(const std::string& roomName,
                             std::vector<sf::Vector2f> emptyPositions,
-                            std::vector<Entity>& blocks,
-                            const bool def)
+                            std::vector<Entity>& blocks)
 {
-	const auto roomWidth = getRoomJson(roomName, def).at("width").get<int>(),
-	           roomHeight = getRoomJson(roomName, def).at("height").get<int>();
+	const auto roomWidth = getRoomJson(roomName).at("width").get<int>(),
+	           roomHeight = getRoomJson(roomName).at("height").get<int>();
 
 	for(auto i = 0; i < roomWidth; i++)
 	{
@@ -260,10 +215,9 @@ void Resources::createWalls(const std::string& roomName,
 /* Sebastian Pietras */
 void Resources::createInternalBlocks(const std::string& roomName,
                                      const std::vector<sf::Vector2f>& emptyPositions,
-                                     std::vector<Entity>& blocks,
-                                     const bool def)
+                                     std::vector<Entity>& blocks)
 {
-	for(auto& entity : json(getRoomJson(roomName, def).at("blocks")))
+	for(auto& entity : json(getRoomJson(roomName).at("blocks")))
 	{
 		try
 		{
@@ -282,15 +236,12 @@ void Resources::createInternalBlocks(const std::string& roomName,
 				}
 			}
 		}
-		catch(const std::exception& e)
-		{
-			throw std::runtime_error("Can't create internal block in " + roomName + ".\n" + std::string(e.what()));
-		}
+		catch(const std::exception& e) { throw std::runtime_error("Can't create internal block in " + roomName + ".\n" + std::string(e.what())); }
 	}
 }
 
 /* Sebastian Pietras */
-std::vector<Entity> Resources::createBlocks(const std::string& roomName, const bool def)
+std::vector<Entity> Resources::createBlocks(const std::string& roomName)
 {
 	std::vector<Entity> blocks;
 
@@ -298,17 +249,17 @@ std::vector<Entity> Resources::createBlocks(const std::string& roomName, const b
 
 	//Assumes that all blocks are 50x50
 
-	createWalls(roomName, emptyPos, blocks, def);
-	createInternalBlocks(roomName, emptyPos, blocks, def);
+	createWalls(roomName, emptyPos, blocks);
+	createInternalBlocks(roomName, emptyPos, blocks);
 
 	return blocks;
 }
 
 /*Bernard Lesiewicz, Sebastian Pietras*/
-std::vector<Door> Resources::createDoors(const std::string& roomName, const bool def)
+std::vector<Door> Resources::createDoors(const std::string& roomName)
 {
 	std::vector<Door> doors;
-	for(auto& door : json(getRoomJson(roomName, def).at("doors")))
+	for(auto& door : json(getRoomJson(roomName).at("doors")))
 	{
 		try
 		{
@@ -318,19 +269,16 @@ std::vector<Door> Resources::createDoors(const std::string& roomName, const bool
 			const auto textureName = door.at("texture").get<std::string>();
 			doors.push_back(Door(textures[textureName], position, id, opened, roomName));
 		}
-		catch(const std::exception& e)
-		{
-			throw std::runtime_error("Can't create door in " + roomName + ".\n" + std::string(e.what()));
-		}
+		catch(const std::exception& e) { throw std::runtime_error("Can't create door in " + roomName + ".\n" + std::string(e.what())); }
 	}
 	return doors;
 }
 
 /*Bernard Lesiewicz, Sebastian Pietras */
-std::vector<Key> Resources::createKeys(const std::string& roomName, const bool def)
+std::vector<Key> Resources::createKeys(const std::string& roomName)
 {
 	std::vector<Key> keys;
-	for(auto& key : json(getRoomJson(roomName, def).at("keys")))
+	for(auto& key : json(getRoomJson(roomName).at("keys")))
 	{
 		try
 		{
@@ -341,19 +289,16 @@ std::vector<Key> Resources::createKeys(const std::string& roomName, const bool d
 			const auto doorRoomName = key.at("doorRoomName").get<std::string>();
 			keys.push_back(Key(textures[textureName], position, doorId, doorRoomName, pickedUp, roomName));
 		}
-		catch(const std::exception& e)
-		{
-			throw std::runtime_error("Can't create key in " + roomName + ".\n" + std::string(e.what()));
-		}
+		catch(const std::exception& e) { throw std::runtime_error("Can't create key in " + roomName + ".\n" + std::string(e.what())); }
 	}
 	return keys;
 }
 
 /* Bernard Lesiewicz */
-std::vector<Portal> Resources::createPortals(const std::string& roomName, const bool def)
+std::vector<Portal> Resources::createPortals(const std::string& roomName)
 {
 	std::vector<Portal> portals;
-	for(auto& portal : json(getRoomJson(roomName, def).at("portals")))
+	for(auto& portal : json(getRoomJson(roomName).at("portals")))
 	{
 		try
 		{
@@ -364,18 +309,15 @@ std::vector<Portal> Resources::createPortals(const std::string& roomName, const 
 			const auto textureName = portal.at("texture").get<std::string>();
 			portals.push_back(Portal(textures[textureName], position, roomName, id, toId, toRoomName));
 		}
-		catch(const std::exception& e)
-		{
-			throw std::runtime_error("Can't create portal in " + roomName + ".\n" + std::string(e.what()));
-		}
+		catch(const std::exception& e) { throw std::runtime_error("Can't create portal in " + roomName + ".\n" + std::string(e.what())); }
 	}
 	return portals;
 }
 
-std::vector<std::unique_ptr<Obstacle>> Resources::createObstacles(const std::string& roomName, const bool def)
+std::vector<std::unique_ptr<Obstacle>> Resources::createObstacles(const std::string& roomName)
 {
 	std::vector<std::unique_ptr<Obstacle>> obstacles;
-	for(auto& obstacle : json(getRoomJson(roomName, def).at("obstacles")))
+	for(auto& obstacle : json(getRoomJson(roomName).at("obstacles")))
 	{
 		try
 		{
@@ -385,20 +327,16 @@ std::vector<std::unique_ptr<Obstacle>> Resources::createObstacles(const std::str
 			else if(type == 2) obstacles.emplace_back(new Laser(textures["laser"], position, roomName));
 			else if(type == 3) obstacles.emplace_back(new Inverter(textures["inverter"], position, roomName));
 		}
-		catch(const std::exception& e)
-		{
-			throw std::runtime_error("Can't create obstacle in " + roomName + ".\n" + std::string(e.what()));
-		}
+		catch(const std::exception& e) { throw std::runtime_error("Can't create obstacle in " + roomName + ".\n" + std::string(e.what())); }
 	}
 	return obstacles;
 }
 
 /* Sebastian Pietras */
-std::vector<std::unique_ptr<Enemy>> Resources::createEnemies(const bool def)
+std::vector<std::unique_ptr<Enemy>> Resources::createEnemies()
 {
-	auto& data = def ? defaultEnemiesData : enemiesData;
 	std::vector<std::unique_ptr<Enemy>> enemies;
-	for(auto& enemy : data)
+	for(auto& enemy : enemiesData)
 	{
 		const auto type = enemy.at("type").get<int>(), id = enemy.at("id").get<int>(),
 		           hp = enemy.at("hp").get<int>(), damage = enemy.at("damage").get<int>();
@@ -437,17 +375,15 @@ std::vector<std::unique_ptr<Enemy>> Resources::createEnemies(const bool def)
 }
 
 /* Sebastian Pietras */
-std::unordered_map<std::string, Room> Resources::createRooms(const bool def)
+std::unordered_map<std::string, Room> Resources::createRooms()
 {
-	auto& data = def ? defaultRooms : rooms;
 	std::unordered_map<std::string, Room> roomMap;
-	for(auto& room : data)
+	for(auto& room : rooms)
 	{
 		try
 		{
 			const auto roomName = room.at("name").get<std::string>();
-			const auto layerId = room.at("layer").get<int>();
-			roomMap[roomName] = Room(roomName, layerId, def);
+			roomMap[roomName] = Room(roomName);
 		}
 		catch(const std::exception& e) { throw std::runtime_error("Can't create room.\n" + std::string(e.what())); }
 	}
@@ -456,28 +392,25 @@ std::unordered_map<std::string, Room> Resources::createRooms(const bool def)
 }
 
 /* Sebastian Pietras */
-json& Resources::getRoomJson(const std::string& name, const bool def)
+json& Resources::getRoomJson(const std::string& name)
 {
-	auto& data = def ? defaultRooms : rooms;
-	for(auto& room : data) if(room.at("name").get<std::string>() == name) return room;
+	for(auto& room : rooms) if(room.at("name").get<std::string>() == name) return room;
 
 	throw std::out_of_range("Room json for " + name + " not found");
 }
 
 /* Sebastian Pietras */
-json& Resources::getEnemyJson(const int id, const bool def)
+json& Resources::getEnemyJson(const int id)
 {
-	auto& data = def ? defaultEnemiesData : enemiesData;
-	for(auto& enemy : data) if(enemy.at("id").get<int>() == id) return enemy;
+	for(auto& enemy : enemiesData) if(enemy.at("id").get<int>() == id) return enemy;
 
 	throw std::out_of_range("Enemy json for " + std::to_string(id) + " not found");
 }
 
 /* Sebastian Pietras */
-json& Resources::getDoorJson(const std::string& roomName, const int id, const bool def)
+json& Resources::getDoorJson(const std::string& roomName, const int id)
 {
-	auto& data = def ? defaultRooms : rooms;
-	for(auto& room : data)
+	for(auto& room : rooms)
 		if(room.at("name").get<std::string>() == roomName)
 			for(auto& door : room.at("doors"))
 				if(door.at("id").get<int>() ==
@@ -488,10 +421,9 @@ json& Resources::getDoorJson(const std::string& roomName, const int id, const bo
 }
 
 /* Sebastian Pietras */
-json& Resources::getKeyJson(const std::string& roomName, const int doorId, const bool def)
+json& Resources::getKeyJson(const std::string& roomName, const int doorId)
 {
-	auto& data = def ? defaultRooms : rooms;
-	for(auto& room : data)
+	for(auto& room : rooms)
 		if(room.at("name").get<std::string>() == roomName)
 			for(auto& key : room.at("keys"))
 				if(key.at("doorId").get<int>() ==

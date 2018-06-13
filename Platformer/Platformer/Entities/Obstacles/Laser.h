@@ -1,4 +1,10 @@
 #pragma once
+
+/**
+* @file
+* @brief Laser obstacle class
+*/
+
 #include "Obstacle.h"
 
 class Laser : public Obstacle

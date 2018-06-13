@@ -1,7 +1,14 @@
 #pragma once
-#include "../Entity.h"
+
+/**
+* @file
+* @brief Portal class
+*/
+
+/** @cond */
 #include <utility>
-#include <iostream>
+/** @endcond */
+#include "../Entity.h"
 
 /* Bernard Lesiewicz */
 class Portal : public Entity
@@ -13,6 +20,15 @@ class Portal : public Entity
 	Portal* toPortal_;
 public:
 
+	/**
+	 * \brief Constructs a portal
+	 * \param texture Texture
+	 * \param position Position vector
+	 * \param roomName Name of the room where the portal is
+	 * \param id ID of the portal
+	 * \param toId ID of the target portal
+	 * \param toRoomName Name of the room where the target portal is
+	 */
 	Portal(sf::Texture& texture,
 	       const sf::Vector2f position,
 	       const std::string& roomName,
@@ -25,9 +41,7 @@ public:
 		, toRoomName_(std::move(toRoomName))
 		, toPortal_(nullptr) {}
 
-	void setToPortal(Portal* toPortal) { toPortal_ = toPortal;
-	std::cout << "Portal " << id_ << " in " << getCurrentRoomName() << " setToPortal " << toId_ << " in " << toRoomName_
-        << ", Ptr: " << toPortal_->getId() << " in " << toPortal->getCurrentRoomName() << std::endl; /*TEMPORARY*/}
+	void setToPortal(Portal* toPortal) { toPortal_ = toPortal; }
 
 	std::string getToRoomName() const { return toRoomName_; }
 	int getId() const { return id_; }

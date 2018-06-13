@@ -1,6 +1,14 @@
 #pragma once
-#include "Enemy.h"
+
+/**
+* @file
+* @brief Flier enemy class
+*/
+
+/** @cond */
 #include <random>
+/** @endcond */
+#include "Enemy.h"
 
 class Flier : public Enemy
 {

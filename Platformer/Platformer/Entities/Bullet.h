@@ -1,4 +1,10 @@
 #pragma once
+
+/**
+* @file
+* @brief Bullet class
+*/
+
 #include "Entity.h"
 
 class Player;
@@ -9,6 +15,14 @@ class Bullet : public Entity
 	sf::Vector2f velocity_;
 	int damage_;
 public:
+	/**
+	 * \brief Constructs a bullet
+	 * \param texture Texture
+	 * \param position Position vector
+	 * \param target Target position vector (where should the bullet fly)
+	 * \param damage Damage done by bullet
+	 * \param roomName Name of the room where the bullet is
+	 */
 	Bullet(sf::Texture& texture,
 	       sf::Vector2f position,
 	       sf::Vector2f target,

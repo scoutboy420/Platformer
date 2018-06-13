@@ -1,4 +1,10 @@
 #pragma once
+
+/**
+* @file
+* @brief Shooter enemy class
+*/
+
 #include "Enemy.h"
 #include "../Bullet.h"
 

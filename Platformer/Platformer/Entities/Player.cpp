@@ -36,6 +36,25 @@ void Player::shoot(std::vector<Bullet>& bullets)
 }
 
 /* Sebastian Pietras */
+bool Player::hurt(int damage, Player& p)
+{
+	if(mana_ >= 100.0f)
+	{
+		if(isImmune()) return false;
+
+		if(damage < 0) damage = 0;
+
+		mana_ = fmax(mana_ - damage, 0.0f);
+		immunityClock_.restart();
+		jump(true);
+
+		return false;
+	}
+
+	return MobileEntity::hurt(damage, p);
+}
+
+/* Sebastian Pietras */
 void Player::heal(const int amount)
 {
 	if(amount <= 0) return;

@@ -1,4 +1,10 @@
 #pragma once
+
+/**
+* @file
+* @brief Abstract enemy class
+*/
+
 #include "../MobileEntity.h"
 #include "../../Utilities/Resources.h"
 
@@ -13,6 +19,18 @@ public:
 		: id_(0)
 		, damage_(0) {}
 
+	/**
+	 * \brief 
+	 * \param texture Texture
+	 * \param position Position vector
+	 * \param speed Speed vector, where x is vertical speed and y is horizontal speed (jump speed)
+	 * \param gravity Gravity value
+	 * \param friction Friction value
+	 * \param roomName Name of the room where the entity is
+	 * \param hp Health points
+	 * \param id ID of enemy
+	 * \param damage Damage done by enemy to player by collision
+	 */
 	Enemy(sf::Texture& texture,
 	      const sf::Vector2f position,
 	      const sf::Vector2f speed,
@@ -33,5 +51,9 @@ public:
 
 	virtual void onPlayerCollision(Player& player, sf::Vector2f push);
 
+	/**
+	 * \brief Updates all data about the enemy to given json object
+	 * \param enemyJson Reference to enemy json object (should be taken from Resources)
+	 */
 	virtual void saveData(nlohmann::json& enemyJson);
 };

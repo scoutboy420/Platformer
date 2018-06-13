@@ -6,7 +6,7 @@ int main()
 {
 	try
 	{
-		Game game(sf::VideoMode(1280, 720), "Game");
+		Game game(sf::VideoMode(1280, 720), "Elka Quest");
 
 		while(game.play()) {}
 	}

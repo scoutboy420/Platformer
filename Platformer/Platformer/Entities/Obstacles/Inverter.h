@@ -1,4 +1,10 @@
 #pragma once
+
+/**
+* @file
+* @brief Inverter obstacle class
+*/
+
 #include "Obstacle.h"
 
 class Inverter : public Obstacle

@@ -1,4 +1,10 @@
 #pragma once
+
+/**
+* @file
+* @brief Player class
+*/
+
 #include "MobileEntity.h"
 
 class Player : public MobileEntity
@@ -23,6 +29,19 @@ public:
 		, startInvertGuard_(true)
 		, startDashGuard_(true) {}
 
+	/**
+	 * \brief Constructs player
+	 * \param texture Texture
+	 * \param position Position vector
+	 * \param speed Speed vector, where x is vertical speed and y is horizontal speed (jump speed)
+	 * \param gravity Gravity value
+	 * \param friction Friction value
+	 * \param roomName Name of the room where the entity is
+	 * \param hp Health points
+	 * \param mana Mana points
+	 * \param dashSpeed Vertical speed of dash
+	 * \param dashDamage Damage done when dashing
+	 */
 	Player(sf::Texture& texture,
 	       const sf::Vector2f position,
 	       const sf::Vector2f speed,
@@ -49,6 +68,8 @@ public:
 
 	bool isImmune() const override { return MobileEntity::isImmune() || isDashing(); }
 	bool isInverted() const { return invertClock_.getElapsedTime().asSeconds() <= 5.0f && !startInvertGuard_; }
+
+	bool hurt(int damage, Player&) override;
 
 	void heal(int amount);
 	void addMana(float amount);

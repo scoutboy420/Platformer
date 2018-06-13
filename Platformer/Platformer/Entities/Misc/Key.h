@@ -1,5 +1,13 @@
 #pragma once
+
+/**
+* @file
+* @brief Key class
+*/
+
+/** @cond */
 #include <utility>
+/** @endcond */
 #include "../Entity.h"
 #include "Door.h"
 
@@ -10,6 +18,15 @@ class Key : public Entity
 	std::string doorRoomName_;
 	Door* door_;
 public:
+	/**
+	 * \brief Constructs a key
+	 * \param texture Texture
+	 * \param position Position vector
+	 * \param doorId ID of the door this key opens
+	 * \param doorRoomName Name of the door where the target door is
+	 * \param pickedUp Is key picked up
+	 * \param roomName Name of the room where the key is
+	 */
 	Key(sf::Texture& texture,
 	    const sf::Vector2f position,
 	    const int doorId,

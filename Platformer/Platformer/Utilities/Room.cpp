@@ -39,26 +39,28 @@ void Room::addGradient()
 }
 
 /* Sebastian Pietras, Bernard Lesiewicz */
-Room::Room(const std::string& roomName, int layerId, const bool def)
+Room::Room(const std::string& roomName)
 {
 	roomName_ = roomName;
-	layerId_ = layerId;
 
-	blocks_ = Resources::createBlocks(roomName, def);
-	doors_ = Resources::createDoors(roomName, def);
-	keys_ = Resources::createKeys(roomName, def);
-	portals_ = Resources::createPortals(roomName, def);
-	obstacles_ = Resources::createObstacles(roomName, def);
+	blocks_ = Resources::createBlocks(roomName);
+	doors_ = Resources::createDoors(roomName);
+	keys_ = Resources::createKeys(roomName);
+	portals_ = Resources::createPortals(roomName);
+	obstacles_ = Resources::createObstacles(roomName);
 
-	size_ = sf::Vector2f(Resources::getRoomJson(roomName, def).at("width").get<float>() * 50.0f,
-	                     Resources::getRoomJson(roomName, def).at("height").get<float>() * 50.0f);
+	size_ = sf::Vector2f(Resources::getRoomJson(roomName).at("width").get<float>() * 50.0f,
+	                     Resources::getRoomJson(roomName).at("height").get<float>() * 50.0f);
+
+	layerId_ = Resources::getRoomJson(roomName).at("layer").get<int>();
+
 	addGradient();
 
 	try
 	{
-		const auto r = Resources::getRoomJson(roomName, def).at("colorR").get<int>();
-		const auto g = Resources::getRoomJson(roomName, def).at("colorG").get<int>();
-		const auto b = Resources::getRoomJson(roomName, def).at("colorB").get<int>();
+		const auto r = Resources::getRoomJson(roomName).at("colorR").get<int>();
+		const auto g = Resources::getRoomJson(roomName).at("colorG").get<int>();
+		const auto b = Resources::getRoomJson(roomName).at("colorB").get<int>();
 
 		backgroundColor_ = sf::Color(r, g, b);
 	}

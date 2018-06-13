@@ -1,4 +1,10 @@
 #pragma once
+
+/**
+* @file
+* @brief Walker enemy class
+*/
+
 #include "Enemy.h"
 
 class Walker : public Enemy

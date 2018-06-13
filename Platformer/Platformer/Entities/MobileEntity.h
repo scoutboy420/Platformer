@@ -1,4 +1,10 @@
 #pragma once
+
+/**
+* @file
+* @brief Abstract mobile entity class, representing entities with rigid bodies (e.g. affected by gravity)
+*/
+
 #include "Entity.h"
 #include "Bullet.h"
 
@@ -23,6 +29,16 @@ public:
 		, onGround_(false)
 		, healthPoints_(0) { }
 
+	/**
+	 * \brief Constructs a mobile entity
+	 * \param texture Texture
+	 * \param position Position vector
+	 * \param speed Speed vector, where x is vertical speed and y is horizontal speed (jump speed)
+	 * \param gravity Gravity value
+	 * \param friction Friction value
+	 * \param roomName Name of the room where the entity is
+	 * \param hp Health points
+	 */
 	MobileEntity(sf::Texture& texture,
 	             sf::Vector2f position,
 	             sf::Vector2f speed,
@@ -36,6 +52,11 @@ public:
 	virtual void update(float deltaTime, sf::Vector2f, bool, std::vector<Bullet>&);
 
 	virtual void jump(bool force);
+
+	/**
+	 * \brief Changes position by given transformation vector
+	 * \param transform Transformation vector
+	 */
 	void move(const sf::Vector2f transform) { body_.move(sf::Vector2f(transform.x, -transform.y)); }
 	void setVelocity(const sf::Vector2f velocity) { velocity_ = velocity; }
 	void stopX() { velocity_.x = 0.0f; }

@@ -1,5 +1,14 @@
 #pragma once
+
+/**
+* @file
+* @brief Abstract entity class
+*/
+
+/** @cond */
 #include <SFML/Graphics.hpp>
+
+/** @endcond */
 
 class Entity
 {
@@ -16,6 +25,12 @@ public:
 		: tpImmunity_(false)
 		, isActive(false) { }
 
+	/**
+	 * \brief Construct an entity
+	 * \param texture Texture
+	 * \param position Position vecotr
+	 * \param roomName Name of the room where the entity is
+	 */
 	Entity(sf::Texture& texture, sf::Vector2f position, std::string roomName);
 
 	const sf::Sprite& getBody() const { return body_; }
@@ -26,8 +41,16 @@ public:
 
 	void setPosition(const sf::Vector2f position) { body_.setPosition(position); }
 
+	/**
+	 * \brief This function can/should be called when this and given object are colliding 
+	 */
 	virtual void onCollision(const Entity&, sf::Vector2f) {}
+
+	/**
+	 * \brief This function can/should be called when this object changes rooms
+	 */
 	virtual void onRoomChange(const std::string&) {}
+
 	bool isTpImmune() const { return tpImmunity_; }
 	virtual void setTpImmunity(const bool a) { tpImmunity_ = a; }
 };
