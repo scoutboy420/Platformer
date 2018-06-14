@@ -1,5 +1,7 @@
-#include "Entity.h"
+/** @cond */
 #include <utility>
+/** @endcond */
+#include "Entity.h"
 
 /* Sebastian Pietras */
 Entity::Entity(sf::Texture& texture, const sf::Vector2f position, std::string roomName)

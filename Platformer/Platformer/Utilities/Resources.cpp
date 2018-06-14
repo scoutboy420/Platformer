@@ -1,5 +1,7 @@
-#include "Resources.h"
+/** @cond */
 #include <fstream>
+/** @endcond */
+#include "Resources.h"
 #include "../Entities/Enemies/Walker.h"
 #include "Room.h"
 #include "../Entities/Enemies/Flier.h"

@@ -7,7 +7,6 @@
 
 /** @cond */
 #include <SFML/Graphics.hpp>
-
 /** @endcond */
 
 class Entity

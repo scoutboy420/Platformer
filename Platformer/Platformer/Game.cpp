@@ -1,5 +1,4 @@
 #include "Game.h"
-#include <iostream>
 
 /* Sebastian Pietras */
 bool Game::isRectangleInWay(const sf::FloatRect& rect, const sf::Vector2f& p1, const sf::Vector2f& p2) const
