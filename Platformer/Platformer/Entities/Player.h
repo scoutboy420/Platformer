@@ -1,36 +1,85 @@
 #pragma once
-#include "Entity.h"
-#include "../Utilities/Resources.h"
 
-class Player :
-	public Entity
+/**
+* @file
+* @brief Player class
+*/
+
+#include "MobileEntity.h"
+
+class Player : public MobileEntity
 {
-	sf::Vector2f velocity_, speed_;
-	float gravity_, friction_;
+	sf::Clock dashCooldown_;
+	sf::Clock dashClock_;
+	sf::Clock shootClock_;
+	sf::Clock manaCooldown_;
+	sf::Clock invertClock_;
+	float dashSpeed_;
+	int dashDamage_;
+	bool movingRight_;
+	float mana_;
+	bool startInvertGuard_;
+	bool startDashGuard_;
 public:
-	bool onGround;
+	Player()
+		: dashSpeed_(0)
+		, dashDamage_(0)
+		, movingRight_(true)
+		, mana_(0)
+		, startInvertGuard_(true)
+		, startDashGuard_(true) {}
 
-	Player() : velocity_(0.0f, 0.0f), speed_(0.0f, 0.0f), gravity_(0.0f), friction_(0.0f), onGround(false) { }
+	/**
+	 * \brief Constructs player
+	 * \param texture Texture
+	 * \param position Position vector
+	 * \param speed Speed vector, where x is vertical speed and y is horizontal speed (jump speed)
+	 * \param gravity Gravity value
+	 * \param friction Friction value
+	 * \param roomName Name of the room where the entity is
+	 * \param hp Health points
+	 * \param mana Mana points
+	 * \param dashSpeed Vertical speed of dash
+	 * \param dashDamage Damage done when dashing
+	 */
+	Player(sf::Texture& texture,
+	       const sf::Vector2f position,
+	       const sf::Vector2f speed,
+	       const float gravity,
+	       const float friction,
+	       const std::string& roomName,
+	       const int hp,
+	       const float mana,
+	       const float dashSpeed,
+	       const int dashDamage)
+		: MobileEntity(texture, position, speed, gravity, friction, roomName, hp)
+		, dashSpeed_(dashSpeed)
+		, dashDamage_(dashDamage)
+		, movingRight_(true)
+		, mana_(mana)
+		, startInvertGuard_(true)
+		, startDashGuard_(true) { }
 
-	Player(sf::Texture& texture, sf::Vector2f position, sf::Vector2f speed, float gravity, float friction) :
-		Entity(texture, position), velocity_(0.0f, 0.0f), speed_(speed), gravity_(gravity), friction_(friction),
-		onGround(false) { }
+	void dash();
+	bool isDashing() const { return dashClock_.getElapsedTime().asSeconds() <= 0.125f && !startDashGuard_; }
+	int getDashDamage() const { return dashDamage_; }
 
-	const sf::Sprite& getBody() const { return body_; }
+	void shoot(std::vector<Bullet>& bullets);
 
-	void update(float deltaTime);
+	bool isImmune() const override { return MobileEntity::isImmune() || isDashing(); }
+	bool isInverted() const { return invertClock_.getElapsedTime().asSeconds() <= 5.0f && !startInvertGuard_; }
 
-	void jump();
-	void move(sf::Vector2f transform) { body_.move(sf::Vector2f(transform.x, -transform.y)); }
-	void setPosition(sf::Vector2f position) { body_.setPosition(position); }
-	void stopX() { velocity_.x = 0.0f; }
-	void stopY() { velocity_.y = 0.0f; }
+	bool hurt(int damage, Player&) override;
 
-	void run(Resources::direction direction)
-	{
-		if(direction == Resources::direction::LEFT) velocity_.x = -speed_.x;
-		if(direction == Resources::direction::RIGHT) velocity_.x = speed_.x;
-	}
+	void heal(int amount);
+	void addMana(float amount);
+	float getMana() const { return mana_; }
 
-	sf::Vector2f checkPush(const Entity& other, float deltaTime) const;
+	void run(bool runRight) override;
+	void jump(bool force) override;
+
+	void invert();
+
+	void update(float deltaTime, sf::Vector2f, bool, std::vector<Bullet>&) override;
+	void onRoomChange(const std::string& roomName) override;
 };

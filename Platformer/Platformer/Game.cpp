@@ -1,160 +1,471 @@
 #include "Game.h"
-#include "Utilities/Resources.h"
-#include "Utilities/JSON/json.hpp"
 
-/* Sebastian Pietras, Bernard Lesiewicz*/
-void Game::checkCollisions(float deltaTime)
+/* Sebastian Pietras */
+bool Game::isRectangleInWay(const sf::FloatRect& rect, const sf::Vector2f& p1, const sf::Vector2f& p2) const
 {
-	player_.onGround = false;
+	// Find min and max X for the segment
+	auto minX = std::min(p1.x, p2.x);
+	auto maxX = std::max(p1.x, p2.x);
 
-	for(const auto& entity : currentRoom_.getEntities())
+	// Find the intersection of the segment's and rectangle's x-projections
+	if(maxX > rect.left + rect.width) maxX = rect.left + rect.width;
+
+	if(minX < rect.left) minX = rect.left;
+
+	// If Y-projections do not intersect then there's no intersection
+	if(minX > maxX) return false;
+
+	// Find corresponding min and max Y for min and max X we found before
+	auto minY = p1.y;
+	auto maxY = p2.y;
+
+	const auto dx = p2.x - p1.x;
+	if(std::abs(dx) > 0.0001f)
 	{
-		if(player_.collides(entity))
+		const auto k = (p2.y - p1.y) / dx;
+		const auto b = p1.y - k * p1.x;
+		minY = k * minX + b;
+		maxY = k * maxX + b;
+	}
+
+	if(minY > maxY) std::swap(minY, maxY);
+
+	// Find the intersection of the segment's and rectangle's y-projections
+	if(maxY > rect.top + rect.height) maxY = rect.top + rect.height;
+
+	if(minY < rect.top) minY = rect.top;
+
+	// If Y-projections do not intersect then there's no intersection
+	return minY <= maxY;
+}
+
+/* Sebastian Pietras */
+bool Game::areInLine(const MobileEntity& e1, const MobileEntity& e2)
+{
+	if(e1.getCurrentRoomName() != e2.getCurrentRoomName()) return false;
+	if(!e1.isActive || !e2.isActive) return false;
+
+	auto lined = true;
+
+	for(auto& block : loadedRooms_[e1.getCurrentRoomName()].getEntities())
+	{
+		if(!block.isActive) continue;
+		if(isRectangleInWay(block.getBody().getGlobalBounds(), e1.getCenter(), e2.getCenter()))
 		{
-			const auto push = player_.checkPush(entity, deltaTime);
-			if(push.y > 0) player_.onGround = true; //if it pushes the player upwards, then the player is on top of something
-			player_.move(push);
-
-			printf("Position: %f,%f, Push: %f,%f\n", player_.getCenter().x, player_.getCenter().y, push.x, push.y);
-
-			if(push.y != 0.0f) player_.stopY();
+			lined = false;
+			break;
 		}
 	}
-	for(const auto& key : currentRoom_.getKeys())
-    {
-        int id = key.getId();
-        if(player_.collides(key) && openedDoors_[id] == false)
-        {
-            openedDoors_[id] = true;
-            //and reload/update the room
-            currentRoom_ = Room(currentRoom_.getID(), openedDoors_);
-        }
-    }
-    for(const auto& door : currentRoom_.getDoors())
+	for(auto& door : loadedRooms_[e1.getCurrentRoomName()].getDoors())
 	{
-		if(player_.collides(door))
+		if(!door.isActive) continue;
+		if(isRectangleInWay(door.getBody().getGlobalBounds(), e1.getCenter(), e2.getCenter()))
 		{
-			const auto push = player_.checkPush(door, deltaTime);
-			if(push.y > 0) player_.onGround = true; //if it pushes the player upwards, then the player is on top of something
-			player_.move(push);
-
-			printf("Position: %f,%f, Push: %f,%f (locked door)\n", player_.getCenter().x, player_.getCenter().y, push.x, push.y);
-
-			if(push.y != 0.0f) player_.stopY();
+			lined = false;
+			break;
 		}
+	}
+
+	return lined;
+}
+
+/* Sebastian Pietras */
+bool Game::collides(const Entity& e1, const Entity& e2) const
+{
+	if(!e1.isActive || !e2.isActive) return false;
+
+	//Distances
+	const auto deltaX = e2.getCenter().x - e1.getCenter().x;
+	const auto deltaY = e2.getCenter().y - e1.getCenter().y;
+	//Intersections
+	const auto intersectX = std::fabs(deltaX) - (e2.getSize().x * 0.5f + e1.getSize().x * 0.5f);
+	const auto intersectY = std::fabs(deltaY) - (e2.getSize().y * 0.5f + e1.getSize().y * 0.5f);
+
+	return intersectX < 0.0f && intersectY < 0.0f; //if both intersections are negative, then objects collide
+}
+
+/* Sebastian Pietras, Bernard Lesiewicz */
+sf::Vector2f Game::checkPush(const MobileEntity& e1, const Entity& e2, const float deltaTime) const
+{
+	if(!e1.isActive || !e2.isActive) return {0.0f, 0.0f};
+	const auto deltaX = e2.getCenter().x - e1.getCenter().x;
+	const auto deltaY = e2.getCenter().y - e1.getCenter().y;
+	const auto intersectX = std::fabs(deltaX) - (e2.getSize().x * 0.5f + e1.getSize().x * 0.5f);
+	const auto intersectY = std::fabs(deltaY) - (e2.getSize().y * 0.5f + e1.getSize().y * 0.5f);
+
+	if(intersectX < 0.0f && intersectY < 0.0f &&
+		(intersectX <= -fabs(deltaTime * e1.getVelocity().x) - 0.001f ||
+			intersectY <= -fabs(deltaTime * e1.getVelocity().y) - 0.001f))
+	{
+		if(intersectX > intersectY)
+		{
+			if(deltaX > 0.0f) return {intersectX, 0.0f};
+			return {-intersectX, 0.0f};
+		}
+		if(intersectX < intersectY)
+		{
+			if(deltaY > 0.0f) return {0.0f, -intersectY};
+			return {0.0f, intersectY};
+		}
+
+		return {intersectX, -intersectY};
+	}
+
+	return {0.0f, 0.0f};
+}
+
+/* Sebastian Pietras */
+void Game::checkBlockCollision(MobileEntity& mobile, const Entity& block, const float deltaTime) const
+{
+	if(collides(mobile, block))
+	{
+		const auto push = checkPush(mobile, block, deltaTime);
+		mobile.move(push);
+		mobile.onCollision(block, push);
 	}
 }
 
 /* Sebastian Pietras */
-void Game::checkRoomChange()
+void Game::checkKeyCollision(const Player& player, Key& key) const { if(collides(player, key)) { key.onCollision(player, sf::Vector2f(0, 0)); } }
+
+/* Sebastian Pietras */
+void Game::checkEnemyCollision(Player& player, Enemy& enemy, const float deltaTime) const { if(collides(player, enemy)) { enemy.onPlayerCollision(player, checkPush(player, enemy, deltaTime)); } }
+
+void Game::checkObstaclesColllision() { for(auto& obstacle : getCurrentRoom().getObstacles()) { if(collides(player_, *obstacle)) { obstacle->onPlayerCollision(player_); } } }
+
+/* Sebastian Pietras */
+void Game::checkBulletCollision()
 {
+	for(auto it = bullets_.begin(); it != bullets_.end();)
+	{
+		auto deleted = false;
+		for(auto& block : loadedRooms_[it->getCurrentRoomName()].getEntities())
+		{
+			if(collides(*it, block))
+			{
+				deleted = true;
+				break;
+			}
+		}
+		for(auto& door : loadedRooms_[it->getCurrentRoomName()].getDoors())
+		{
+			if(collides(*it, door))
+			{
+				deleted = true;
+				break;
+			}
+		}
+		if(deleted) it = bullets_.erase(it);
+		else ++it;
+	}
+
+	for(auto it = bullets_.begin(); it != bullets_.end();)
+	{
+		if(it->getCurrentRoomName() == player_.getCurrentRoomName())
+		{
+			if(collides(*it, player_))
+			{
+				it->onPlayerCollision(player_);
+				it = bullets_.erase(it);
+			}
+			else ++it;
+		}
+		else ++it;
+	}
+}
+
+/* Sebastian Pietras */
+void Game::checkPlayerBulletCollision()
+{
+	for(auto it = playerBullets_.begin(); it != playerBullets_.end();)
+	{
+		auto deleted = false;
+		for(auto& block : loadedRooms_[it->getCurrentRoomName()].getEntities())
+		{
+			if(collides(*it, block))
+			{
+				deleted = true;
+				break;
+			}
+		}
+		for(auto& door : loadedRooms_[it->getCurrentRoomName()].getDoors())
+		{
+			if(collides(*it, door))
+			{
+				deleted = true;
+				break;
+			}
+		}
+		if(deleted) it = playerBullets_.erase(it);
+		else ++it;
+	}
+
+	for(auto& enemy : enemies_)
+	{
+		for(auto it = playerBullets_.begin(); it != playerBullets_.end();)
+		{
+			if(it->getCurrentRoomName() == enemy->getCurrentRoomName())
+			{
+				if(collides(*it, *enemy))
+				{
+					it->onEnemyCollision(*enemy, player_);
+					it = playerBullets_.erase(it);
+				}
+				else ++it;
+			}
+			else ++it;
+		}
+	}
+}
+
+
+/* Sebastian Pietras, Bernard Lesiewicz*/
+void Game::checkCollisions(const float deltaTime)
+{
+	auto& playerRoom = getCurrentRoom();
+	for(const auto& entity : playerRoom.getEntities()) checkBlockCollision(player_, entity, deltaTime);
+	for(const auto& door : playerRoom.getDoors()) checkBlockCollision(player_, door, deltaTime);
+	for(auto& key : playerRoom.getKeys()) checkKeyCollision(player_, key);
+
+	for(auto& enemy : enemies_)
+	{
+		auto& enemyRoom = loadedRooms_[enemy->getCurrentRoomName()];
+		for(const auto& entity : enemyRoom.getEntities()) checkBlockCollision(*enemy, entity, deltaTime);
+		for(const auto& door : enemyRoom.getDoors()) checkBlockCollision(*enemy, door, deltaTime);
+
+		if(&enemyRoom == &playerRoom) checkEnemyCollision(player_, *enemy, deltaTime);
+	}
+
+	checkBulletCollision();
+	checkPlayerBulletCollision();
+
+	checkObstaclesColllision();
+}
+
+/* Bernard Lesiewicz */
+void Game::checkPlayerInPortals()
+{
+	auto& playerRoom = getCurrentRoom();
+	for(auto& portal : playerRoom.getPortals())
+	{
+		if(isInside(player_, portal) && !player_.isTpImmune()) { teleport(player_, portal); }                                      //if he entered the portal
+		else if(player_.isTpImmune() && !isInside(player_, portal) && collides(player_, portal)) { player_.setTpImmunity(false); } //if he isn't in the portal anymore
+	}
+}
+
+/* Bernard Lesiewicz */
+void Game::checkEnemiesInPortals()
+{
+	for(auto& enemy : enemies_)
+	{
+		auto& enemyRoom = loadedRooms_[enemy->getCurrentRoomName()];
+		for(auto& portal : enemyRoom.getPortals())
+		{
+			if(isInside(*enemy, portal) && !enemy->isTpImmune()) { teleport(*enemy, portal); }
+			else if(enemy->isTpImmune() && !isInside(*enemy, portal) && collides(*enemy, portal)) { enemy->setTpImmunity(false); }
+		}
+	}
+}
+
+/* Bernard Lesiewicz */
+void Game::checkBulletsInPortals()
+{
+	for(auto& bullet : bullets_)
+	{
+		auto& bulletRoom = loadedRooms_[bullet.getCurrentRoomName()];
+		for(auto& portal : bulletRoom.getPortals())
+		{
+			if(isInside(bullet, portal) && !bullet.isTpImmune()) { teleport(bullet, portal); }
+			else if(bullet.isTpImmune() && !isInside(bullet, portal) && collides(bullet, portal)) { bullet.setTpImmunity(false); }
+		}
+	}
+
+	for(auto& bullet : playerBullets_)
+	{
+		auto& bulletRoom = loadedRooms_[bullet.getCurrentRoomName()];
+		for(auto& portal : bulletRoom.getPortals())
+		{
+			if(isInside(bullet, portal) && !bullet.isTpImmune()) { teleport(bullet, portal); }
+			else if(bullet.isTpImmune() && !isInside(bullet, portal) && collides(bullet, portal)) { bullet.setTpImmunity(false); }
+		}
+	}
+}
+
+/* Bernard Lesiewicz */
+void Game::checkPortals()
+{
+	checkPlayerInPortals();
+	checkEnemiesInPortals();
+	checkBulletsInPortals();
+}
+
+/*Bernard Lesiewicz*/
+bool Game::isInside(const Entity& e1, const Entity& e2) const
+{
+	//distances between the centers:
+	const auto deltaX = std::fabs(e1.getCenter().x - e2.getCenter().x);
+	const auto deltaY = std::fabs(e1.getCenter().y - e2.getCenter().y);
+	//is the 1st entity inside the 2nd entity:
+	const auto withinX = e2.getSize().x * 0.5f - e1.getSize().x * 0.5f - deltaX;
+	const auto withinY = e2.getSize().y * 0.5f - e1.getSize().y * 0.5f - deltaY;
+
+	return withinX >= 0.0f && withinY >= 0.0f;
+}
+
+/* Bernard Lesiewicz */
+void Game::teleport(Entity& entity, Portal& portal)
+{
+	entity.setPosition(sf::Vector2f(portal.getToPortal()->getPosition().x + entity.getPosition().x - portal
+	                                                                                                 .getPosition().x,
+	                                portal.getToPortal()->getPosition().y + entity.getPosition().y - portal
+	                                                                                                 .getPosition().y));
+
+	entity.onRoomChange(portal.getToRoomName());
+	entity.setTpImmunity(true);
+}
+
+/* Sebastian Pietras */
+bool Game::findTransportLocation(const Entity& entity,
+                                 const Room& currentRoom,
+                                 const Resources::direction dir,
+                                 const nlohmann::json& entrance,
+                                 std::string& roomName,
+                                 int& entranceId,
+                                 sf::Vector2f& offset)
+{
+	switch(dir)
+	{
+	case Resources::direction::LEFT: if(entity.getCenter().y >= entrance.at("y").get<float>() &&
+			entity.getCenter().y <= entrance.at("y").get<float>() + entrance.at("height").get<float>() * 50.0f)
+		{
+			if(entrance.at("x").get<float>() == 0.0f)
+			{
+				roomName = entrance.at("to").at("roomName").get<std::string>();
+				entranceId = entrance.at("to").at("entranceID").get<int>();
+				offset = sf::Vector2f(-entity.getSize().x * 0.5f + 50.0f,
+				                      entity.getPosition().y - entrance.at("y").get<float>());
+				return true;
+			}
+		}
+		break;
+	case Resources::direction::RIGHT: if(entity.getCenter().y >= entrance.at("y").get<float>() &&
+			entity.getCenter().y <= entrance.at("y").get<float>() + entrance.at("height").get<float>() * 50.0f)
+		{
+			if(entrance.at("x").get<float>() + 50.0f == currentRoom.getSize().x)
+			{
+				roomName = entrance.at("to").at("roomName").get<std::string>();
+				entranceId = entrance.at("to").at("entranceID").get<int>();
+				offset = sf::Vector2f(-entity.getSize().x * 0.5f,
+				                      entity.getPosition().y - entrance.at("y").get<float>());
+				return true;
+			}
+		}
+		break;
+	case Resources::direction::UP: if(entity.getCenter().x >= entrance.at("x").get<float>() &&
+			entity.getCenter().x <= entrance.at("x").get<float>() + entrance.at("width").get<float>() * 50.0f)
+		{
+			if(entrance.at("y").get<float>() == 0.0f)
+			{
+				roomName = entrance.at("to").at("roomName").get<std::string>();
+				entranceId = entrance.at("to").at("entranceID").get<int>();
+				offset = sf::Vector2f(entity.getPosition().x - entrance.at("x").get<float>(),
+				                      -entity.getSize().y * 0.5f + 50.0f);
+				return true;
+			}
+		}
+		break;
+	case Resources::direction::DOWN: if(entity.getCenter().x >= entrance.at("x").get<float>() &&
+			entity.getCenter().x <= entrance.at("x").get<float>() + entrance.at("width").get<float>() * 50.0f)
+		{
+			if(entrance.at("y").get<float>() + 50.0f == currentRoom.getSize().y)
+			{
+				roomName = entrance.at("to").at("roomName").get<std::string>();
+				entranceId = entrance.at("to").at("entranceID").get<int>();
+				offset = sf::Vector2f(entity.getPosition().x - entrance.at("x").get<float>(),
+				                      -entity.getSize().y * 0.5f);
+				return true;
+			}
+		}
+		break;
+	}
+
+	return false;
+}
+
+/* Sebastian Pietras */
+void Game::checkRoomChange(Entity& entity)
+{
+	if(!entity.isActive) return;
+
+	auto& currentRoom = loadedRooms_[entity.getCurrentRoomName()];
+
 	Resources::direction dir;
-	if(player_.getCenter().x < 0.0f) dir = Resources::direction::LEFT;
-	else if(player_.getCenter().x > currentRoom_.getSize().x) dir = Resources::direction::RIGHT;
-	else if(player_.getCenter().y < 0.0f) dir = Resources::direction::UP;
-	else if(player_.getCenter().y > currentRoom_.getSize().y) dir = Resources::direction::DOWN;
+	if(entity.getCenter().x < 0.0f) dir = Resources::direction::LEFT;
+	else if(entity.getCenter().x > currentRoom.getSize().x) dir = Resources::direction::RIGHT;
+	else if(entity.getCenter().y < 0.0f) dir = Resources::direction::UP;
+	else if(entity.getCenter().y > currentRoom.getSize().y) dir = Resources::direction::DOWN;
 	else return;
 
 	//Messy and assumes blocks are 50x50 but works
 
-	int roomID = 0, entranceID = 0;
-	sf::Vector2f offset = { 0.0f, 0.0f };
-	const std::string roomName = "room" + std::to_string(currentRoom_.getID());
+	std::string roomName;
+	auto entranceId = 0;
+	sf::Vector2f offset = {0.0f, 0.0f};
 
-	//Find which entrance this entrance leads to and player position relative to this entrance
-	for(const auto& entrance : Resources::rooms_.at(roomName).at("entrances"))
+	//Find which entrance this entrance leads to and entity position relative to this entrance
+	for(const auto& entrance : json(Resources::getRoomJson(entity.getCurrentRoomName()).at("entrances")))
 	{
-		if(dir == Resources::direction::LEFT)
-		{
-			if(player_.getCenter().y >= entrance.at("y").get<float>() &&
-				player_.getCenter().y <= entrance.at("y").get<float>() + entrance.at("height").get<float>() * 50.0f)
-			{
-				if(entrance.at("x").get<float>() == 0.0f)
-				{
-					roomID = entrance.at("to").at("roomID").get<int>();
-					entranceID = entrance.at("to").at("entranceID").get<int>();
-					offset = sf::Vector2f(-player_.getSize().x * 0.5f + 50.0f, player_.getPosition().y - entrance.at("y").get<float>());
-				}
-			}
-		}
-		else if(dir == Resources::direction::RIGHT)
-		{
-			if(player_.getCenter().y >= entrance.at("y").get<float>() &&
-				player_.getCenter().y <= entrance.at("y").get<float>() + entrance.at("height").get<float>() * 50.0f)
-			{
-				if(entrance.at("x").get<float>() + 50.0f == currentRoom_.getSize().x)
-				{
-					roomID = entrance.at("to").at("roomID").get<int>();
-					entranceID = entrance.at("to").at("entranceID").get<int>();
-					offset = sf::Vector2f(-player_.getSize().x * 0.5f, player_.getPosition().y - entrance.at("y").get<float>());
-				}
-			}
-		}
-		else if(dir == Resources::direction::UP)
-		{
-			if(player_.getCenter().x >= entrance.at("x").get<float>() &&
-				player_.getCenter().x <= entrance.at("x").get<float>() + entrance.at("width").get<float>() * 50.0f)
-			{
-				if(entrance.at("y").get<float>() == 0.0f)
-				{
-					roomID = entrance.at("to").at("roomID").get<int>();
-					entranceID = entrance.at("to").at("entranceID").get<int>();
-					offset = sf::Vector2f(player_.getPosition().x - entrance.at("x").get<float>(), -player_.getSize().y * 0.5f + 50.0f);
-				}
-			}
-
-		}
-		else if(dir == Resources::direction::DOWN)
-		{
-			if(player_.getCenter().x >= entrance.at("x").get<float>() &&
-				player_.getCenter().x <= entrance.at("x").get<float>() + entrance.at("width").get<float>() * 50.0f)
-			{
-				if(entrance.at("y").get<float>() + 50.0f == currentRoom_.getSize().y)
-				{
-					roomID = entrance.at("to").at("roomID").get<int>();
-					entranceID = entrance.at("to").at("entranceID").get<int>();
-					offset = sf::Vector2f(player_.getPosition().x - entrance.at("x").get<float>(), -player_.getSize().y * 0.5f);
-				}
-			}
-		}
+		if(findTransportLocation(entity, currentRoom, dir, entrance, roomName, entranceId, offset)) break;
 	}
 
-	changeRoom(roomID, entranceID, offset);
+	if(roomName.empty())
+		throw std::runtime_error("Target room not found.\nCurrent room: " + entity.getCurrentRoomName() +
+		                         "\nEntity position: " + std::to_string(entity.getPosition().x) + "," +
+		                         std::to_string(entity.getPosition().y));
+
+	changeRoom(entity, roomName, entranceId, offset);
 }
 
 /* Sebastian Pietras */
-void Game::changeRoom(int roomID, int entranceID, sf::Vector2f offset)
+void Game::changeRoom(Entity& entity,
+                      const std::string& roomName,
+                      const int entranceId,
+                      const sf::Vector2f offset)
 {
-	const std::string roomName = "room" + std::to_string(roomID);
+	sf::Vector2f entrancePos = {0.0f, 0.0f};
 
-	currentRoom_ = Room(roomID, openedDoors_);
-
-	sf::Vector2f entrancePos = { 0.0f, 0.0f };
-
-	for(const auto& entrances : Resources::rooms_.at(roomName).at("entrances"))
+	for(const auto& entrances : json(Resources::getRoomJson(roomName).at("entrances")))
 	{
-		if(entrances.at("id").get<int>() == entranceID)
+		if(entrances.at("id").get<int>() == entranceId)
 		{
 			entrancePos = sf::Vector2f(entrances.at("x").get<float>(), entrances.at("y").get<float>());
 			break;
 		}
 	}
 
-	player_.setPosition(entrancePos + offset); //Apply offset so movement can be smooth
-
-	scaleView();
+	entity.setPosition(entrancePos + offset); //Apply offset so movement can be smooth
+	entity.onRoomChange(roomName);
 }
+
 
 /* Sebastian Pietras */
 void Game::checkCamera()
 {
-	float camX = player_.getCenter().x, camY = player_.getCenter().y;
+	auto camX = player_.getCenter().x, camY = player_.getCenter().y;
+	const auto& currentRoom = getCurrentRoom();
 
 	//Bound camera if it goes outside walls (assuming room is rectangular)
-	if(camX - view_.getSize().x * 0.5f < 0.0f) camX += (view_.getSize().x * 0.5f - camX);
-	if(camX + view_.getSize().x * 0.5f > currentRoom_.getSize().x) camX -= (camX + view_.getSize().x * 0.5f - currentRoom_.getSize().x);
-	if(camY - view_.getSize().y * 0.5f < 0.0f) camY += (view_.getSize().y * 0.5f - camY);
-	if(camY + view_.getSize().y * 0.5f > currentRoom_.getSize().y) camY -= (camY + view_.getSize().y * 0.5f - currentRoom_.getSize().y);
+	if(camX - view_.getSize().x * 0.5f < 0.0f) camX += view_.getSize().x * 0.5f - camX;
+
+	if(camX + view_.getSize().x * 0.5f > currentRoom.getSize().x)
+		camX -= camX + view_.getSize().x * 0.5f - currentRoom
+		                                          .getSize().x;
+
+	if(camY - view_.getSize().y * 0.5f < 0.0f) camY += view_.getSize().y * 0.5f - camY;
+
+	if(camY + view_.getSize().y * 0.5f > currentRoom.getSize().y)
+		camY -= camY + view_.getSize().y * 0.5f - currentRoom
+		                                          .getSize().y;
 
 	view_.setCenter(camX, camY);
 }
@@ -165,8 +476,9 @@ void Game::scaleView()
 	view_.setSize(sf::Vector2f(window_.getSize()));
 	//If current view is bigger than entire room, scale it down to fit entire room (and no more)
 
-	const float ratioX = currentRoom_.getSize().x / view_.getSize().x, ratioY = currentRoom_.getSize().y / view_.getSize().y;
-	const float dominatingRatio = std::min(ratioX, ratioY);
+	const auto ratioX = getCurrentRoom().getSize().x / view_.getSize().x,
+	           ratioY = getCurrentRoom().getSize().y / view_.getSize().y;
+	const auto dominatingRatio = std::min(ratioX, ratioY);
 
 	if(dominatingRatio < 1.0f) view_.zoom(dominatingRatio);
 }
@@ -174,46 +486,129 @@ void Game::scaleView()
 /* Sebastian Pietras */
 void Game::handleInput()
 {
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
-	{
-		player_.run(Resources::direction::RIGHT);
-	}
-	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-	{
-		player_.run(Resources::direction::LEFT);
-	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) restart();
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) player_.run(true);
+	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)) player_.run(false);
+
+	if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) player_.dash();
+
+	if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) player_.shoot(playerBullets_);
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) player_.jump(false);
+}
+
+/* Sebastian Pietras */
+void Game::savePlayer() const
+{
+	Resources::playerData.at("positionX") = player_.getPosition().x;
+	Resources::playerData.at("positionY") = player_.getPosition().y;
+	Resources::playerData.at("startingRoom") = player_.getCurrentRoomName();
+	Resources::playerData.at("hp") = player_.getHp();
+	Resources::playerData.at("mana") = player_.getMana();
+}
+
+/* Sebastian Pietras */
+void Game::saveEnemies()
+{
+	for(auto& enemy : enemies_)
 	{
-		player_.jump();
+		auto& enemyJson = Resources::getEnemyJson(enemy->getId());
+		enemy->saveData(enemyJson);
 	}
+}
+
+/* Sebastian Pietras */
+void Game::showErrorWindow(const std::string& title, const std::string& message)
+{
+	auto errorText = sf::Text(message, Resources::fonts["roboto"]);
+	errorText.setCharacterSize(22);
+	errorText.setFillColor(sf::Color::Black);
+
+	const auto width = unsigned(errorText.getGlobalBounds().width) * 2, height =
+			           unsigned(errorText.getGlobalBounds().height) * 4;
+	auto errorWindow = new sf::RenderWindow(sf::VideoMode(width, height),
+	                                        title,
+	                                        sf::Style::Close | sf::Style::Titlebar);
+
+	errorWindow->clear(sf::Color::White);
+
+	errorText.setPosition(0.25f * width, 3.0f / 8.0f * height);
+	errorWindow->draw(errorText);
+	errorWindow->display();
+
+	errorWindows_.push_back(errorWindow);
+}
+
+/* Sebastian Pietras */
+void Game::checkErrorWindows()
+{
+	sf::Event e{};
+	for(auto it = errorWindows_.begin(); it != errorWindows_.end();)
+	{
+		auto close = false;
+		while(!close && (*it)->pollEvent(e))
+		{
+			if(e.type == sf::Event::Closed)
+			{
+				(*it)->close();
+				delete *it;
+				it = errorWindows_.erase(it);
+				close = true;
+			}
+		}
+
+		if(!close) ++it;
+	}
+}
+
+/* Sebastian Pietras */
+void Game::save()
+{
+	savePlayer();
+	saveEnemies();
+	Resources::save();
+}
+
+/* Sebastian Pietras */
+void Game::restart()
+{
+	Resources::rooms = Resources::defaultRooms;
+	Resources::playerData = Resources::defaultPlayerData;
+	Resources::enemiesData = Resources::defaultEnemiesData;
+	loadedRooms_ = Resources::createRooms();
+	setKeys();
+	setPortals();
+	enemies_ = Resources::createEnemies();
+
+	initializePlayer(true);
+
+	view_ = sf::View(player_.getCenter(), sf::Vector2f(window_.getSize()));
+
+	scaleView();
+
+	window_.setView(view_);
 }
 
 /* Sebastian Pietras */
 bool Game::handleWindowEvents()
 {
-	sf::Event e;
+	sf::Event e{};
 
 	while(window_.pollEvent(e))
 	{
 		switch(e.type)
 		{
-			case sf::Event::Closed:
+		case sf::Event::Closed: try { save(); }
+			catch(const std::exception& ex)
 			{
-				//Save all data
-				Resources::playerData_.at("positionX") = player_.getPosition().x;
-				Resources::playerData_.at("positionY") = player_.getPosition().y;
-				Resources::playerData_.at("startingRoom") = "room" + std::to_string(currentRoom_.getID());
-//				Resources::save();
-				window_.close();
-				return false;
+				showErrorWindow("Error", "Can't save.\n" + std::string(ex.what()));
+				return true;
 			}
-			case sf::Event::Resized:
-			{
-				scaleView();
-			}
-		default:
-			break;
+			window_.close();
+			return false;
+		case sf::Event::Resized: scaleView();
+		default: break;
 		}
 	}
 
@@ -221,66 +616,186 @@ bool Game::handleWindowEvents()
 }
 
 /* Sebastian Pietras */
-void Game::update(float deltaTime)
+void Game::update(const float deltaTime)
 {
-	player_.update(deltaTime);
+	player_.update(deltaTime, player_.getPosition(), true, bullets_);
+	for(auto& enemy : enemies_) enemy->update(deltaTime, player_.getCenter(), areInLine(player_, *enemy), bullets_);
+	for(auto& bullet : bullets_) bullet.update(deltaTime);
+	for(auto& bullet : playerBullets_) bullet.update(deltaTime);
+	for(auto& room : loadedRooms_) room.second.update();
 
 	checkCollisions(deltaTime);
+	checkPortals();
 
-	checkRoomChange();
+	try { checkRoomChange(player_); }
+	catch(const std::exception& e)
+	{
+		showErrorWindow("Error", "Player can't change room.\n" + std::string(e.what()));
+		restart();
+	}
+
+
+	scaleView();
+	try
+	{
+		for(auto& enemy : enemies_) checkRoomChange(*enemy);
+		for(auto& bullet : bullets_) checkRoomChange(bullet);
+		for(auto& bullet : playerBullets_) checkRoomChange(bullet);
+	}
+	catch(const std::exception& e)
+	{
+		showErrorWindow("Error", "Entity can't change room.\n" + std::string(e.what()));
+		restart();
+	}
 
 	checkCamera();
+}
+
+/* Sebastian Pietras */
+bool Game::isInsideView(const sf::FloatRect& viewRect, const Entity& entity) const
+{
+	if(!entity.isActive || entity.getCurrentRoomName() != player_.getCurrentRoomName()) return false;
+	const auto entityRect = entity.getBody().getGlobalBounds();
+	return viewRect.intersects(entityRect);
+}
+
+/* Sebastian Pietras */
+void Game::drawEntities()
+{
+	const auto viewRect = sf::FloatRect(view_.getCenter() - sf::Vector2f(view_.getSize().x * 0.5f,
+	                                                                     view_.getSize().y * 0.5f),
+	                                    view_.getSize());
+
+	for(const auto& entity : getCurrentRoom().getEntities())
+		if(isInsideView(viewRect, entity))
+			window_.
+					draw(entity.getBody());
+
+	for(const auto& door : getCurrentRoom().getDoors()) if(isInsideView(viewRect, door)) window_.draw(door.getBody());
+
+	for(const auto& key : getCurrentRoom().getKeys()) if(isInsideView(viewRect, key)) window_.draw(key.getBody());
+
+	for(auto& room : loadedRooms_)
+		for(auto& obstacle : room.second.getObstacles())
+			if(isInsideView(viewRect, *obstacle))
+				window_.
+						draw(obstacle->getBody());
+
+	for(const auto& portal : getCurrentRoom().getPortals())
+		if(isInsideView(viewRect, portal))
+			window_.
+					draw(portal.getBody());
+
+	for(auto& enemy : enemies_)
+	{
+		if(isInsideView(viewRect, *enemy))
+		{
+			window_.draw(enemy->getBody());
+			window_.draw(enemy->getHealthText());
+		}
+	}
+
+	for(auto& bullet : bullets_) if(isInsideView(viewRect, bullet)) window_.draw(bullet.getBody());
+	for(auto& bullet : playerBullets_) if(isInsideView(viewRect, bullet)) window_.draw(bullet.getBody());
+
+	window_.draw(player_.getBody());
+}
+
+/* Sebastian Pietras */
+void Game::drawOverlay()
+{
+	for(auto e : getCurrentRoom().getGradientEdges()) window_.draw(e.data(), 4, sf::Quads);
+
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Tab)) showMiniMap();
+
+	window_.setView(sf::View(sf::Vector2f(window_.getSize()) * 0.5f,
+	                         sf::Vector2f(window_.getSize())));
+
+	playerHealthText_.setString(std::to_string(player_.getHp()));
+	manaText_.setString(std::to_string(int(player_.getMana())));
+	window_.draw(playerHealthText_);
+	window_.draw(manaText_);
 }
 
 /* Sebastian Pietras, Bernard Lesiewicz */
 void Game::draw()
 {
 	window_.clear(sf::Color::Black);
-
 	window_.setView(view_);
+	window_.draw(getCurrentRoom().getBackground());
 
-	window_.draw(currentRoom_.getBackground());
-
-	const auto viewRect = sf::FloatRect(view_.getCenter() - sf::Vector2f(view_.getSize().x * 0.5f, view_.getSize().y * 0.5f), view_.getSize());
-
-	for(const auto& entity : currentRoom_.getEntities())
-	{
-		const auto entityRect = entity.getBody().getGlobalBounds();
-		if(viewRect.intersects(entityRect)) //draw only entities that are inside view
-		{
-			window_.draw(entity.getBody());
-		}
-	}
-
-    for(const auto& door : currentRoom_.getDoors())
-	{
-		const auto entityRect = door.getBody().getGlobalBounds();
-		if(viewRect.intersects(entityRect)) //draw only entities that are inside view
-		{
-			window_.draw(door.getBody());
-		}
-	}
-
-	for(const auto& key : currentRoom_.getKeys())
-	{
-		const auto entityRect = key.getBody().getGlobalBounds();
-		if(viewRect.intersects(entityRect)) //draw only entities that are inside view
-		{
-			window_.draw(key.getBody());
-		}
-	}
-
-	window_.draw(player_.getBody());
-
-	for(auto e : currentRoom_.getGradientEdges())
-	{
-		window_.draw(e.data(), 4, sf::Quads);
-	}
-
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Tab))
-		showMiniMap();
+	drawEntities();
+	drawOverlay();
 
 	window_.display();
+}
+
+/* Sebastian Pietras */
+sf::RectangleShape Game::createRoomShape(const nlohmann::json& roomJson,
+                                         const float scale,
+                                         const float outlineThickness)
+{
+	auto shape = sf::RectangleShape(sf::Vector2f(roomJson.at("width").get<float>() * scale -
+	                                             outlineThickness,
+	                                             roomJson.at("height").get<float>() * scale -
+	                                             outlineThickness));
+	shape.setPosition(roomJson.at("globalX").get<float>() / 50.0f * scale,
+	                  roomJson.at("globalY").get<float>() / 50.0f * scale);
+
+	const auto r = roomJson.at("colorR").get<int>();
+	const auto g = roomJson.at("colorG").get<int>();
+	const auto b = roomJson.at("colorB").get<int>();
+
+	shape.setFillColor(sf::Color(r, g, b));
+
+	shape.setOutlineColor(sf::Color::Blue);
+	shape.setOutlineThickness(outlineThickness);
+
+	return shape;
+}
+
+/* Sebastian Pietras */
+sf::RectangleShape Game::createMiniMapBackground(const sf::Vector2f baseSize) const
+{
+	auto background = sf::RectangleShape(sf::Vector2f(baseSize.x * 1.25f, baseSize.y * 1.25f));
+	background.setPosition(sf::Vector2f(window_.getSize().x * 0.5f, window_.getSize().y * 0.5f) -
+	                       sf::Vector2f(background.getSize().x * 0.5f, background.getSize().y * 0.5f));
+	background.setFillColor(sf::Color::Black);
+
+	return background;
+}
+
+/* Sebastian Pietras */
+void Game::drawMiniMap(const sf::RectangleShape& background,
+                       sf::RectangleShape& currentRoomShape,
+                       std::vector<sf::RectangleShape> roomShapes,
+                       const sf::Vector2f mapCenter)
+{
+	//Draw minimap independently of current view
+	window_.setView(sf::View(sf::Vector2f(window_.getSize().x * 0.5f, window_.getSize().y * 0.5f),
+	                         sf::Vector2f(window_.getSize())));
+
+	window_.draw(background);
+
+	for(auto shape : roomShapes)
+	{
+		//Transform from local to global position
+		shape.setPosition(sf::Vector2f(window_.getSize().x * 0.5f, window_.getSize().y * 0.5f) - mapCenter +
+		                  shape.getPosition());
+		window_.draw(shape);
+	}
+
+	currentRoomShape.setPosition(sf::Vector2f(window_.getSize().x * 0.5f, window_.getSize().y * 0.5f) - mapCenter +
+	                             currentRoomShape.getPosition());
+	window_.draw(currentRoomShape);
+}
+
+/* Sebastian Pietras */
+Room& Game::getCurrentRoom()
+{
+	const auto roomName = player_.getCurrentRoomName();
+
+	return loadedRooms_[roomName];
 }
 
 /* Sebastian Pietras */
@@ -288,35 +803,32 @@ void Game::showMiniMap()
 {
 	std::vector<sf::RectangleShape> roomShapes;
 	sf::RectangleShape currentRoomShape;
-	sf::Vector2f upperLeft = sf::Vector2f(0.0f, 0.0f), lowerRight = sf::Vector2f(0.0f, 0.0f);
+	auto upperLeft = sf::Vector2f(0.0f, 0.0f), lowerRight = sf::Vector2f(0.0f, 0.0f);
 
-	const float outlineThickness = 2.0f;
-	const float scale = std::min(float(window_.getSize().x), float(window_.getSize().y)) / 50.0f;
+	const auto outlineThickness = 2.0f;
+	const auto scale = std::min(float(window_.getSize().x), float(window_.getSize().y)) / 50.0f;
 
-	for(auto it = Resources::rooms_.begin(); it != Resources::rooms_.end(); ++it)
+	for(auto room : Resources::rooms)
 	{
-		if(!it.value().at("visited").get<bool>()) continue;
+		if(room.at("layer").get<int>() != getCurrentRoom().getLayerId()) continue;
+		if(!room.at("visited").get<bool>()) continue;
 
 		//Shape of room
-		sf::RectangleShape shape = sf::RectangleShape(sf::Vector2f(it.value().at("width").get<float>() * scale - outlineThickness, it.value().at("height").get<float>() * scale - outlineThickness));
-		shape.setPosition(it.value().at("globalX").get<float>() / 50.0f * scale, it.value().at("globalY").get<float>() / 50.0f * scale);
+		auto shape = createRoomShape(room, scale, outlineThickness);
 
 		//Bounds
 		if(shape.getPosition().x < upperLeft.x) upperLeft.x = shape.getPosition().x;
 		if(shape.getPosition().y < upperLeft.y) upperLeft.y = shape.getPosition().y;
-		if(shape.getPosition().x + shape.getSize().x > lowerRight.x) lowerRight.x = shape.getPosition().x + shape.getSize().x;
-		if(shape.getPosition().y + shape.getSize().y > lowerRight.y) lowerRight.y = shape.getPosition().y + shape.getSize().y;
+		if(shape.getPosition().x + shape.getSize().x > lowerRight.x)
+			lowerRight.x = shape.getPosition().x + shape
+			                                       .getSize().
+			                                       x;
+		if(shape.getPosition().y + shape.getSize().y > lowerRight.y)
+			lowerRight.y = shape.getPosition().y + shape
+			                                       .getSize().
+			                                       y;
 
-		const int r = it.value().at("colorR").get<int>();
-		const int g = it.value().at("colorG").get<int>();
-		const int b = it.value().at("colorB").get<int>();
-
-		shape.setFillColor(sf::Color(r, g, b));
-
-		shape.setOutlineColor(sf::Color::Blue);
-		shape.setOutlineThickness(outlineThickness);
-
-		if(it.key() == "room" + std::to_string(currentRoom_.getID())) //current room
+		if(room.at("name").get<std::string>() == getCurrentRoom().getRoomName()) //current room
 		{
 			shape.setOutlineColor(sf::Color::Red);
 			currentRoomShape = shape;
@@ -324,78 +836,153 @@ void Game::showMiniMap()
 		else roomShapes.push_back(shape);
 	}
 
-	const sf::Vector2f center = sf::Vector2f((upperLeft.x + lowerRight.x)*0.5f, (upperLeft.y + lowerRight.y)*0.5f);
-	const sf::Vector2f size = sf::Vector2f(fabs(upperLeft.x - lowerRight.x), fabs(upperLeft.y - lowerRight.y));
-	//Background
-	sf::RectangleShape background = sf::RectangleShape(sf::Vector2f(size.x * 1.25f, size.y * 1.25f));
-	background.setPosition(sf::Vector2f(window_.getSize().x * 0.5f, window_.getSize().y * 0.5f) - sf::Vector2f(background.getSize().x * 0.5f, background.getSize().y * 0.5f));
-	background.setFillColor(sf::Color::Black);
-	background.setOutlineColor(sf::Color::Black);
-	background.setOutlineThickness(outlineThickness);
+	const auto center = sf::Vector2f((upperLeft.x + lowerRight.x) * 0.5f, (upperLeft.y + lowerRight.y) * 0.5f);
+	const auto size = sf::Vector2f(fabs(upperLeft.x - lowerRight.x), fabs(upperLeft.y - lowerRight.y));
+	const auto background = createMiniMapBackground(size);
 
-	//Draw minimap independently of current view
-	window_.setView(sf::View(sf::Vector2f(window_.getSize().x * 0.5f, window_.getSize().y * 0.5f), sf::Vector2f(window_.getSize())));
+	drawMiniMap(background, currentRoomShape, roomShapes, center);
+}
 
-	window_.draw(background);
+/* Sebastian Pietras */
+void Game::initializePlayer(const bool def)
+{
+	auto& data = def ? Resources::defaultPlayerData : Resources::playerData;
 
-	for(auto shape : roomShapes)
+	const sf::Vector2f playerPosition(data.at("positionX").get<float>(),
+	                                  data.at("positionY").get<float>());
+	const sf::Vector2f playerSpeed(data.at("speed").get<float>(),
+	                               data.at("jumpSpeed").get<float>());
+	const auto gravity = data.at("gravity").get<float>(),
+	           friction = data.at("friction").get<float>(),
+	           dashSpeed = data.at("dashSpeed").get<float>(),
+	           mana = data.at("mana").get<float>();
+	const auto roomName = data.at("startingRoom").get<std::string>();
+	const auto hp = data.at("hp").get<int>(),
+	           dashDamage = data.at("dashDamage").get<int>();
+
+	player_ = Player(Resources::textures.at("player"),
+	                 playerPosition,
+	                 playerSpeed,
+	                 gravity,
+	                 friction,
+	                 roomName,
+	                 hp,
+	                 mana,
+	                 dashSpeed,
+	                 dashDamage);
+
+	Resources::getRoomJson(roomName).at("visited") = true;
+}
+
+
+/* Sebastian Pietras */
+void Game::setKeys()
+{
+	for(auto& room : loadedRooms_)
 	{
-		//Transform from local to global position
-		shape.setPosition(sf::Vector2f(window_.getSize().x * 0.5f, window_.getSize().y * 0.5f) - center + shape.getPosition());
-		window_.draw(shape);
+		for(auto& key : room.second.getKeys())
+		{
+			auto& doorRoom = loadedRooms_[key.getDoorRoomName()];
+			for(auto& door : doorRoom.getDoors())
+			{
+				if(door.getId() == key.getDoorId())
+				{
+					key.setDoor(&door);
+					break;
+				}
+			}
+		}
 	}
+}
 
-	currentRoomShape.setPosition(sf::Vector2f(window_.getSize().x * 0.5f, window_.getSize().y * 0.5f) - center + currentRoomShape.getPosition());
-	window_.draw(currentRoomShape);
+/* Bernard Lesiewicz */
+void Game::setPortals()
+{
+	for(auto& room : loadedRooms_)
+	{
+		for(auto& portal : room.second.getPortals())
+		{
+			auto& toRoom = loadedRooms_[portal.getToRoomName()];
+			for(auto& toPortal : toRoom.getPortals())
+			{
+				if(toPortal.getId() == portal.getToId())
+				{
+					portal.setToPortal(&toPortal);
+					break;
+				}
+			}
+		}
+	}
 }
 
 /* Sebastian Pietras, Bernard Lesiewicz */
-Game::Game(sf::VideoMode mode, std::string title) : window_(mode, title)
+Game::Game(const sf::VideoMode mode, const std::string& title)
+	: window_(mode, title)
 {
 	window_.setVisible(false);
+	window_.setMouseCursorVisible(false);
 
-	Resources::load();
+	try { Resources::load(); }
+	catch(const std::exception& e) { throw std::runtime_error("Can't load resources.\n" + std::string(e.what())); }
 
-    int n = Resources::highestDoorId();     //all doors are closed at the beginning
-	for(int i=0; i<=n; i++)
-    {
-        openedDoors_.push_back(false);
-    }
+	loadedRooms_ = Resources::createRooms();
+	setKeys();
+	setPortals();
 
-	currentRoom_ = Room(Resources::getRoomId(Resources::playerData_.at("startingRoom").get<std::string>()), openedDoors_);
+	try { enemies_ = Resources::createEnemies(); }
+	catch(const std::exception& e) { throw std::runtime_error("Can't create enemies.\n" + std::string(e.what())); }
 
-	const sf::Vector2f playerPosition(Resources::playerData_.at("positionX").get<float>(),
-	                                  Resources::playerData_.at("positionY").get<float>());
-	const sf::Vector2f playerSpeed(Resources::playerData_.at("speed").get<float>(),
-	                               Resources::playerData_.at("jumpSpeed").get<float>());
-	const auto gravity = Resources::playerData_.at("gravity").get<float>();
-	const auto friction = Resources::playerData_.at("friction").get<float>();
 
-	player_ = Player(Resources::textures_.at("player"), playerPosition, playerSpeed, gravity, friction);
+	try { initializePlayer(); }
+	catch(const std::exception& e) { throw std::runtime_error("Can't initialize player.\n" + std::string(e.what())); }
 
-	checkCollisions(0.0f);      //not sure how big deltaTime should be
+	playerHealthText_.setFont(Resources::fonts["vcr"]);
+	playerHealthText_.setFillColor(sf::Color::White);
+	playerHealthText_.setOutlineColor(sf::Color::Black);
+	playerHealthText_.setOutlineThickness(1.0f);
+	playerHealthText_.setPosition(10.0f, 10.0f);
+	playerHealthText_.setCharacterSize(20);
+
+	manaText_.setFont(Resources::fonts["vcr"]);
+	manaText_.setFillColor(sf::Color::White);
+	manaText_.setOutlineColor(sf::Color::Black);
+	manaText_.setOutlineThickness(1.0f);
+	manaText_.setPosition(100.0f, 10.0f);
+	manaText_.setCharacterSize(20);
 
 	view_ = sf::View(player_.getCenter(), sf::Vector2f(window_.getSize()));
 
 	scaleView();
 
 	window_.setView(view_);
-
 	window_.setVisible(true);
 }
 
 /* Sebastian Pietras */
 bool Game::play()
 {
-	if(!handleWindowEvents()) return false; //Check what happened with window
+	try
+	{
+		if(!handleWindowEvents()) return false; //Check what happened with window
 
-	handleInput(); //Check pressed keys
+		handleInput(); //Check pressed keys
 
-	float deltaTime = clock_.restart().asSeconds();
-	if(deltaTime > 1.0f / 60.0f) deltaTime = 1.0f / 60.0f; //limit deltaTime, so it can't be big
+		auto deltaTime = clock_.restart().asSeconds();
+		if(deltaTime > 1.0f / 60.0f) deltaTime = 1.0f / 60.0f; //limit deltaTime, so it can't be big
 
-	update(deltaTime); //update everything that is moving
-	draw(); //draw everything to the screen
+		update(deltaTime); //update everything that is moving
+		if(player_.getHp() <= 0) restart();
 
-	return true;
+		draw(); //draw everything to the screen
+		checkErrorWindows();
+
+		return true;
+	}
+	catch(const std::exception& e1)
+	{
+		try { save(); }
+		catch(const std::exception& e2) { throw std::runtime_error("Runtime error.\n" + std::string(e1.what()) + "\nCouldn't save :(\n" + e2.what()); }
+
+		throw std::runtime_error("Runtime error.\n" + std::string(e1.what()) + "\nGame saved :)");
+	}
 }

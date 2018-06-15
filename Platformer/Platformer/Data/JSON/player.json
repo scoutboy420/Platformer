@@ -1,10 +1,13 @@
 {
+    "dashDamage": 25,
+    "dashSpeed": 2000.0,
     "friction": 35.0,
     "gravity": 4000.0,
+    "hp": 100,
     "jumpSpeed": 1200.0,
-    "name": "player",
-    "positionX": 400,
-    "positionY": 350.0,
+    "mana": 90.6480484008789,
+    "positionX": 200.0,
+    "positionY": 400.0,
     "speed": 500.0,
     "startingRoom": "room1"
 }

@@ -1,53 +1,134 @@
 #include "Player.h"
+#include "../Utilities/Resources.h"
 
-/* Sebastian Pietras, Bernard Lesiewicz */
-void Player::update(float deltaTime)
+/* Sebastian Pietras */
+void Player::dash()
 {
-	velocity_.y -= gravity_ * deltaTime;
+	if(dashCooldown_.getElapsedTime().asSeconds() < 0.5f || mana_ < 10) return;
 
-	velocity_.x *= 1.0f / (1.0f + deltaTime * friction_);
+	startDashGuard_ = false;
 
-	if(std::fabs(velocity_.x) < 0.0001f) velocity_.x = 0.0f;
+	if(movingRight_) velocity_.x = dashSpeed_;
+	else velocity_.x = -dashSpeed_;
 
-	printf("Velocity: %f,%f\n", velocity_.x, velocity_.y);
+	mana_ -= 10;
+	manaCooldown_.restart();
 
-	const sf::Vector2f transform = sf::Vector2f(velocity_.x * deltaTime, velocity_.y * deltaTime);
-	move(transform);
+	dashClock_.restart();
+	dashCooldown_.restart();
 }
 
 /* Sebastian Pietras */
-void Player::jump()
+void Player::shoot(std::vector<Bullet>& bullets)
 {
-	if(onGround)
+	if(shootClock_.getElapsedTime().asSeconds() < 0.25f || mana_ < 5) return;
+
+	sf::Vector2f target;
+	if(movingRight_) target = {getCenter().x + 10.0f, getCenter().y};
+	else target = {getCenter().x - 10.0f, getCenter().y};
+
+	bullets.push_back(Bullet(Resources::textures["bullet"], getCenter(), target, 20, getCurrentRoomName()));
+
+	mana_ -= 5;
+	manaCooldown_.restart();
+
+	shootClock_.restart();
+}
+
+/* Sebastian Pietras */
+bool Player::hurt(int damage, Player& p)
+{
+	if(mana_ >= 100.0f)
 	{
-		velocity_.y = speed_.y;
-		onGround = false;
+		if(isImmune()) return false;
+
+		if(damage < 0) damage = 0;
+
+		mana_ = fmax(mana_ - damage, 0.0f);
+		immunityClock_.restart();
+		jump(true);
+
+		return false;
+	}
+
+	return MobileEntity::hurt(damage, p);
+}
+
+/* Sebastian Pietras */
+void Player::heal(const int amount)
+{
+	if(amount <= 0) return;
+	healthPoints_ += amount;
+	if(healthPoints_ > 100) healthPoints_ = 100;
+}
+
+/* Sebastian Pietras */
+void Player::addMana(const float amount)
+{
+	if(amount <= 0.0f) return;
+	mana_ += amount;
+	if(mana_ > 100.0f) mana_ = 100.0f;
+}
+
+/* Sebastian Pietras */
+void Player::run(const bool runRight)
+{
+	if(isDashing()) return;
+
+	if(!isInverted())
+	{
+		movingRight_ = runRight;
+		if(!runRight) velocity_.x = -speed_.x;
+		else velocity_.x = speed_.x;
+	}
+	else
+	{
+		movingRight_ = !runRight;
+		if(runRight) velocity_.x = -speed_.x;
+		else velocity_.x = speed_.x;
 	}
 }
 
-/* Sebastian Pietras, Bernard Lesiewicz */
-sf::Vector2f Player::checkPush(const Entity& other, float deltaTime) const
+/* Sebastian Pietras */
+void Player::jump(const bool force)
 {
-	const float deltaX = other.getCenter().x - getCenter().x;
-	const float deltaY = other.getCenter().y - getCenter().y;
-	const float intersectX = std::fabs(deltaX) - (other.getSize().x * 0.5f + getSize().x * 0.5f);
-	const float intersectY = std::fabs(deltaY) - (other.getSize().y * 0.5f + getSize().y * 0.5f);
-
-	if(intersectX < 0.0f && intersectY < 0.0f && (intersectX <= -fabs(deltaTime*velocity_.x)-0.001f || intersectY <= -fabs(deltaTime*velocity_.y)-0.001f))
+	if(onGround_ && !isDashing() || force)
 	{
-		if(intersectX > intersectY)
-		{
-			if(deltaX > 0.0f) return {intersectX, 0.0f};
-			return {-intersectX, 0.0f};
-		}
-		if(intersectX < intersectY)
-		{
-			if(deltaY > 0.0f) return {0.0f, -intersectY};
-			return {0.0f, intersectY};
-		}
+		velocity_.y = speed_.y;
+		onGround_ = false;
+	}
+}
 
-		return { intersectX, -intersectY };
+void Player::invert()
+{
+	if(!isInverted())
+	{
+		startInvertGuard_ = false;
+		invertClock_.restart();
+	}
+}
+
+/* Sebastian Pietras */
+void Player::update(const float deltaTime,
+                    const sf::Vector2f playerPos,
+                    const bool isPlayerVisible,
+                    std::vector<Bullet>& bullets)
+{
+	if(!isActive) return;
+	if(!isDashing()) MobileEntity::update(deltaTime, playerPos, isPlayerVisible, bullets);
+	else
+	{
+		const auto transform = sf::Vector2f(velocity_.x * deltaTime, 0.0f);
+		move(transform);
 	}
 
-	return {0.0f, 0.0f};
+	if(manaCooldown_.getElapsedTime().asSeconds() >= 2.5f) { addMana(deltaTime * 2.5f); }
+}
+
+/* Sebastian Pietras */
+void Player::onRoomChange(const std::string& roomName)
+{
+	MobileEntity::onRoomChange(roomName);
+
+	Resources::getRoomJson(roomName).at("visited") = true;
 }
