@@ -26,37 +26,37 @@ void Resources::load()
 
 
 	i.open("Data/JSON/rooms.json");
-	if(!i) throw std::runtime_error("Can't open Data/Json/rooms.json");
+	if(!i) throw std::runtime_error("Can't open Data/JSON/rooms.json");
 	i >> rooms;
 	i.close();
 	i.clear();
 
 	i.open("Data/JSON/player.json");
-	if(!i) throw std::runtime_error("Can't open Data/Json/player.json");
+	if(!i) throw std::runtime_error("Can't open Data/JSON/player.json");
 	i >> playerData;
 	i.close();
 	i.clear();
 
 	i.open("Data/JSON/enemies.json");
-	if(!i) throw std::runtime_error("Can't open Data/Json/enemies.json");
+	if(!i) throw std::runtime_error("Can't open Data/JSON/enemies.json");
 	i >> enemiesData;
 	i.close();
 	i.clear();
 
-	i.open("Data/Json/defaultrooms.json");
-	if(!i) throw std::runtime_error("Can't open Data/Json/defaultrooms.json");
+	i.open("Data/JSON/defaultrooms.json");
+	if(!i) throw std::runtime_error("Can't open Data/JSON/defaultrooms.json");
 	i >> defaultRooms;
 	i.close();
 	i.clear();
 
-	i.open("Data/Json/defaultplayer.json");
-	if(!i) throw std::runtime_error("Can't open Data/Json/defaultplayer.json");
+	i.open("Data/JSON/defaultplayer.json");
+	if(!i) throw std::runtime_error("Can't open Data/JSON/defaultplayer.json");
 	i >> defaultPlayerData;
 	i.close();
 	i.clear();
 
-	i.open("Data/Json/defaultenemies.json");
-	if(!i) throw std::runtime_error("Can't open Data/Json/defaultenemies.json");
+	i.open("Data/JSON/defaultenemies.json");
+	if(!i) throw std::runtime_error("Can't open Data/JSON/defaultenemies.json");
 	i >> defaultEnemiesData;
 	i.close();
 	i.clear();
