@@ -574,8 +574,8 @@
         "name": "room12",
         "obstacles": [
             {
-                "positionX": 600,
-                "positionY": 400,
+                "positionX": 650,
+                "positionY": 450,
                 "type": 3
             }
         ],
@@ -693,28 +693,7 @@
         ],
         "layer": 1,
         "name": "room5",
-        "obstacles": [
-            {
-                "positionX": 300,
-                "positionY": 150,
-                "type": 1
-            },
-            {
-                "positionX": 450,
-                "positionY": 150,
-                "type": 1
-            },
-            {
-                "positionX": 600,
-                "positionY": 150,
-                "type": 1
-            },
-            {
-                "positionX": 750,
-                "positionY": 150,
-                "type": 1
-            }
-        ],
+        "obstacles": [],
         "portals": [],
         "visited": false,
         "width": 12
@@ -1291,6 +1270,12 @@
             {
                 "height": 1,
                 "positionX": 200.0,
+                "positionY": 250.0,
+                "width": 1
+            },
+            {
+                "height": 1,
+                "positionX": 50.0,
                 "positionY": 250.0,
                 "width": 1
             }
