@@ -1,3 +1,7 @@
+## Wymagania
+
+[SFML](https://www.sfml-dev.org/tutorials/2.5/#getting-started)
+
 # Elka Quest
 
 Celem gry jest dojście **NAJLEPSZYM WYDZIAŁEM NAJLEPSZEJ UCZELNI TECHNICZNEJ W POLSCE
